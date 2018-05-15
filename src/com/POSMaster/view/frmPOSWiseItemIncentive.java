@@ -36,32 +36,33 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
     private StringBuilder sb = new StringBuilder();
     private ResultSet rs;
     clsUtility objUtility = new clsUtility();
-    String strSearchItemCode="";
+    String strSearchItemCode = "";
+
     public frmPOSWiseItemIncentive()
     {
-        initComponents();
-        try
-        {
-            lblUserCode.setText(clsGlobalVarClass.gUserCode);
-            lblPosName.setText(clsGlobalVarClass.gPOSName);
-            lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
-            lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
-            funLoadPOSCombo();
-            funSetShortCutKeys();
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	initComponents();
+	try
+	{
+	    lblUserCode.setText(clsGlobalVarClass.gUserCode);
+	    lblPosName.setText(clsGlobalVarClass.gPOSName);
+	    lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
+	    lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
+	    funLoadPOSCombo();
+	    funSetShortCutKeys();
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
 
     }
 
     private void funSetShortCutKeys()
     {
-        btnExit.setMnemonic('c');
-        btnExecute.setMnemonic('s');
-        btnReset.setMnemonic('r');
+	btnExit.setMnemonic('c');
+	btnExecute.setMnemonic('s');
+	btnReset.setMnemonic('r');
     }
 
     /**
@@ -69,218 +70,221 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
      */
     private void funLoadPOSCombo() throws Exception
     {
-        ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet("select strPOSCode,strPOSName from tblposmaster ");
-        mapPOSCode = new HashMap<String, String>();
-        mapPOSName = new HashMap<String, String>();
-        cmbPosCode.addItem("All");
-        mapPOSCode.put("All", "All");
-        mapPOSName.put("All", "All");
-        while (rsPOS.next())
-        {
-            cmbPosCode.addItem(rsPOS.getString(2));
-            mapPOSCode.put(rsPOS.getString(1), rsPOS.getString(2));
-            mapPOSName.put(rsPOS.getString(2), rsPOS.getString(1));
-        }
+	ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet("select strPOSCode,strPOSName from tblposmaster ");
+	mapPOSCode = new HashMap<String, String>();
+	mapPOSName = new HashMap<String, String>();
+	cmbPosCode.addItem("All");
+	mapPOSCode.put("All", "All");
+	mapPOSName.put("All", "All");
+	while (rsPOS.next())
+	{
+	    cmbPosCode.addItem(rsPOS.getString(2));
+	    mapPOSCode.put(rsPOS.getString(1), rsPOS.getString(2));
+	    mapPOSName.put(rsPOS.getString(2), rsPOS.getString(1));
+	}
 
     }
 
     private void funExecuteClick()
     {
-        try
-        {
+	try
+	{
 
-            boolean flgPreviousRecordFound = false;
-            String posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
-            DefaultTableModel dmImemTable = (DefaultTableModel) tblPoswiseItemIncentiveDtl.getModel();
-            dmImemTable.setRowCount(0);
-            sb.setLength(0);
-            rs = clsGlobalVarClass.dbMysql.executeResultSet(funGetDataFromIncentiveDtlTable().toString());
+	    boolean flgPreviousRecordFound = false;
+	    String posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
+	    DefaultTableModel dmImemTable = (DefaultTableModel) tblPoswiseItemIncentiveDtl.getModel();
+	    dmImemTable.setRowCount(0);
+	    sb.setLength(0);
+	    rs = clsGlobalVarClass.dbMysql.executeResultSet(funGetDataFromIncentiveDtlTable().toString());
 
-            while (rs.next())
-            {
-                flgPreviousRecordFound = true;
-                Object[] itemRows =
-                {
-                    rs.getString(1), rs.getString(2), rs.getString(7), rs.getString(8), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(3)
-                };
+	    while (rs.next())
+	    {
+		flgPreviousRecordFound = true;
+		Object[] itemRows =
+		{
+		    rs.getString(1), rs.getString(2), rs.getString(7), rs.getString(8), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(3)
+		};
 
-                dmImemTable.addRow(itemRows);
-            }
+		dmImemTable.addRow(itemRows);
+	    }
 
-            sb.setLength(0);
-            rs = clsGlobalVarClass.dbMysql.executeResultSet(funGetDataFromPricingTable().toString());
+	    sb.setLength(0);
+	    rs = clsGlobalVarClass.dbMysql.executeResultSet(funGetDataFromPricingTable().toString());
 
-            while (rs.next())
-            {
-                flgPreviousRecordFound = true;
-                Object[] itemRows =
-                {
-                    rs.getString(1), rs.getString(2), rs.getString(5), rs.getString(6), rs.getString(4), jComboBox1.getSelectedItem().toString(), "0.0", rs.getString(3)
-                };
+	    while (rs.next())
+	    {
+		flgPreviousRecordFound = true;
+		Object[] itemRows =
+		{
+		    rs.getString(1), rs.getString(2), rs.getString(5), rs.getString(6), rs.getString(4), jComboBox1.getSelectedItem().toString(), "0.0", rs.getString(3)
+		};
 
-                dmImemTable.addRow(itemRows);
-            }
+		dmImemTable.addRow(itemRows);
+	    }
 
-            rs.close();
+	    rs.close();
 
-            if (!flgPreviousRecordFound)
-            {
-                rs = clsGlobalVarClass.dbMysql.executeResultSet(funGetExecuteString().toString());
+	    if (!flgPreviousRecordFound)
+	    {
+		rs = clsGlobalVarClass.dbMysql.executeResultSet(funGetExecuteString().toString());
 
-                while (rs.next())
-                {
-                    Object[] itemRows =
-                    {
-                        rs.getString(1), rs.getString(2), rs.getString(5), rs.getString(6), rs.getString(4), jComboBox1.getSelectedItem().toString(), "0.0", rs.getString(3)
-                    };
+		while (rs.next())
+		{
+		    Object[] itemRows =
+		    {
+			rs.getString(1), rs.getString(2), rs.getString(5), rs.getString(6), rs.getString(4), jComboBox1.getSelectedItem().toString(), "0.0", rs.getString(3)
+		    };
 
-                    dmImemTable.addRow(itemRows);
+		    dmImemTable.addRow(itemRows);
 
-                }
-                rs.close();
-            }
+		}
+		rs.close();
+	    }
 
-            tblPoswiseItemIncentiveDtl.setModel(dmImemTable);
-            sb.setLength(0);
+	    tblPoswiseItemIncentiveDtl.setModel(dmImemTable);
+	    sb.setLength(0);
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
 
     }
 
     private StringBuilder funGetExecuteString()
     {
-        try
-        {
-            String posCode = "";
-            if (!cmbPosCode.getSelectedItem().toString().equals("All"))
-            {
-                posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
-            }
-            else
-            {
-                posCode = cmbPosCode.getSelectedItem().toString();
-            }
-            sb.setLength(0);
-            sb.append("SELECT distinct(a.strItemCode),a.strItemName,a.strPosCode,b.strPosName,e.strGroupName,d.strSubGroupName "
-                    + " FROM tblmenuitempricingdtl a  "
-                    + " left outer join tblposmaster b on a.strPosCode=b.strPosCode "
-                    + "join tblitemmaster c on a.strItemCode=c.strItemCode "
-                    + "join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
-                    + "join tblgrouphd e on d.strGroupCode=e.strGroupCode "
-                    + " ");
-            //conditions append
-            if (!cmbPosCode.getSelectedItem().toString().equals("All"))
-            {
-                sb.append("Where a.strPOSCode='").append(posCode).append("' ");
-            }
-	    if(!strSearchItemCode.equals("")){
-		 sb.append("and a.strItemCode='").append(strSearchItemCode).append("' ");
+	try
+	{
+	    String posCode = "";
+	    if (!cmbPosCode.getSelectedItem().toString().equals("All"))
+	    {
+		posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
 	    }
-            sb.append(" order by a.strItemCode,e.strGroupName,d.strSubGroupName,b.strPosName  ");
+	    else
+	    {
+		posCode = cmbPosCode.getSelectedItem().toString();
+	    }
+	    sb.setLength(0);
+	    sb.append("SELECT distinct(a.strItemCode),a.strItemName,a.strPosCode,b.strPosName,e.strGroupName,d.strSubGroupName "
+		    + " FROM tblmenuitempricingdtl a  "
+		    + " left outer join tblposmaster b on a.strPosCode=b.strPosCode "
+		    + "join tblitemmaster c on a.strItemCode=c.strItemCode "
+		    + "join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
+		    + "join tblgrouphd e on d.strGroupCode=e.strGroupCode "
+		    + " ");
+	    //conditions append
+	    if (!cmbPosCode.getSelectedItem().toString().equals("All"))
+	    {
+		sb.append("Where a.strPOSCode='").append(posCode).append("' ");
+	    }
+	    if (!strSearchItemCode.equals(""))
+	    {
+		sb.append("and a.strItemCode='").append(strSearchItemCode).append("' ");
+	    }
+	    sb.append(" order by a.strItemCode,e.strGroupName,d.strSubGroupName,b.strPosName  ");
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
 
-        System.out.println("sb==== " + sb);
+	System.out.println("sb==== " + sb);
 
-        return sb;
+	return sb;
     }
 
     private StringBuilder funGetDataFromIncentiveDtlTable()
     {
-        try
-        {
-            String posCode = "";
-            if (!cmbPosCode.getSelectedItem().toString().equals("All"))
-            {
-                posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
-            }
-            else
-            {
-                posCode = cmbPosCode.getSelectedItem().toString();
-            }
-            sb.setLength(0);
-            sb.append("SELECT a.strItemCode,a.strItemName,a.strPOSCode,b.strPosName,a.strIncentiveType,a.dblIncentiveValue "
-                    + ",e.strGroupName,d.strSubGroupName "
-                    + " FROM tblposwiseitemwiseincentives a  "
-                    + "left outer join tblposmaster b on a.strPosCode=b.strPosCode "
-                    + "join tblitemmaster c on a.strItemCode=c.strItemCode "
-                    + "join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
-                    + "join tblgrouphd e on d.strGroupCode=e.strGroupCode ");
-            //conditions append
-            if (!cmbPosCode.getSelectedItem().toString().equals("All"))
-            {
-                sb.append("Where a.strPOSCode='").append(posCode).append("' ");
-            }
-	    if(!strSearchItemCode.equals("")){
-		 sb.append("and a.strItemCode='").append(strSearchItemCode).append("' ");
+	try
+	{
+	    String posCode = "";
+	    if (!cmbPosCode.getSelectedItem().toString().equals("All"))
+	    {
+		posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
 	    }
-            sb.append(" order by a.strItemCode,e.strGroupName,d.strSubGroupName,b.strPosName ");
+	    else
+	    {
+		posCode = cmbPosCode.getSelectedItem().toString();
+	    }
+	    sb.setLength(0);
+	    sb.append("SELECT a.strItemCode,a.strItemName,a.strPOSCode,b.strPosName,a.strIncentiveType,a.dblIncentiveValue "
+		    + ",e.strGroupName,d.strSubGroupName "
+		    + " FROM tblposwiseitemwiseincentives a  "
+		    + "left outer join tblposmaster b on a.strPosCode=b.strPosCode "
+		    + "join tblitemmaster c on a.strItemCode=c.strItemCode "
+		    + "join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
+		    + "join tblgrouphd e on d.strGroupCode=e.strGroupCode ");
+	    //conditions append
+	    if (!cmbPosCode.getSelectedItem().toString().equals("All"))
+	    {
+		sb.append("Where a.strPOSCode='").append(posCode).append("' ");
+	    }
+	    if (!strSearchItemCode.equals(""))
+	    {
+		sb.append("and a.strItemCode='").append(strSearchItemCode).append("' ");
+	    }
+	    sb.append(" order by a.strItemCode,e.strGroupName,d.strSubGroupName,b.strPosName ");
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
 
-        System.out.println("sb==== " + sb);
+	System.out.println("sb==== " + sb);
 
-        return sb;
+	return sb;
     }
 
     private StringBuilder funGetDataFromPricingTable()
     {
-        try
-        {
-            String posCode = "";
-            if (!cmbPosCode.getSelectedItem().toString().equals("All"))
-            {
-                posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
-            }
-            else
-            {
-                posCode = cmbPosCode.getSelectedItem().toString();
-            }
-            sb.setLength(0);
-            sb.append("SELECT distinct(a.strItemCode),a.strItemName,a.strPosCode,b.strPosName "
-                    + ",e.strGroupName,d.strSubGroupName "
-                    + " FROM tblmenuitempricingdtl a  "
-                    + " left outer join tblposmaster b on a.strPosCode=b.strPosCode "
-                    + "join tblitemmaster c on a.strItemCode=c.strItemCode "
-                    + "join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
-                    + "join tblgrouphd e on d.strGroupCode=e.strGroupCode "
-                    + " where a.strItemCode NOT IN(SELECT c.strItemCode FROM tblposwiseitemwiseincentives c   ) ");
-            //conditions append
-            if (!cmbPosCode.getSelectedItem().toString().equals("All"))
-            {
-                sb.append("and (a.strPOSCode='").append(posCode).append("' or a.strPosCode='All' ) ");
-            }
-	    if(!strSearchItemCode.equals("")){
-		 sb.append("and a.strItemCode='").append(strSearchItemCode).append("' ");
+	try
+	{
+	    String posCode = "";
+	    if (!cmbPosCode.getSelectedItem().toString().equals("All"))
+	    {
+		posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
 	    }
-	    
-            sb.append(" order by a.strItemCode,e.strGroupName,d.strSubGroupName,b.strPosName  ");
+	    else
+	    {
+		posCode = cmbPosCode.getSelectedItem().toString();
+	    }
+	    sb.setLength(0);
+	    sb.append("SELECT distinct(a.strItemCode),a.strItemName,a.strPosCode,b.strPosName "
+		    + ",e.strGroupName,d.strSubGroupName "
+		    + " FROM tblmenuitempricingdtl a  "
+		    + " left outer join tblposmaster b on a.strPosCode=b.strPosCode "
+		    + "join tblitemmaster c on a.strItemCode=c.strItemCode "
+		    + "join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
+		    + "join tblgrouphd e on d.strGroupCode=e.strGroupCode "
+		    + " where a.strItemCode NOT IN(SELECT c.strItemCode FROM tblposwiseitemwiseincentives c   ) ");
+	    //conditions append
+	    if (!cmbPosCode.getSelectedItem().toString().equals("All"))
+	    {
+		sb.append("and (a.strPOSCode='").append(posCode).append("' or a.strPosCode='All' ) ");
+	    }
+	    if (!strSearchItemCode.equals(""))
+	    {
+		sb.append("and a.strItemCode='").append(strSearchItemCode).append("' ");
+	    }
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    sb.append(" order by a.strItemCode,e.strGroupName,d.strSubGroupName,b.strPosName  ");
 
-        System.out.println("sb==== " + sb);
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
 
-        return sb;
+	System.out.println("sb==== " + sb);
+
+	return sb;
     }
 
     /**
@@ -288,60 +292,89 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
      */
     private void funSave()
     {
-        try
-        {
-            String posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
-            int cnt = 0;
-            int ch = JOptionPane.showConfirmDialog(new JPanel(), "Do you want to Update All Item?", "Confirmation", JOptionPane.YES_NO_OPTION);
-            if (ch == JOptionPane.YES_OPTION)
-            {
-                if (!cmbPosCode.getSelectedItem().toString().equals("All"))
-                {
-                    String deleteQuery = " delete from tblposwiseitemwiseincentives where strPOSCode='" + posCode + "' ";
-                    clsGlobalVarClass.dbMysql.execute(deleteQuery);
-                }
-                else
-                {
-                    String deleteQuery = " truncate table tblposwiseitemwiseincentives  ";
-                    clsGlobalVarClass.dbMysql.execute(deleteQuery);
-                }
+	try
+	{
+	    String posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
+	    int cnt = 0;
+	    int ch = JOptionPane.showConfirmDialog(new JPanel(), "Do you want to Update All Item?", "Confirmation", JOptionPane.YES_NO_OPTION);
+	    if (ch == JOptionPane.YES_OPTION)
+	    {
 
-                if (tblPoswiseItemIncentiveDtl.getRowCount() > 0)
-                {
-                    String insertQuery = "insert into tblposwiseitemwiseincentives (strPOSCode,strItemCode,strItemName,strIncentiveType,dblIncentiveValue,strClientCode,strDataPostFlag,dteDateCreated,dteDateEdited) values ";
-                    for (int row = 0; row < tblPoswiseItemIncentiveDtl.getRowCount(); row++)
-                    {
-                        if (cnt == 0)
-                        {
-                            insertQuery += "('" + tblPoswiseItemIncentiveDtl.getValueAt(row, 7) + "', '" + tblPoswiseItemIncentiveDtl.getValueAt(row, 0) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 1) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 5) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 6) + "','" + clsGlobalVarClass.gClientCode + "','N','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "')";
-                        }
-                        else
-                        {
-                            insertQuery += ",('" + tblPoswiseItemIncentiveDtl.getValueAt(row, 7) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 0) + "', '" + tblPoswiseItemIncentiveDtl.getValueAt(row, 1) + "', '" + tblPoswiseItemIncentiveDtl.getValueAt(row, 5) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 6) + "','" + clsGlobalVarClass.gClientCode + "','N','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "')";
-                        }
-                        cnt++;
-                    }
-                    System.out.println("insertQuery=" + insertQuery);
-                    if (cnt > 0)
-                    {
-                        clsGlobalVarClass.dbMysql.execute(insertQuery);
-                    }
+		if (tblPoswiseItemIncentiveDtl.getRowCount() > 0 && tblPoswiseItemIncentiveDtl.getRowCount() == 1)
+		{
 
-                    String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                            + " where strTableName='PosWiseItemWiseIncentive' and strClientCode='" + clsGlobalVarClass.gClientCode + "'";
-                    clsGlobalVarClass.dbMysql.execute(sql);
+		    int row = 0;
 
-                    new frmOkPopUp(this, "Entry added Successfully", "Successfull", 3).setVisible(true);
-                    funResetFields();
-                }
-            }
+		    String deleteQuery = " delete from tblposwiseitemwiseincentives where strPOSCode='" + tblPoswiseItemIncentiveDtl.getValueAt(row, 7) + "'  and strItemCode='" + tblPoswiseItemIncentiveDtl.getValueAt(row, 0) + "' ";
+		    clsGlobalVarClass.dbMysql.execute(deleteQuery);
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+		    String insertQuery = "insert into tblposwiseitemwiseincentives (strPOSCode,strItemCode,strItemName,strIncentiveType,dblIncentiveValue,strClientCode,strDataPostFlag,dteDateCreated,dteDateEdited) values ";
+
+		    insertQuery += "('" + tblPoswiseItemIncentiveDtl.getValueAt(row, 7) + "', '" + tblPoswiseItemIncentiveDtl.getValueAt(row, 0) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 1) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 5) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 6) + "','" + clsGlobalVarClass.gClientCode + "','N','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "')";
+		    System.out.println("insertQuery=" + insertQuery);
+
+		    clsGlobalVarClass.dbMysql.execute(insertQuery);
+
+		    String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+			    + " where strTableName='PosWiseItemWiseIncentive' and strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+		    clsGlobalVarClass.dbMysql.execute(sql);
+
+		    new frmOkPopUp(this, "Entry added Successfully", "Successfull", 3).setVisible(true);
+		    
+		    
+		    funResetFields();
+
+		}
+		else
+		{
+		    if (!cmbPosCode.getSelectedItem().toString().equals("All"))
+		    {
+			String deleteQuery = " delete from tblposwiseitemwiseincentives where strPOSCode='" + posCode + "' ";
+			clsGlobalVarClass.dbMysql.execute(deleteQuery);
+		    }
+		    else
+		    {
+			String deleteQuery = " truncate table tblposwiseitemwiseincentives  ";
+			clsGlobalVarClass.dbMysql.execute(deleteQuery);
+		    }
+
+		    if (tblPoswiseItemIncentiveDtl.getRowCount() > 0)
+		    {
+			String insertQuery = "insert into tblposwiseitemwiseincentives (strPOSCode,strItemCode,strItemName,strIncentiveType,dblIncentiveValue,strClientCode,strDataPostFlag,dteDateCreated,dteDateEdited) values ";
+			for (int row = 0; row < tblPoswiseItemIncentiveDtl.getRowCount(); row++)
+			{
+			    if (cnt == 0)
+			    {
+				insertQuery += "('" + tblPoswiseItemIncentiveDtl.getValueAt(row, 7) + "', '" + tblPoswiseItemIncentiveDtl.getValueAt(row, 0) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 1) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 5) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 6) + "','" + clsGlobalVarClass.gClientCode + "','N','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "')";
+			    }
+			    else
+			    {
+				insertQuery += ",('" + tblPoswiseItemIncentiveDtl.getValueAt(row, 7) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 0) + "', '" + tblPoswiseItemIncentiveDtl.getValueAt(row, 1) + "', '" + tblPoswiseItemIncentiveDtl.getValueAt(row, 5) + "','" + tblPoswiseItemIncentiveDtl.getValueAt(row, 6) + "','" + clsGlobalVarClass.gClientCode + "','N','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "')";
+			    }
+			    cnt++;
+			}
+			System.out.println("insertQuery=" + insertQuery);
+			if (cnt > 0)
+			{
+			    clsGlobalVarClass.dbMysql.execute(insertQuery);
+			}
+
+			String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+				+ " where strTableName='PosWiseItemWiseIncentive' and strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+			clsGlobalVarClass.dbMysql.execute(sql);
+
+			new frmOkPopUp(this, "Entry added Successfully", "Successfull", 3).setVisible(true);
+			funResetFields();
+		    }
+		}
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
 
     }
 
@@ -709,27 +742,27 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("POSWise Item Incentive");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("POSWise Item Incentive");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("POSWise Item Incentive");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("POSWise Item Incentive");
     }//GEN-LAST:event_formWindowClosing
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        funResetClick();
+	funResetClick();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void tblPoswiseItemIncentiveDtlKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPoswiseItemIncentiveDtlKeyPressed
-        // TODO add your handling code here:
-        // System.out.println("key code="+evt.getKeyCode()+"\tChar="+evt.getKeyChar()+"\textendes key code"+evt.getExtendedKeyCode());
+	// TODO add your handling code here:
+	// System.out.println("key code="+evt.getKeyCode()+"\tChar="+evt.getKeyChar()+"\textendes key code"+evt.getExtendedKeyCode());
 
     }//GEN-LAST:event_tblPoswiseItemIncentiveDtlKeyPressed
 
     private void tblPoswiseItemIncentiveDtlInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tblPoswiseItemIncentiveDtlInputMethodTextChanged
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_tblPoswiseItemIncentiveDtlInputMethodTextChanged
 
     private void tblPoswiseItemIncentiveDtlFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblPoswiseItemIncentiveDtlFocusLost
@@ -738,7 +771,7 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
 
     private void tblPoswiseItemIncentiveDtlFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblPoswiseItemIncentiveDtlFocusGained
 
-        /*
+	/*
         if (tblPoswiseItemIncentiveDtl.getSelectedColumn() == 2)
         {
             tblPoswiseItemIncentiveDtl.setValueAt(tblPoswiseItemIncentiveDtl.getValueAt(tblPoswiseItemIncentiveDtl.getSelectedRow(), 2), tblPoswiseItemIncentiveDtl.getSelectedRow(), 3);
@@ -751,57 +784,57 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
     }//GEN-LAST:event_tblPoswiseItemIncentiveDtlFocusGained
 
     private void cmbPosCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbPosCodeKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
 
     }//GEN-LAST:event_cmbPosCodeKeyPressed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        clsGlobalVarClass.hmActiveForms.remove("Item Wise Incentives");
-        funExitClick();
+	clsGlobalVarClass.hmActiveForms.remove("Item Wise Incentives");
+	funExitClick();
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExitMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnExitMouseClicked
 
     private void btnExecuteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExecuteKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
 
     }//GEN-LAST:event_btnExecuteKeyPressed
 
     private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
-        funExecuteClick();
+	funExecuteClick();
     }//GEN-LAST:event_btnExecuteActionPerformed
 
     private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnSaveMouseClicked
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
-        funSave();
+	// TODO add your handling code here:
+	funSave();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveVetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_btnSaveVetoableChange
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnSaveVetoableChange
 
     private void txtItemCodeMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtItemCodeMouseClicked
     {//GEN-HEADEREND:event_txtItemCodeMouseClicked
-        // TODO add your handling code here:
-        funSelectItemCode();
+	// TODO add your handling code here:
+	funSelectItemCode();
     }//GEN-LAST:event_txtItemCodeMouseClicked
 
     private void txtItemCodeKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtItemCodeKeyPressed
     {//GEN-HEADEREND:event_txtItemCodeKeyPressed
-        // TODO add your handling code here:
-        //open item help on click of '?' or '/' key
-        if (evt.getKeyChar() == '?' || evt.getKeyChar() == '/')
-        {
-            funSelectItemCode();
-        }
-      
-        
+	// TODO add your handling code here:
+	//open item help on click of '?' or '/' key
+	if (evt.getKeyChar() == '?' || evt.getKeyChar() == '/')
+	{
+	    funSelectItemCode();
+	}
+
+
     }//GEN-LAST:event_txtItemCodeKeyPressed
 
 
@@ -838,42 +871,42 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
      */
     private void funExitClick()
     {
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(frmBulkMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(frmBulkMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(frmBulkMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(frmBulkMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        dispose();
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	}
+	catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmBulkMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmBulkMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmBulkMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmBulkMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	dispose();
     }
 
     private void funResetFields()
     {
-        DefaultTableModel dm = (DefaultTableModel) tblPoswiseItemIncentiveDtl.getModel();
-        dm.setRowCount(0);
-        cmbPosCode.setSelectedIndex(0);
-        sb.setLength(0);
+	DefaultTableModel dm = (DefaultTableModel) tblPoswiseItemIncentiveDtl.getModel();
+	dm.setRowCount(0);
+	cmbPosCode.setSelectedIndex(0);
+	sb.setLength(0);
     }
 
     /**
@@ -881,50 +914,50 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
      */
     private void funResetClick()
     {
-        funResetFields();
+	funResetFields();
     }
 
     class MyTableCellEditor extends AbstractCellEditor implements TableCellEditor
     {
 
-        JComponent component = new JTextField();
+	JComponent component = new JTextField();
 
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
-                int rowIndex, int vColIndex)
-        {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
+		int rowIndex, int vColIndex)
+	{
 
-            ((JTextField) component).setText((String) value);
+	    ((JTextField) component).setText((String) value);
 
-            return component;
-        }
+	    return component;
+	}
 
-        public Object getCellEditorValue()
-        {
-            return ((JTextField) component).getText();
-        }
+	public Object getCellEditorValue()
+	{
+	    return ((JTextField) component).getText();
+	}
     }
 
-     private void funSelectItemCode()
+    private void funSelectItemCode()
     {
-        try
-        {
-            objUtility.funCallForSearchForm("MenuItem");
-            new frmSearchFormDialog(this, true).setVisible(true);
-            if (clsGlobalVarClass.gSearchItemClicked)
-            {
-                Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-               // funSetData(data);
-	        strSearchItemCode=clsGlobalVarClass.gSearchedItem;
-	        funExecuteClick();
-	        strSearchItemCode="";
-                clsGlobalVarClass.gSearchItemClicked = false;
-               
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	try
+	{
+	    objUtility.funCallForSearchForm("MenuItem");
+	    new frmSearchFormDialog(this, true).setVisible(true);
+	    if (clsGlobalVarClass.gSearchItemClicked)
+	    {
+		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+		// funSetData(data);
+		strSearchItemCode = clsGlobalVarClass.gSearchedItem;
+		funExecuteClick();
+		strSearchItemCode = "";
+		clsGlobalVarClass.gSearchItemClicked = false;
+
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 }
