@@ -950,12 +950,11 @@ public class frmBillSeriesMaster extends javax.swing.JFrame
 		    {
 			printInclusiveOfAllTaxesOnBill = "N";
 		    }
-		    String billNote="";
-		    if(tblBillSeriesDtl.getValueAt(i, 6)!=null)
+		    String billNote = "";
+		    if (tblBillSeriesDtl.getValueAt(i, 6) != null)
 		    {
-			billNote=tblBillSeriesDtl.getValueAt(i, 6).toString().trim();
+			billNote = tblBillSeriesDtl.getValueAt(i, 6).toString().trim();
 		    }
-		    
 
 		    sqlBuilder.append(",('" + selectedPOSCode + "','" + cmbBillSeriesType.getSelectedItem().toString() + "'"
 			    + ",'" + tblBillSeriesDtl.getValueAt(i, 1).toString() + "','0','" + funGetCodeList(listOfCodes) + "'"
@@ -1295,7 +1294,11 @@ public class frmBillSeriesMaster extends javax.swing.JFrame
 		{
 		    printInclusiveOfAllTaxesOnBill = "N";
 		}
-		String billNote = tblBillSeriesDtl.getValueAt(row, 6).toString().trim();
+		String billNote = "";
+		if (tblBillSeriesDtl.getValueAt(row, 6) != null)
+		{
+		    billNote = tblBillSeriesDtl.getValueAt(row, 6).toString().trim();
+		}
 
 		clsGlobalVarClass.dbMysql.execute("update tblbillseries a "
 			+ "set a.strCodes='" + funGetCodeList(listOfCodes) + "' "

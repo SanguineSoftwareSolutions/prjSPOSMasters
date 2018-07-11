@@ -257,6 +257,16 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 		    chkCustCompulsory.setSelected(false);
 		}
 
+		if (rsCardCode.getString(41).equalsIgnoreCase("Y"))
+		{
+		    chkExpiryTime.setSelected(true);
+		}
+		else
+		{
+		    chkExpiryTime.setSelected(false);
+		}
+		txtExpiryTimeMin.setText(rsCardCode.getString(42));
+
 		txtValidityDays.setText(rsCardCode.getString(17));
 		txtCardValueFixed.setText(rsCardCode.getString(18));
 		txtMin.setText(rsCardCode.getString(19));
@@ -379,6 +389,9 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 		tblPaymentMode.setValueAt(false, i, 1);
 	    }
 
+	    chkExpiryTime.setSelected(false);
+	    txtExpiryTimeMin.setText("0");
+
 	}
 	catch (Exception e)
 	{
@@ -394,7 +407,8 @@ public class frmDebitCardMaster extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         panelHeader = new javax.swing.JPanel();
         lblProductName = new javax.swing.JLabel();
@@ -441,6 +455,8 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkCustCompulsory = new javax.swing.JCheckBox();
         chkCashCard = new javax.swing.JCheckBox();
         chkAuthorizeMemberCard = new javax.swing.JCheckBox();
+        chkExpiryTime = new javax.swing.JCheckBox();
+        txtExpiryTimeMin = new javax.swing.JTextField();
         panelTabCardValue = new javax.swing.JPanel();
         lblCardValue = new javax.swing.JLabel();
         lblCardValueFix = new javax.swing.JLabel();
@@ -472,11 +488,14 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         setExtendedState(MAXIMIZED_BOTH);
         setMinimumSize(new java.awt.Dimension(800, 600));
         setUndecorated(true);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosed(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosed(evt);
             }
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
@@ -549,21 +568,27 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkDebitOnCredit.setBackground(new java.awt.Color(255, 255, 255));
         chkDebitOnCredit.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkDebitOnCredit.setText("Debit On Credit");
-        chkDebitOnCredit.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkDebitOnCredit.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkDebitOnCreditKeyPressed(evt);
             }
         });
 
         txtCardCode.setEditable(false);
         txtCardCode.setBackground(new java.awt.Color(204, 204, 204));
-        txtCardCode.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtCardCode.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtCardCodeMouseClicked(evt);
             }
         });
-        txtCardCode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtCardCode.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtCardCodeKeyPressed(evt);
             }
         });
@@ -572,13 +597,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         lblCardName.setText("Card Name    :");
 
         txtCardName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtCardName.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtCardName.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtCardNameMouseClicked(evt);
             }
         });
-        txtCardName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtCardName.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtCardNameKeyPressed(evt);
             }
         });
@@ -589,13 +618,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkRoomCard.setBackground(new java.awt.Color(255, 255, 255));
         chkRoomCard.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkRoomCard.setText("Room Card");
-        chkRoomCard.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        chkRoomCard.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 chkRoomCardStateChanged(evt);
             }
         });
-        chkRoomCard.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkRoomCard.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkRoomCardKeyPressed(evt);
             }
         });
@@ -603,8 +636,10 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkComplementary.setBackground(new java.awt.Color(255, 255, 255));
         chkComplementary.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkComplementary.setText("Complimentary");
-        chkComplementary.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkComplementary.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkComplementaryKeyPressed(evt);
             }
         });
@@ -612,24 +647,30 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkAutoTopUp.setBackground(new java.awt.Color(255, 255, 255));
         chkAutoTopUp.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkAutoTopUp.setText("Auto Top Up");
-        chkAutoTopUp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkAutoTopUp.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkAutoTopUpKeyPressed(evt);
             }
         });
 
         chkCoverCahrge.setBackground(new java.awt.Color(255, 255, 255));
         chkCoverCahrge.setText("Cover Charge");
-        chkCoverCahrge.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkCoverCahrge.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkCoverCahrgeKeyPressed(evt);
             }
         });
 
         chkEntryCharge.setBackground(new java.awt.Color(255, 255, 255));
         chkEntryCharge.setText("Entry Charge");
-        chkEntryCharge.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkEntryCharge.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkEntryChargeKeyPressed(evt);
             }
         });
@@ -637,8 +678,10 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkCardInUse.setBackground(new java.awt.Color(255, 255, 255));
         chkCardInUse.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkCardInUse.setText("Card Type In Use");
-        chkCardInUse.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkCardInUse.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkCardInUseKeyPressed(evt);
             }
         });
@@ -646,8 +689,10 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkRedeemableCard.setBackground(new java.awt.Color(255, 255, 255));
         chkRedeemableCard.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkRedeemableCard.setText("Redeemable Card");
-        chkRedeemableCard.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkRedeemableCard.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkRedeemableCardKeyPressed(evt);
             }
         });
@@ -655,8 +700,10 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkDiplomate.setBackground(new java.awt.Color(255, 255, 255));
         chkDiplomate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkDiplomate.setText("Diplomate");
-        chkDiplomate.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkDiplomate.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkDiplomateKeyPressed(evt);
             }
         });
@@ -664,8 +711,10 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkAllowTopUp.setBackground(new java.awt.Color(255, 255, 255));
         chkAllowTopUp.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkAllowTopUp.setText("Allow Top Up");
-        chkAllowTopUp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkAllowTopUp.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkAllowTopUpKeyPressed(evt);
             }
         });
@@ -673,8 +722,10 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkExtndValOnTopUp.setBackground(new java.awt.Color(255, 255, 255));
         chkExtndValOnTopUp.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkExtndValOnTopUp.setText("Extended Validity On TopUp");
-        chkExtndValOnTopUp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkExtndValOnTopUp.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkExtndValOnTopUpKeyPressed(evt);
             }
         });
@@ -682,15 +733,19 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkForCurrentFinaceYr.setBackground(new java.awt.Color(255, 255, 255));
         chkForCurrentFinaceYr.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkForCurrentFinaceYr.setText("For Current Financial Year");
-        chkForCurrentFinaceYr.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkForCurrentFinaceYr.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkForCurrentFinaceYrKeyPressed(evt);
             }
         });
 
         dteToDate.setOpaque(false);
-        dteToDate.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        dteToDate.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 dteToDateKeyPressed(evt);
             }
         });
@@ -698,8 +753,10 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkSetExpiryDate.setBackground(new java.awt.Color(255, 255, 255));
         chkSetExpiryDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkSetExpiryDate.setText("Set Expiry date");
-        chkSetExpiryDate.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkSetExpiryDate.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkSetExpiryDateKeyPressed(evt);
             }
         });
@@ -709,29 +766,37 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 
         txtValidityDays.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtValidityDays.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtValidityDays.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtValidityDays.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtValidityDaysMouseClicked(evt);
             }
         });
-        txtValidityDays.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtValidityDays.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtValidityDaysKeyPressed(evt);
             }
         });
 
         chkCustCompulsory.setBackground(new java.awt.Color(255, 255, 255));
         chkCustCompulsory.setText("Customer Compulsory");
-        chkCustCompulsory.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkCustCompulsory.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkCustCompulsoryKeyPressed(evt);
             }
         });
 
         chkCashCard.setBackground(new java.awt.Color(255, 255, 255));
         chkCashCard.setText("Cash Card");
-        chkCashCard.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkCashCard.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkCashCardKeyPressed(evt);
             }
         });
@@ -739,9 +804,40 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         chkAuthorizeMemberCard.setBackground(new java.awt.Color(255, 255, 255));
         chkAuthorizeMemberCard.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkAuthorizeMemberCard.setText("Authorize Member Card");
-        chkAuthorizeMemberCard.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkAuthorizeMemberCard.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkAuthorizeMemberCardKeyPressed(evt);
+            }
+        });
+
+        chkExpiryTime.setBackground(new java.awt.Color(255, 255, 255));
+        chkExpiryTime.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkExpiryTime.setText("Set Expiry Time (minutes)");
+        chkExpiryTime.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                chkExpiryTimeKeyPressed(evt);
+            }
+        });
+
+        txtExpiryTimeMin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtExpiryTimeMin.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtExpiryTimeMin.setText("0");
+        txtExpiryTimeMin.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                txtExpiryTimeMinMouseClicked(evt);
+            }
+        });
+        txtExpiryTimeMin.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                txtExpiryTimeMinKeyPressed(evt);
             }
         });
 
@@ -773,14 +869,19 @@ public class frmDebitCardMaster extends javax.swing.JFrame
                                         .addComponent(lblReasonCOde, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtCardCode, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panelTabCardDtlLayout.createSequentialGroup()
-                                        .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(chkSetExpiryDate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblTransferType, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtValidityDays, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(panelTabCardDtlLayout.createSequentialGroup()
+                                            .addComponent(chkExpiryTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(txtExpiryTimeMin, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTabCardDtlLayout.createSequentialGroup()
+                                            .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(chkSetExpiryDate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(lblTransferType, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(18, 18, 18)
+                                            .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtValidityDays, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGap(71, 71, 71)))
                         .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelTabCardDtlLayout.createSequentialGroup()
@@ -851,13 +952,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
                 .addGap(18, 18, 18)
                 .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTabCardDtlLayout.createSequentialGroup()
+                        .addComponent(chkAuthorizeMemberCard, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelTabCardDtlLayout.createSequentialGroup()
                         .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblTransferType, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtValidityDays, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
-                        .addContainerGap(110, Short.MAX_VALUE))
-                    .addGroup(panelTabCardDtlLayout.createSequentialGroup()
-                        .addComponent(chkAuthorizeMemberCard, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelTabCardDtlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(chkExpiryTime, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtExpiryTimeMin, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(59, 59, 59))))
         );
 
         tabPane.addTab("Card Details", panelTabCardDtl);
@@ -874,13 +979,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         txtCardValueFixed.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCardValueFixed.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtCardValueFixed.setText("0.00");
-        txtCardValueFixed.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtCardValueFixed.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtCardValueFixedMouseClicked(evt);
             }
         });
-        txtCardValueFixed.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtCardValueFixed.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtCardValueFixedKeyPressed(evt);
             }
         });
@@ -892,13 +1001,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         txtMin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtMin.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtMin.setText("0.00");
-        txtMin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtMin.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtMinMouseClicked(evt);
             }
         });
-        txtMin.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtMin.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtMinKeyPressed(evt);
             }
         });
@@ -909,13 +1022,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         txtMax.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtMax.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtMax.setText("0.00");
-        txtMax.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtMax.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtMaxMouseClicked(evt);
             }
         });
-        txtMax.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtMax.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtMaxKeyPressed(evt);
             }
         });
@@ -923,13 +1040,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         txtMinCharges.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtMinCharges.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtMinCharges.setText("0.00");
-        txtMinCharges.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtMinCharges.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtMinChargesMouseClicked(evt);
             }
         });
-        txtMinCharges.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtMinCharges.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtMinChargesKeyPressed(evt);
             }
         });
@@ -941,13 +1062,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         txtDepositeAmount.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtDepositeAmount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtDepositeAmount.setText("0.00");
-        txtDepositeAmount.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtDepositeAmount.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtDepositeAmountMouseClicked(evt);
             }
         });
-        txtDepositeAmount.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtDepositeAmount.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtDepositeAmountKeyPressed(evt);
             }
         });
@@ -964,49 +1089,64 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         txtMaxRefundAmt.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtMaxRefundAmt.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtMaxRefundAmt.setText("0.00");
-        txtMaxRefundAmt.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtMaxRefundAmt.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtMaxRefundAmtMouseClicked(evt);
             }
         });
-        txtMaxRefundAmt.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtMaxRefundAmt.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtMaxRefundAmtKeyPressed(evt);
             }
         });
 
         cmbRedeemptionLimit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "NA", "Daily", "Monthly" }));
-        cmbRedeemptionLimit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cmbRedeemptionLimit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 cmbRedeemptionLimitActionPerformed(evt);
             }
         });
-        cmbRedeemptionLimit.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbRedeemptionLimit.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbRedeemptionLimitKeyPressed(evt);
             }
         });
 
         tblPaymentMode.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "PaymentMode", "Select"
             }
-        ) {
-            Class[] types = new Class [] {
+        )
+        {
+            Class[] types = new Class []
+            {
                 java.lang.Object.class, java.lang.Boolean.class
             };
-            boolean[] canEdit = new boolean [] {
+            boolean[] canEdit = new boolean []
+            {
                 false, true
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class getColumnClass(int columnIndex)
+            {
                 return types [columnIndex];
             }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
@@ -1014,15 +1154,18 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         tblPaymentMode.setSelectionBackground(new java.awt.Color(15, 131, 240));
         tblPaymentMode.setSelectionForeground(new java.awt.Color(254, 254, 254));
         scrollPanePayMode.setViewportView(tblPaymentMode);
-        if (tblPaymentMode.getColumnModel().getColumnCount() > 0) {
+        if (tblPaymentMode.getColumnModel().getColumnCount() > 0)
+        {
             tblPaymentMode.getColumnModel().getColumn(0).setPreferredWidth(200);
         }
 
         txtRedeemptionLimit.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtRedeemptionLimit.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtRedeemptionLimit.setText("0.00");
-        txtRedeemptionLimit.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtRedeemptionLimit.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtRedeemptionLimitKeyPressed(evt);
             }
         });
@@ -1162,18 +1305,24 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         btnNew1.setToolTipText("Save Debit Card Master");
         btnNew1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNew1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnNew1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnNew1.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnNew1MouseClicked(evt);
             }
         });
-        btnNew1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnNew1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnNew1ActionPerformed(evt);
             }
         });
-        btnNew1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        btnNew1.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 btnNew1KeyPressed(evt);
             }
         });
@@ -1185,13 +1334,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         btnReset.setToolTipText("Reset All Fields");
         btnReset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnReset.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnReset.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnReset.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnResetMouseClicked(evt);
             }
         });
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnReset.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnResetActionPerformed(evt);
             }
         });
@@ -1203,13 +1356,17 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         btnClose.setToolTipText("Close Debit Card Master");
         btnClose.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnClose.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnClose.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCloseMouseClicked(evt);
             }
         });
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnClose.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnCloseActionPerformed(evt);
             }
         });
@@ -1219,23 +1376,22 @@ public class frmDebitCardMaster extends javax.swing.JFrame
         panelBodyLayout.setHorizontalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBodyLayout.createSequentialGroup()
+                .addGap(289, 289, 289)
+                .addComponent(lblFormName, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(panelBodyLayout.createSequentialGroup()
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBodyLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(tabPane, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnNew1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
                         .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
-                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tabPane, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(panelBodyLayout.createSequentialGroup()
-                .addGap(289, 289, 289)
-                .addComponent(lblFormName, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBodyLayout.setVerticalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1761,6 +1917,21 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 	clsGlobalVarClass.hmActiveForms.remove("DebitCardMaster");
     }//GEN-LAST:event_formWindowClosing
 
+    private void chkExpiryTimeKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_chkExpiryTimeKeyPressed
+    {//GEN-HEADEREND:event_chkExpiryTimeKeyPressed
+	// TODO add your handling code here:
+    }//GEN-LAST:event_chkExpiryTimeKeyPressed
+
+    private void txtExpiryTimeMinMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtExpiryTimeMinMouseClicked
+    {//GEN-HEADEREND:event_txtExpiryTimeMinMouseClicked
+	// TODO add your handling code here:
+    }//GEN-LAST:event_txtExpiryTimeMinMouseClicked
+
+    private void txtExpiryTimeMinKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtExpiryTimeMinKeyPressed
+    {//GEN-HEADEREND:event_txtExpiryTimeMinKeyPressed
+	// TODO add your handling code here:
+    }//GEN-LAST:event_txtExpiryTimeMinKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
@@ -1777,6 +1948,7 @@ public class frmDebitCardMaster extends javax.swing.JFrame
     private javax.swing.JCheckBox chkDebitOnCredit;
     private javax.swing.JCheckBox chkDiplomate;
     private javax.swing.JCheckBox chkEntryCharge;
+    private javax.swing.JCheckBox chkExpiryTime;
     private javax.swing.JCheckBox chkExtndValOnTopUp;
     private javax.swing.JCheckBox chkForCurrentFinaceYr;
     private javax.swing.JCheckBox chkRedeemableCard;
@@ -1822,6 +1994,7 @@ public class frmDebitCardMaster extends javax.swing.JFrame
     private javax.swing.JTextField txtCardName;
     private javax.swing.JTextField txtCardValueFixed;
     private javax.swing.JTextField txtDepositeAmount;
+    private javax.swing.JTextField txtExpiryTimeMin;
     private javax.swing.JTextField txtMax;
     private javax.swing.JTextField txtMaxRefundAmt;
     private javax.swing.JTextField txtMin;
@@ -2190,6 +2363,21 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 	    }
 	    // authorizeCard= "N";
 
+	    String isExpiryTime = "N";
+	    int intExpiryTime = 0;
+	    if (chkExpiryTime.isSelected())
+	    {
+		isExpiryTime = "Y";
+
+		if (!clsGlobalVarClass.validateNumbers(txtExpiryTimeMin.getText()))
+		{
+		    new frmOkPopUp(this, "Enter only numbers in expiry time field", "Error", 1).setVisible(true);
+		    txtExpiryTimeMin.requestFocus();
+		    return;
+		}
+		intExpiryTime = Integer.parseInt(txtExpiryTimeMin.getText());
+	    }
+
 	    sql = "insert into tbldebitcardtype (strCardTypeCode,strCardName,strDebitOnCredit,strRoomCard,"
 		    + "strComplementary,strAutoTopUp,strRedeemableCard,strCardInUse,strEntryCharge,strCoverCharge,"
 		    + "strDiplomate,strAllowTopUp,strExValOnTopUp,strSetExpiryDt,dteExpiryDt,strCurrentFinacialYr,"
@@ -2197,7 +2385,7 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 		    + "strPayModParty,strPayModMember,strPayModCreditCard,strPayModStaff,strPayModCheque,dblMaxRefundAmt,"
 		    + "strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strRedemptionLimitType,dblRedemptionLimitValue"
 		    + ",strCustomerCompulsory,strClientCode,strDataPostFlag"
-		    + ",strCashCard,strAuthorizeMemberCard)"
+		    + ",strCashCard,strAuthorizeMemberCard,strSetExpiryTime,intExpiryTime)"
 		    + "values ('" + txtCardCode.getText() + "','" + txtCardName.getText() + "','" + dbtOnCredit + "','" + roomCard + "','"
 		    + complementary + "','" + autoTopUp + "','" + redeemabelCard + "','" + cardInUse + "','" + entryCharge + "','" + coverCharge + "','"
 		    + diplomate + "','" + allowTop + "','" + extenValOnTopUp + "','" + setExpiryDate + "','" + toDate + "','" + forCurrentFinaceYr + "',"
@@ -2207,7 +2395,8 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 		    + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "','"
 		    + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "','"
 		    + RedemptionLimitType + "'," + txtRedeemptionLimit.getText() + ",'" + customerCompusory + "'"
-		    + ",'" + clsGlobalVarClass.gClientCode + "','N','" + cashCard + "','" + authorizeCard + "')";
+		    + ",'" + clsGlobalVarClass.gClientCode + "','N','" + cashCard + "','" + authorizeCard + "'"
+		    + ",'" + isExpiryTime + "','" + intExpiryTime + "')";
 	    //System.out.println(insertQuery);
 	    int exc = clsGlobalVarClass.dbMysql.execute(sql);
 	    if (exc > 0)
@@ -2346,6 +2535,21 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 		    authorizeCard = "Y";
 		}
 
+		String isExpiryTime = "N";
+		int intExpiryTime = 0;
+		if (chkExpiryTime.isSelected())
+		{
+		    isExpiryTime = "Y";
+
+		    if (!clsGlobalVarClass.validateNumbers(txtExpiryTimeMin.getText()))
+		    {
+			new frmOkPopUp(this, "Enter only numbers in expiry time field", "Error", 1).setVisible(true);
+			txtExpiryTimeMin.requestFocus();
+			return;
+		    }
+		    intExpiryTime = Integer.parseInt(txtExpiryTimeMin.getText());
+		}
+
 		toDate = getToDate();
 		sql = "UPDATE tbldebitcardtype SET strCardName = '" + txtCardName.getText()
 			+ "',strDebitOnCredit='" + dbtOnCredit + "',strRoomCard='" + roomCard + "',strComplementary='" + complementary + "'"
@@ -2360,7 +2564,9 @@ public class frmDebitCardMaster extends javax.swing.JFrame
 			+ ",dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "',strRedemptionLimitType='" + RedemptionLimitType + "'"
 			+ ",dblRedemptionLimitValue='" + txtRedeemptionLimit.getText() + "',strCustomerCompulsory='" + customerCompusory + "'"
 			+ ",strDataPostFlag='N',strCashCard='" + cashCard + "',strAuthorizeMemberCard='" + authorizeCard + "' "
-			+ "where strCardTypeCode ='" + txtCardCode.getText() + "' and strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+			+ ",strSetExpiryTime='" + isExpiryTime + "',intExpiryTime='" + intExpiryTime + "'"
+			+ "where strCardTypeCode ='" + txtCardCode.getText() + "' "
+			+ "and strClientCode='" + clsGlobalVarClass.gClientCode + "'";
 
 		int exc = clsGlobalVarClass.dbMysql.execute(sql);
 		if (exc > 0)

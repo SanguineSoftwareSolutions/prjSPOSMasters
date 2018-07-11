@@ -1529,7 +1529,10 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 
                 if (txtRecipeCode.getText().toString().equalsIgnoreCase(""))
                 {
-                    funSaveRecipeMaster();
+                   if (!txtChildItemName.getText().equalsIgnoreCase(""))
+                    {
+			funSaveRecipeMaster();
+		    }
                 }
                 else
                 {
@@ -1557,6 +1560,8 @@ public class frmMenuItemMaster extends javax.swing.JFrame
                         String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode);
                         while (rsPOS.next())
                         {
+			    clsGlobalVarClass.dbMysql.execute("delete from tblitemmasterlinkupdtl where strItemCode='"+txtItemCode.getText()+"' ");
+			    
                             String insertQuery = "insert into tblitemmasterlinkupdtl (strItemCode,strWSProductCode,strWSProductName,strPOSCode,strClientCode,strDataPostFlag) values "
                                     + " ('" + txtItemCode.getText() + "','" + mmsProdCode + "','" + txtItemName.getText() + "','" + rsPOS.getString(1) + "','" + clsGlobalVarClass.gClientCode + "','N' )";
                             clsGlobalVarClass.dbMysql.execute(insertQuery);

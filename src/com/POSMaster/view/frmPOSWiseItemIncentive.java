@@ -6,20 +6,19 @@
 package com.POSMaster.view;
 
 import com.POSGlobal.controller.clsGlobalVarClass;
-import com.POSGlobal.controller.clsItemPriceDtl;
 import com.POSGlobal.controller.clsUtility;
 import com.POSGlobal.view.frmOkPopUp;
 import com.POSGlobal.view.frmSearchFormDialog;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.sql.ResultSet;
 import java.util.HashMap;
-import java.util.TreeMap;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,7 +26,14 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.NumberFormat;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.Number;
 
 public class frmPOSWiseItemIncentive extends javax.swing.JFrame
 {
@@ -214,7 +220,7 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
 	    sb.append("SELECT a.strItemCode,a.strItemName,a.strPOSCode,b.strPosName,a.strIncentiveType,a.dblIncentiveValue "
 		    + ",e.strGroupName,d.strSubGroupName "
 		    + " FROM tblposwiseitemwiseincentives a  "
-		    + "left outer join tblposmaster b on a.strPosCode=b.strPosCode "
+		    + "left outer join tblposmaster b on (a.strPosCode=b.strPosCode or a.strPosCode='All') "
 		    + "join tblitemmaster c on a.strItemCode=c.strItemCode "
 		    + "join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
 		    + "join tblgrouphd e on d.strGroupCode=e.strGroupCode ");
@@ -258,7 +264,7 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
 	    sb.append("SELECT distinct(a.strItemCode),a.strItemName,a.strPosCode,b.strPosName "
 		    + ",e.strGroupName,d.strSubGroupName "
 		    + " FROM tblmenuitempricingdtl a  "
-		    + " left outer join tblposmaster b on a.strPosCode=b.strPosCode "
+		    + " left outer join tblposmaster b on (a.strPosCode=b.strPosCode or a.strPosCode='All') "
 		    + "join tblitemmaster c on a.strItemCode=c.strItemCode "
 		    + "join tblsubgrouphd d on c.strSubGroupCode=d.strSubGroupCode "
 		    + "join tblgrouphd e on d.strGroupCode=e.strGroupCode "
@@ -320,8 +326,7 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
 		    clsGlobalVarClass.dbMysql.execute(sql);
 
 		    new frmOkPopUp(this, "Entry added Successfully", "Successfull", 3).setVisible(true);
-		    
-		    
+
 		    funResetFields();
 
 		}
@@ -419,6 +424,7 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
         btnSave = new javax.swing.JButton();
         txtItemCode = new javax.swing.JTextField();
         lblPosCode1 = new javax.swing.JLabel();
+        btnExport = new javax.swing.JButton();
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Per", "Amt", " " }));
 
@@ -687,6 +693,28 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
 
         lblPosCode1.setText("Item");
 
+        btnExport.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        btnExport.setForeground(new java.awt.Color(251, 246, 246));
+        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn1.png"))); // NOI18N
+        btnExport.setText("Export");
+        btnExport.setToolTipText("Execute");
+        btnExport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnExport.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
+        btnExport.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnExportActionPerformed(evt);
+            }
+        });
+        btnExport.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                btnExportKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
@@ -704,12 +732,14 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
                 .addGap(26, 26, 26)
                 .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(141, 141, 141))
             .addComponent(srollPane)
         );
         panelBodyLayout.setVerticalGroup(
@@ -722,15 +752,19 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
                     .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtItemCode, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPosCode1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtItemCode, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(panelBodyLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblPosCode1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(separator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(srollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -837,10 +871,21 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
 
     }//GEN-LAST:event_txtItemCodeKeyPressed
 
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnExportActionPerformed
+    {//GEN-HEADEREND:event_btnExportActionPerformed
+	funExportButtonClicked();
+    }//GEN-LAST:event_btnExportActionPerformed
+
+    private void btnExportKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_btnExportKeyPressed
+    {//GEN-HEADEREND:event_btnExportKeyPressed
+	// TODO add your handling code here:
+    }//GEN-LAST:event_btnExportKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExecute;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cmbPosCode;
@@ -915,6 +960,114 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
     private void funResetClick()
     {
 	funResetFields();
+    }
+
+    private void funExportButtonClicked()
+    {
+	try
+	{
+	    if (tblPoswiseItemIncentiveDtl.getRowCount() <= 0)
+	    {
+		new frmOkPopUp(this, "No data found.", "Warning", 3).setVisible(true);
+		return;
+	    }
+	    else
+	    {
+		funExportTheData();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    private void funExportTheData()
+    {
+	String filePath = System.getProperty("user.dir");
+	File file = new File(filePath + File.separator + "Reports" + File.separator + "Item Incentive.xls");
+	try
+	{
+	    WritableWorkbook workbook1 = Workbook.createWorkbook(file);
+	    WritableSheet sheet1 = workbook1.createSheet("Item Incentive", 0);
+
+	    WritableFont cellFont = new WritableFont(WritableFont.ARIAL, 8);
+	    // cellFont.setBoldStyle(WritableFont.BOLD);
+
+	    WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
+
+	    WritableFont headerCellFont = new WritableFont(WritableFont.ARIAL, 8);
+	    headerCellFont.setBoldStyle(WritableFont.BOLD);
+
+	    WritableCellFormat headerCell = new WritableCellFormat(headerCellFont);
+
+	    NumberFormat decimalNo = new NumberFormat("0.00");
+	    WritableCellFormat numberCellFormat = new WritableCellFormat(decimalNo);
+
+	    Label header1 = new Label(0, 0, "ITEM CODE", headerCell);
+	    sheet1.addCell(header1);
+	    sheet1.setColumnView(0, 10);
+
+	    Label header2 = new Label(1, 0, "ITEM NAME", headerCell);
+	    sheet1.addCell(header2);
+	    sheet1.setColumnView(1, 40);
+
+	    Label header3 = new Label(2, 0, "GROUP", headerCell);
+	    sheet1.addCell(header3);
+	    sheet1.setColumnView(2, 15);
+
+	    Label header4 = new Label(3, 0, "SUB GROUP", headerCell);
+	    sheet1.addCell(header4);
+	    sheet1.setColumnView(3, 15);
+
+	    Label header5 = new Label(4, 0, "POS", headerCell);
+	    sheet1.addCell(header5);
+	    sheet1.setColumnView(4, 15);
+
+	    Label header6 = new Label(5, 0, "INC. TYPE", headerCell);
+	    sheet1.addCell(header6);
+	    sheet1.setColumnView(5, 15);
+
+	    Label header7 = new Label(6, 0, "INCENTIVE", headerCell);
+	    sheet1.addCell(header7);
+	    sheet1.setColumnView(6, 10);
+
+	    
+	    int dataRow=1,dataCol=0;
+	    for (int row = 0; row < tblPoswiseItemIncentiveDtl.getRowCount(); row++)
+	    {
+		for (int col = 0; col < tblPoswiseItemIncentiveDtl.getColumnCount() - 1; col++)
+		{
+		    if (col == 6)
+		    {
+			Number number = new Number(dataCol, dataRow, Double.parseDouble(tblPoswiseItemIncentiveDtl.getValueAt(row, col).toString()), numberCellFormat);
+			sheet1.addCell(number);
+		    }
+		    else
+		    {
+			Label cell = new Label(dataCol, dataRow, tblPoswiseItemIncentiveDtl.getValueAt(row, col).toString(), cellFormat);
+			sheet1.addCell(cell);
+		    }
+		    
+		    dataCol++;
+		}
+		
+		dataRow++;
+		dataCol=0;
+	    }
+
+	    workbook1.write();
+	    workbook1.close();
+
+	    Desktop dt = Desktop.getDesktop();
+	    dt.open(file);
+
+	}
+	catch (Exception ex)
+	{
+	    JOptionPane.showMessageDialog(null, ex.getMessage());
+	    ex.printStackTrace();
+	}
     }
 
     class MyTableCellEditor extends AbstractCellEditor implements TableCellEditor
