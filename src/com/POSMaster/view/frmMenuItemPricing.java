@@ -53,90 +53,90 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     public frmMenuItemPricing()
     {
-        initComponents();
-        try
-        {
-            Timer timer = new Timer(500, new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    tickTock();
-                }
-            });
-            timer.setRepeats(true);
-            timer.setCoalesce(true);
-            timer.setInitialDelay(0);
-            timer.start();
+	initComponents();
+	try
+	{
+	    Timer timer = new Timer(500, new ActionListener()
+	    {
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+		    tickTock();
+		}
+	    });
+	    timer.setRepeats(true);
+	    timer.setCoalesce(true);
+	    timer.setInitialDelay(0);
+	    timer.start();
 
-            flagfrmItemMaster = false;
-            multiSearch = false;
-            if (clsGlobalVarClass.gPriceItem)
-            {
-                flag = true;
-                txtItemCode.setText(clsGlobalVarClass.gItemCodeforPricing);
-                String sql = "select strItemName from tblitemmaster where strItemCode='" + clsGlobalVarClass.gItemCodeforPricing + "'";
-                ResultSet rsCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                rsCode.next();
-                txtItemName.setText(rsCode.getString(1));
-            }
-            java.util.Date dt1 = new java.util.Date();
-            int day = dt1.getDate();
-            int month = dt1.getMonth() + 1;
-            int year = dt1.getYear() + 1900;
-            int year1 = dt1.getYear() + 1901;
-            year1 += 99;
-            String dte = day + "-" + month + "-" + year;
-            java.util.Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dte);
-            String dte1 = day + "-" + month + "-" + year1;
-            java.util.Date date1 = new SimpleDateFormat("dd-MM-yyyy").parse(dte1);
-            java.util.Date posDate = new SimpleDateFormat("dd-MM-yyyy").parse(clsGlobalVarClass.gPOSDateToDisplay);
-            dteFromDate.setDate(posDate);
-            dteToDate.setDate(date1);
-            lblUserCode.setText(clsGlobalVarClass.gUserCode);
-            lblPosName.setText(clsGlobalVarClass.gPOSName);
-            lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
-            lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
+	    flagfrmItemMaster = false;
+	    multiSearch = false;
+	    if (clsGlobalVarClass.gPriceItem)
+	    {
+		flag = true;
+		txtItemCode.setText(clsGlobalVarClass.gItemCodeforPricing);
+		String sql = "select strItemName from tblitemmaster where strItemCode='" + clsGlobalVarClass.gItemCodeforPricing + "'";
+		ResultSet rsCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		rsCode.next();
+		txtItemName.setText(rsCode.getString(1));
+	    }
+	    java.util.Date dt1 = new java.util.Date();
+	    int day = dt1.getDate();
+	    int month = dt1.getMonth() + 1;
+	    int year = dt1.getYear() + 1900;
+	    int year1 = dt1.getYear() + 1901;
+	    year1 += 99;
+	    String dte = day + "-" + month + "-" + year;
+	    java.util.Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dte);
+	    String dte1 = day + "-" + month + "-" + year1;
+	    java.util.Date date1 = new SimpleDateFormat("dd-MM-yyyy").parse(dte1);
+	    java.util.Date posDate = new SimpleDateFormat("dd-MM-yyyy").parse(clsGlobalVarClass.gPOSDateToDisplay);
+	    dteFromDate.setDate(posDate);
+	    dteToDate.setDate(date1);
+	    lblUserCode.setText(clsGlobalVarClass.gUserCode);
+	    lblPosName.setText(clsGlobalVarClass.gPOSName);
+	    lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
+	    lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
 
-            int itemIndex = 0;
+	    int itemIndex = 0;
 
-            funFillPOS();
-            funFillArea();
-            funFillCostCenter();
-            funFillMenuHead();
-            txtItemCode.requestFocus();
+	    funFillPOS();
+	    funFillArea();
+	    funFillCostCenter();
+	    funFillMenuHead();
+	    txtItemCode.requestFocus();
 
-            sql = "select count(strItemCode) from tblitemmaster";
-            ResultSet rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsItemMaster.next();
-            int cnt = rsItemMaster.getInt(1);
-            itemCodes = new String[cnt];
-            itemNames = new String[cnt];
-            sql = "select strItemCode,strItemName from tblitemmaster";
-            rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsItemMaster.next())
-            {
-                itemCodes[itemIndex] = rsItemMaster.getString(1);
-                itemNames[itemIndex] = rsItemMaster.getString(2);
-                itemIndex++;
-            }
-            rsItemMaster.close();
+	    sql = "select count(strItemCode) from tblitemmaster";
+	    ResultSet rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsItemMaster.next();
+	    int cnt = rsItemMaster.getInt(1);
+	    itemCodes = new String[cnt];
+	    itemNames = new String[cnt];
+	    sql = "select strItemCode,strItemName from tblitemmaster";
+	    rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsItemMaster.next())
+	    {
+		itemCodes[itemIndex] = rsItemMaster.getString(1);
+		itemNames[itemIndex] = rsItemMaster.getString(2);
+		itemIndex++;
+	    }
+	    rsItemMaster.close();
 
-            funSetShortCutKeys();
+	    funSetShortCutKeys();
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     private void funSetShortCutKeys()
     {
-        btnCancel.setMnemonic('c');
-        btnNew.setMnemonic('s');
-        btnReset.setMnemonic('r');
+	btnCancel.setMnemonic('c');
+	btnNew.setMnemonic('s');
+	btnReset.setMnemonic('r');
 
     }
 
@@ -145,10 +145,10 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void tickTock()
     {
-        Date date1 = new Date();
-        String newstr = String.format("%tr", date1);
-        String dateAndTime = clsGlobalVarClass.gPOSDateToDisplay + " " + newstr;
-        lblDate.setText(dateAndTime);
+	Date date1 = new Date();
+	String newstr = String.format("%tr", date1);
+	String dateAndTime = clsGlobalVarClass.gPOSDateToDisplay + " " + newstr;
+	lblDate.setText(dateAndTime);
     }
 
     /**
@@ -156,32 +156,32 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funFillPOS()
     {
-        try
-        {
-            cmbPOSNames.removeAllItems();
-            mapPOS = new HashMap<String, String>();
-            mapPOSCodeWithName = new HashMap<String, String>();
+	try
+	{
+	    cmbPOSNames.removeAllItems();
+	    mapPOS = new HashMap<String, String>();
+	    mapPOSCodeWithName = new HashMap<String, String>();
 
-            cmbPOSNames.addItem("All");
-            mapPOS.put("All", "All");
-            mapPOSCodeWithName.put("All", "All");
+	    cmbPOSNames.addItem("All");
+	    mapPOS.put("All", "All");
+	    mapPOSCodeWithName.put("All", "All");
 
-            sql = "select strPosCode,strPosName from tblposmaster";
-            ResultSet rsPOSMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsPOSMaster.next())
-            {
-                cmbPOSNames.addItem(rsPOSMaster.getString(2));
-                mapPOS.put(rsPOSMaster.getString(2), rsPOSMaster.getString(1));
-                mapPOSCodeWithName.put(rsPOSMaster.getString(1), rsPOSMaster.getString(2));
-            }
-            rsPOSMaster.close();
+	    sql = "select strPosCode,strPosName from tblposmaster";
+	    ResultSet rsPOSMaster = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsPOSMaster.next())
+	    {
+		cmbPOSNames.addItem(rsPOSMaster.getString(2));
+		mapPOS.put(rsPOSMaster.getString(2), rsPOSMaster.getString(1));
+		mapPOSCodeWithName.put(rsPOSMaster.getString(1), rsPOSMaster.getString(2));
+	    }
+	    rsPOSMaster.close();
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -189,33 +189,33 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funFillMenuHead()
     {
-        try
-        {
-            cmbMenuNames.removeAllItems();
-            mapMenuHead = new HashMap<String, String>();
-            mapMenuHeadCodeWithName = new HashMap<String, String>();
+	try
+	{
+	    cmbMenuNames.removeAllItems();
+	    mapMenuHead = new HashMap<String, String>();
+	    mapMenuHeadCodeWithName = new HashMap<String, String>();
 
-            cmbMenuNames.addItem(" ");
-            mapMenuHead.put(" ", " ");
-            mapMenuHeadCodeWithName.put(" ", " ");
+	    cmbMenuNames.addItem(" ");
+	    mapMenuHead.put(" ", " ");
+	    mapMenuHeadCodeWithName.put(" ", " ");
 
-            sql = "select strMenuCode,strMenuName from tblmenuhd  order by strMenuName asc";
-            ResultSet rsMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsMenuHead.next())
-            {
-                cmbMenuNames.addItem(rsMenuHead.getString(2));
-                mapMenuHead.put(rsMenuHead.getString(2), rsMenuHead.getString(1));
+	    sql = "select strMenuCode,strMenuName from tblmenuhd  order by strMenuName asc";
+	    ResultSet rsMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsMenuHead.next())
+	    {
+		cmbMenuNames.addItem(rsMenuHead.getString(2));
+		mapMenuHead.put(rsMenuHead.getString(2), rsMenuHead.getString(1));
 
-                mapMenuHeadCodeWithName.put(rsMenuHead.getString(1), rsMenuHead.getString(2));
-            }
-            rsMenuHead.close();
+		mapMenuHeadCodeWithName.put(rsMenuHead.getString(1), rsMenuHead.getString(2));
+	    }
+	    rsMenuHead.close();
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -223,31 +223,31 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funFillCostCenter()
     {
-        try
-        {
-            cmbCostCenter.removeAllItems();
-            mapCostCenter = new HashMap<String, String>();
-            mapCostCenterCodeWithName = new HashMap<String, String>();
+	try
+	{
+	    cmbCostCenter.removeAllItems();
+	    mapCostCenter = new HashMap<String, String>();
+	    mapCostCenterCodeWithName = new HashMap<String, String>();
 
-            cmbCostCenter.addItem("All");
-            mapCostCenter.put("All", "All");
-            mapCostCenterCodeWithName.put("All", "All");
+	    cmbCostCenter.addItem("All");
+	    mapCostCenter.put("All", "All");
+	    mapCostCenterCodeWithName.put("All", "All");
 
-            sql = "select strCostCenterCode,strCostCenterName from tblcostcentermaster";
-            ResultSet rsCostCenter = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsCostCenter.next())
-            {
-                cmbCostCenter.addItem(rsCostCenter.getString(2));
-                mapCostCenter.put(rsCostCenter.getString(2), rsCostCenter.getString(1));
-                mapCostCenterCodeWithName.put(rsCostCenter.getString(1), rsCostCenter.getString(2));
-            }
-            rsCostCenter.close();
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    sql = "select strCostCenterCode,strCostCenterName from tblcostcentermaster";
+	    ResultSet rsCostCenter = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsCostCenter.next())
+	    {
+		cmbCostCenter.addItem(rsCostCenter.getString(2));
+		mapCostCenter.put(rsCostCenter.getString(2), rsCostCenter.getString(1));
+		mapCostCenterCodeWithName.put(rsCostCenter.getString(1), rsCostCenter.getString(2));
+	    }
+	    rsCostCenter.close();
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -255,37 +255,37 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funFillArea()
     {
-        try
-        {
-            cmbArea.removeAllItems();
-            mapArea = new HashMap<String, String>();
-            mapAreaCodeWithName = new HashMap<String, String>();
+	try
+	{
+	    cmbArea.removeAllItems();
+	    mapArea = new HashMap<String, String>();
+	    mapAreaCodeWithName = new HashMap<String, String>();
 
-            sql = "select * from tblareamaster where strAreaName ='All' ";
-            ResultSet rsArea = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsArea.next())
-            {
-                mapArea.put(rsArea.getString(2), rsArea.getString(1));
-                cmbArea.addItem(rsArea.getString(2));
-                mapAreaCodeWithName.put(rsArea.getString(1), rsArea.getString(2));
-            }
-            rsArea.close();
+	    sql = "select * from tblareamaster where strAreaName ='All' ";
+	    ResultSet rsArea = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsArea.next())
+	    {
+		mapArea.put(rsArea.getString(2), rsArea.getString(1));
+		cmbArea.addItem(rsArea.getString(2));
+		mapAreaCodeWithName.put(rsArea.getString(1), rsArea.getString(2));
+	    }
+	    rsArea.close();
 
-            sql = "select * from tblareamaster where strAreaName !='All' ";
-            rsArea = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsArea.next())
-            {
-                mapArea.put(rsArea.getString(2), rsArea.getString(1));
-                cmbArea.addItem(rsArea.getString(2));
-                mapAreaCodeWithName.put(rsArea.getString(1), rsArea.getString(2));
-            }
-            rsArea.close();
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    sql = "select * from tblareamaster where strAreaName !='All' ";
+	    rsArea = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsArea.next())
+	    {
+		mapArea.put(rsArea.getString(2), rsArea.getString(1));
+		cmbArea.addItem(rsArea.getString(2));
+		mapAreaCodeWithName.put(rsArea.getString(1), rsArea.getString(2));
+	    }
+	    rsArea.close();
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -295,11 +295,11 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funSetItemForPrice(Object[] data)
     {
-        funResetField();
-        flag = true;
-        txtItemCode.setText(data[0].toString());
-        txtItemName.setText(data[1].toString());
-        cmbMenuNames.requestFocus();
+	funResetField();
+	flag = true;
+	txtItemCode.setText(data[0].toString());
+	txtItemName.setText(data[1].toString());
+	cmbMenuNames.requestFocus();
     }
 
     /**
@@ -309,152 +309,152 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funSetItemPriceInfo(Object[] data)
     {
-        try
-        {
-            String areaName = "", hourlyPrice = "", sql = "", areaCode = "", pricingId = "";
-            String posCode = mapPOS.get(data[2].toString());
+	try
+	{
+	    String areaName = "", hourlyPrice = "", sql = "", areaCode = "", pricingId = "";
+	    String posCode = mapPOS.get(data[2].toString());
 
-            oldPOSCode = posCode;
+	    oldPOSCode = posCode;
 
-            if (multiSearch)
-            {
-                hourlyPrice = data[6].toString();
-                pricingId = data[7].toString();
-            }
-            else
-            {
-                hourlyPrice = data[7].toString();
-                pricingId = data[8].toString();
-            }
+	    if (multiSearch)
+	    {
+		hourlyPrice = data[6].toString();
+		pricingId = data[7].toString();
+	    }
+	    else
+	    {
+		hourlyPrice = data[7].toString();
+		pricingId = data[8].toString();
+	    }
 
-            if (clsGlobalVarClass.gAreaWisePricing.equals("Y"))
-            {
-                areaName = data[6].toString();
-                hourlyPrice = data[7].toString();
-                pricingId = data[8].toString();
+	    if (clsGlobalVarClass.gAreaWisePricing.equals("Y"))
+	    {
+		areaName = data[6].toString();
+		hourlyPrice = data[7].toString();
+		pricingId = data[8].toString();
 
-                areaCode = mapArea.get(areaName);
-                oldAreaCode = areaCode;
-                //System.out.println("Area Code="+oldAreaCode);
-                sql = "select * from tblmenuitempricingdtl "
-                        + " where strItemCode='" + data[0].toString() + "' "
-                        + " and strAreaCode='" + oldAreaCode + "'  and ( strPOSCode='" + posCode + "' or strPOSCode='All') "
-                        + " and strHourlyPricing='" + hourlyPrice + "' and longPricingId='" + pricingId + "' ";
-            }
-            else
-            {
+		areaCode = mapArea.get(areaName);
+		oldAreaCode = areaCode;
+		//System.out.println("Area Code="+oldAreaCode);
+		sql = "select * from tblmenuitempricingdtl "
+			+ " where strItemCode='" + data[0].toString() + "' "
+			+ " and strAreaCode='" + oldAreaCode + "'  and ( strPOSCode='" + posCode + "' or strPOSCode='All') "
+			+ " and strHourlyPricing='" + hourlyPrice + "' and longPricingId='" + pricingId + "' ";
+	    }
+	    else
+	    {
 
-                areaName = data[6].toString();
-                areaCode = mapArea.get(areaName);
-                oldAreaCode = areaCode;
-                sql = "select * from tblmenuitempricingdtl "
-                        + " where strItemCode='" + data[0].toString() + "' "
-                        + " and strHourlyPricing='" + hourlyPrice + "' "
-                        + " and (strPOSCode='" + posCode + "' or strPOSCode='All') "
-                        + " and longPricingId='" + pricingId + "' ";
-            }
-            //System.out.println(sql);
-            ResultSet rsItemPrice = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsItemPrice.next())
-            {
-                txtItemCode.setText(rsItemPrice.getString(1));
-                txtItemName.setText(rsItemPrice.getString(2));
-                txtPriceMon.setText(rsItemPrice.getString(6));
-                txtPriceTue.setText(rsItemPrice.getString(7));
-                txtPriceWed.setText(rsItemPrice.getString(8));
-                txtPriceThu.setText(rsItemPrice.getString(9));
-                txtPriceFri.setText(rsItemPrice.getString(10));
-                txtPriceSat.setText(rsItemPrice.getString(11));
-                txtPriceSun.setText(rsItemPrice.getString(12));
+		areaName = data[6].toString();
+		areaCode = mapArea.get(areaName);
+		oldAreaCode = areaCode;
+		sql = "select * from tblmenuitempricingdtl "
+			+ " where strItemCode='" + data[0].toString() + "' "
+			+ " and strHourlyPricing='" + hourlyPrice + "' "
+			+ " and (strPOSCode='" + posCode + "' or strPOSCode='All') "
+			+ " and longPricingId='" + pricingId + "' ";
+	    }
+	    //System.out.println(sql);
+	    ResultSet rsItemPrice = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsItemPrice.next())
+	    {
+		txtItemCode.setText(rsItemPrice.getString(1));
+		txtItemName.setText(rsItemPrice.getString(2));
+		txtPriceMon.setText(rsItemPrice.getString(6));
+		txtPriceTue.setText(rsItemPrice.getString(7));
+		txtPriceWed.setText(rsItemPrice.getString(8));
+		txtPriceThu.setText(rsItemPrice.getString(9));
+		txtPriceFri.setText(rsItemPrice.getString(10));
+		txtPriceSat.setText(rsItemPrice.getString(11));
+		txtPriceSun.setText(rsItemPrice.getString(12));
 
-                cmbColor.setSelectedItem(rsItemPrice.getString(20));
-                String costCenterCode = rsItemPrice.getString(19);
-                String menuHeadCode = rsItemPrice.getString(4);
-                oldAreaCode = rsItemPrice.getString(25);
-                String subMenuCode = rsItemPrice.getString(26).trim();
+		cmbColor.setSelectedItem(rsItemPrice.getString(20));
+		String costCenterCode = rsItemPrice.getString(19);
+		String menuHeadCode = rsItemPrice.getString(4);
+		oldAreaCode = rsItemPrice.getString(25);
+		String subMenuCode = rsItemPrice.getString(26).trim();
 
-                StringBuilder sb = new StringBuilder(rsItemPrice.getString(13));
-                int ind = sb.indexOf(" ");
-                String dt = sb.substring(0, ind);
-                String[] dts = new String[3];
-                StringTokenizer stk = new StringTokenizer(dt, "-");
-                int k = 0;
-                while (stk.hasMoreTokens())
-                {
-                    dts[k] = stk.nextToken();
-                    k++;
-                }
-                String date1 = dts[2] + "-" + dts[1] + "-" + dts[0];
-                java.util.Date date = new SimpleDateFormat("dd-MM-yyyy").parse(date1);
-                dteFromDate.setDate(date);
+		StringBuilder sb = new StringBuilder(rsItemPrice.getString(13));
+		int ind = sb.indexOf(" ");
+		String dt = sb.substring(0, ind);
+		String[] dts = new String[3];
+		StringTokenizer stk = new StringTokenizer(dt, "-");
+		int k = 0;
+		while (stk.hasMoreTokens())
+		{
+		    dts[k] = stk.nextToken();
+		    k++;
+		}
+		String date1 = dts[2] + "-" + dts[1] + "-" + dts[0];
+		java.util.Date date = new SimpleDateFormat("dd-MM-yyyy").parse(date1);
+		dteFromDate.setDate(date);
 
-                sb = new StringBuilder(rsItemPrice.getString(14));
-                ind = sb.indexOf(" ");
-                dt = sb.substring(0, ind);
-                dts = new String[3];
-                stk = new StringTokenizer(dt, "-");
-                k = 0;
-                while (stk.hasMoreTokens())
-                {
-                    dts[k] = stk.nextToken();
-                    k++;
-                }
-                String date2 = dts[2] + "-" + dts[1] + "-" + dts[0];
-                date = new SimpleDateFormat("dd-MM-yyyy").parse(date2);
-                dteToDate.setDate(date);
-                if (rsItemPrice.getString(5).equals("Y"))
-                {
-                    chkPopular.setSelected(true);
-                }
+		sb = new StringBuilder(rsItemPrice.getString(14));
+		ind = sb.indexOf(" ");
+		dt = sb.substring(0, ind);
+		dts = new String[3];
+		stk = new StringTokenizer(dt, "-");
+		k = 0;
+		while (stk.hasMoreTokens())
+		{
+		    dts[k] = stk.nextToken();
+		    k++;
+		}
+		String date2 = dts[2] + "-" + dts[1] + "-" + dts[0];
+		date = new SimpleDateFormat("dd-MM-yyyy").parse(date2);
+		dteToDate.setDate(date);
+		if (rsItemPrice.getString(5).equals("Y"))
+		{
+		    chkPopular.setSelected(true);
+		}
 
-                posCode = rsItemPrice.getString(3);
+		posCode = rsItemPrice.getString(3);
 
-                String posName = mapPOSCodeWithName.get(posCode);
-                String menuHeadName = mapMenuHeadCodeWithName.get(menuHeadCode);
-                String areaName2 = mapAreaCodeWithName.get(areaCode);
-                String costCenterName = mapCostCenterCodeWithName.get(costCenterCode);
+		String posName = mapPOSCodeWithName.get(posCode);
+		String menuHeadName = mapMenuHeadCodeWithName.get(menuHeadCode);
+		String areaName2 = mapAreaCodeWithName.get(areaCode);
+		String costCenterName = mapCostCenterCodeWithName.get(costCenterCode);
 
-                cmbPOSNames.setSelectedItem(posName);
-                cmbMenuNames.setSelectedItem(menuHeadName);
-                cmbCostCenter.setSelectedItem(costCenterName);
-                cmbArea.setSelectedItem(areaName2);
+		cmbPOSNames.setSelectedItem(posName);
+		cmbMenuNames.setSelectedItem(menuHeadName);
+		cmbCostCenter.setSelectedItem(costCenterName);
+		cmbArea.setSelectedItem(areaName2);
 
-                funFillSubMenuCombo(menuHeadCode);
-                int index = listSubMenuCode.indexOf(subMenuCode);
-                if (index > 0)
-                {
-                    cmbSubMenuHead.setSelectedIndex(index);
-                }
-                else
-                {
-                    cmbSubMenuHead.setSelectedIndex(0);
-                }
+		funFillSubMenuCombo(menuHeadCode);
+		int index = listSubMenuCode.indexOf(subMenuCode);
+		if (index > 0)
+		{
+		    cmbSubMenuHead.setSelectedIndex(index);
+		}
+		else
+		{
+		    cmbSubMenuHead.setSelectedIndex(0);
+		}
 
-                String[] spFromTime = rsItemPrice.getString(15).split(":");
-                String[] spToTime = rsItemPrice.getString(17).split(":");
-                cmbFromHour.setSelectedItem(spFromTime[0]);
-                cmbFromMin.setSelectedItem(spFromTime[1]);
-                cmbFromAMPM.setSelectedItem(rsItemPrice.getString(16));
-                cmbToHour.setSelectedItem(spToTime[0]);
-                cmbToMin.setSelectedItem(spToTime[1]);
-                cmbToAMPM.setSelectedItem(rsItemPrice.getString(18));
+		String[] spFromTime = rsItemPrice.getString(15).split(":");
+		String[] spToTime = rsItemPrice.getString(17).split(":");
+		cmbFromHour.setSelectedItem(spFromTime[0]);
+		cmbFromMin.setSelectedItem(spFromTime[1]);
+		cmbFromAMPM.setSelectedItem(rsItemPrice.getString(16));
+		cmbToHour.setSelectedItem(spToTime[0]);
+		cmbToMin.setSelectedItem(spToTime[1]);
+		cmbToAMPM.setSelectedItem(rsItemPrice.getString(18));
 
-                chkHourlyPricing.setSelected(false);
-                if (rsItemPrice.getString(27).equalsIgnoreCase("Yes"))
-                {
-                    chkHourlyPricing.setSelected(true);
-                }
+		chkHourlyPricing.setSelected(false);
+		if (rsItemPrice.getString(27).equalsIgnoreCase("Yes"))
+		{
+		    chkHourlyPricing.setSelected(true);
+		}
 
-                longPrincingId = rsItemPrice.getString(28);
+		longPrincingId = rsItemPrice.getString(28);
 
-                rsItemPrice.close();
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+		rsItemPrice.close();
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -462,46 +462,46 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funResetField()
     {
-        try
-        {
-            multiSearch = false;
-            btnNew.setMnemonic('s');
-            btnNew.setText("SAVE");
-            flag = true;
-            chkPopular.setSelected(false);
-            txtItemCode.setText("");
-            txtItemName.setText("");
-            txtPriceMon.setText(" ");
-            txtPriceTue.setText(" ");
-            txtPriceWed.setText(" ");
-            txtPriceThu.setText(" ");
-            txtPriceFri.setText(" ");
-            txtPriceSat.setText(" ");
-            txtPriceSun.setText(" ");
+	try
+	{
+	    multiSearch = false;
+	    btnNew.setMnemonic('s');
+	    btnNew.setText("SAVE");
+	    flag = true;
+	    chkPopular.setSelected(false);
+	    txtItemCode.setText("");
+	    txtItemName.setText("");
+	    txtPriceMon.setText(" ");
+	    txtPriceTue.setText(" ");
+	    txtPriceWed.setText(" ");
+	    txtPriceThu.setText(" ");
+	    txtPriceFri.setText(" ");
+	    txtPriceSat.setText(" ");
+	    txtPriceSun.setText(" ");
 
-            funFillPOS();
-            funFillMenuHead();
-            funFillCostCenter();
-            funFillArea();
-            if (cmbSubMenuHead.getItemCount() > 0)
-            {
-                cmbSubMenuHead.setSelectedIndex(0);
-            }
-            cmbColor.setSelectedIndex(0);
-            clsGlobalVarClass.gPriceItem = false;
-            chkHourlyPricing.setSelected(false);
-            cmbFromHour.setSelectedItem("HH");
-            cmbToHour.setSelectedItem("HH");
-            cmbFromMin.setSelectedItem("MM");
-            cmbToMin.setSelectedItem("MM");
-            cmbFromAMPM.setSelectedItem("AM");
-            cmbToAMPM.setSelectedItem("AM");
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    funFillPOS();
+	    funFillMenuHead();
+	    funFillCostCenter();
+	    funFillArea();
+	    if (cmbSubMenuHead.getItemCount() > 0)
+	    {
+		cmbSubMenuHead.setSelectedIndex(0);
+	    }
+	    cmbColor.setSelectedIndex(0);
+	    clsGlobalVarClass.gPriceItem = false;
+	    chkHourlyPricing.setSelected(false);
+	    cmbFromHour.setSelectedItem("HH");
+	    cmbToHour.setSelectedItem("HH");
+	    cmbFromMin.setSelectedItem("MM");
+	    cmbToMin.setSelectedItem("MM");
+	    cmbFromAMPM.setSelectedItem("AM");
+	    cmbToAMPM.setSelectedItem("AM");
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -511,51 +511,51 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private boolean funCheckNegativeValue()
     {
-        boolean flag = false;
-        try
-        {
-            if (Double.parseDouble(txtPriceSun.getText()) < 0)
-            {
-                flag = true;
-            }
-            else if (Double.parseDouble(txtPriceMon.getText()) < 0)
-            {
-                flag = true;
-            }
-            else if (Double.parseDouble(txtPriceTue.getText()) < 0)
-            {
-                flag = true;
-            }
-            else if (Double.parseDouble(txtPriceWed.getText()) < 0)
-            {
-                flag = true;
-            }
-            else if (Double.parseDouble(txtPriceThu.getText()) < 0)
-            {
-                flag = true;
-            }
-            else if (Double.parseDouble(txtPriceFri.getText()) < 0)
-            {
-                flag = true;
-            }
-            else if (Double.parseDouble(txtPriceSat.getText()) < 0)
-            {
-                flag = true;
-            }
-            else
-            {
-                flag = false;
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flag;
-        }
+	boolean flag = false;
+	try
+	{
+	    if (Double.parseDouble(txtPriceSun.getText()) < 0)
+	    {
+		flag = true;
+	    }
+	    else if (Double.parseDouble(txtPriceMon.getText()) < 0)
+	    {
+		flag = true;
+	    }
+	    else if (Double.parseDouble(txtPriceTue.getText()) < 0)
+	    {
+		flag = true;
+	    }
+	    else if (Double.parseDouble(txtPriceWed.getText()) < 0)
+	    {
+		flag = true;
+	    }
+	    else if (Double.parseDouble(txtPriceThu.getText()) < 0)
+	    {
+		flag = true;
+	    }
+	    else if (Double.parseDouble(txtPriceFri.getText()) < 0)
+	    {
+		flag = true;
+	    }
+	    else if (Double.parseDouble(txtPriceSat.getText()) < 0)
+	    {
+		flag = true;
+	    }
+	    else
+	    {
+		flag = false;
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flag;
+	}
     }
 
     /**
@@ -565,30 +565,30 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funGetAreaName(String areacode)
     {
-        String areaName = "";
-        try
-        {
-            String sql = "select strAreaName from tblareamaster where strAreaCode='" + areacode + "'";
-            ResultSet rsArea = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsArea.next())
-            {
-                areaName = rsArea.getString(1);
-                cmbArea.setSelectedItem(areaName);
-            }
-            else if (areaName == "")
-            {
-                cmbArea.setSelectedItem("All");
-            }
-            else
-            {
-                cmbArea.setSelectedItem("All");
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	String areaName = "";
+	try
+	{
+	    String sql = "select strAreaName from tblareamaster where strAreaCode='" + areacode + "'";
+	    ResultSet rsArea = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsArea.next())
+	    {
+		areaName = rsArea.getString(1);
+		cmbArea.setSelectedItem(areaName);
+	    }
+	    else if (areaName == "")
+	    {
+		cmbArea.setSelectedItem("All");
+	    }
+	    else
+	    {
+		cmbArea.setSelectedItem("All");
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -599,44 +599,44 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private int funFillSubMenuCombo(String MenuCode)
     {
-        String menuHeadCode = MenuCode;
-        try
-        {
-            listSubMenuCode = new ArrayList<String>();
-            listSubMenuName = new ArrayList<String>();
-            mapSubMenuHeadCodeWithName = new HashMap<String, String>();
+	String menuHeadCode = MenuCode;
+	try
+	{
+	    listSubMenuCode = new ArrayList<String>();
+	    listSubMenuName = new ArrayList<String>();
+	    mapSubMenuHeadCodeWithName = new HashMap<String, String>();
 
-            cmbSubMenuHead.removeAllItems();
-            listSubMenuName.add("--SELECT--");
-            listSubMenuCode.add("--SELECT--");
+	    cmbSubMenuHead.removeAllItems();
+	    listSubMenuName.add("--SELECT--");
+	    listSubMenuCode.add("--SELECT--");
 
-            mapSubMenuHeadCodeWithName.put("--SELECT--", "--SELECT--");
+	    mapSubMenuHeadCodeWithName.put("--SELECT--", "--SELECT--");
 
-            sql = "select strSubMenuHeadCode,strSubMenuHeadName from tblsubmenuhead  where "
-                    + "strMenuCode='" + menuHeadCode + "'";
-            //System.out.println(sql);
-            ResultSet rsMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            while (rsMenuHead.next())
-            {
-                String code = rsMenuHead.getString(1);
-                String name = rsMenuHead.getString(2);
-                listSubMenuCode.add(code);
-                listSubMenuName.add(name);
+	    sql = "select strSubMenuHeadCode,strSubMenuHeadName from tblsubmenuhead  where "
+		    + "strMenuCode='" + menuHeadCode + "'";
+	    //System.out.println(sql);
+	    ResultSet rsMenuHead = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    while (rsMenuHead.next())
+	    {
+		String code = rsMenuHead.getString(1);
+		String name = rsMenuHead.getString(2);
+		listSubMenuCode.add(code);
+		listSubMenuName.add(name);
 
-                mapSubMenuHeadCodeWithName.put(code, name);
-            }
-            rsMenuHead.close();
-            for (String subMenuName : listSubMenuName)
-            {
-                cmbSubMenuHead.addItem(subMenuName);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        return 0;
+		mapSubMenuHeadCodeWithName.put(code, name);
+	    }
+	    rsMenuHead.close();
+	    for (String subMenuName : listSubMenuName)
+	    {
+		cmbSubMenuHead.addItem(subMenuName);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	return 0;
     }
 
     /**
@@ -1367,638 +1367,638 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 
     public void funMenuItemForPrice()
     {
-        try
-        {
-            flagfrmItemMaster = true;
-            multiSearch = true;
-            flag = true;
-            clsGlobalVarClass.gPOSCodeForPricing = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
-            clsUtility obj = new clsUtility();
-            obj.funCallForSearchForm("MenuItemForPrice");
-            new frmSearchFormDialog(this, true).setVisible(true);
-            if (clsGlobalVarClass.gSearchItemClicked)
-            {
-                Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-                funSetItemForPrice(data);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	try
+	{
+	    flagfrmItemMaster = true;
+	    multiSearch = true;
+	    flag = true;
+	    clsGlobalVarClass.gPOSCodeForPricing = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
+	    clsUtility obj = new clsUtility();
+	    obj.funCallForSearchForm("MenuItemForPrice");
+	    new frmSearchFormDialog(this, true).setVisible(true);
+	    if (clsGlobalVarClass.gSearchItemClicked)
+	    {
+		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+		funSetItemForPrice(data);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
     private void txtItemCodeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtItemCodeMouseClicked
-        // TODO add your handling code here:
-        funMenuItemForPrice();
+	// TODO add your handling code here:
+	funMenuItemForPrice();
     }//GEN-LAST:event_txtItemCodeMouseClicked
 
     public void funGetItemPriceHelp()
     {
-        try
-        {
-            if (!cmbPOSNames.getSelectedItem().toString().equals("All"))
-            {
-                multiSearch = true;
-            }
-            if (!cmbMenuNames.getSelectedItem().toString().trim().isEmpty())
-            {
-                multiSearch = true;
-            }
-            flag = false;
-            clsGlobalVarClass.gPOSCodeForPricing = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
-            if (multiSearch)
-            {
-                String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
-                String menuCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
-                String costCenterCode = mapCostCenter.get(cmbCostCenter.getSelectedItem().toString());
-                String selectedAreaCode = mapArea.get(cmbArea.getSelectedItem().toString());
-                clsUtility obj = new clsUtility();
-                obj.funCallForSearchForm("MultiPrice");
+	try
+	{
+	    if (!cmbPOSNames.getSelectedItem().toString().equals("All"))
+	    {
+		multiSearch = true;
+	    }
+	    if (!cmbMenuNames.getSelectedItem().toString().trim().isEmpty())
+	    {
+		multiSearch = true;
+	    }
+	    flag = false;
+	    clsGlobalVarClass.gPOSCodeForPricing = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
+	    if (multiSearch)
+	    {
+		String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
+		String menuCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
+		String costCenterCode = mapCostCenter.get(cmbCostCenter.getSelectedItem().toString());
+		String selectedAreaCode = mapArea.get(cmbArea.getSelectedItem().toString());
+		clsUtility obj = new clsUtility();
+		obj.funCallForSearchForm("MultiPrice");
 
-                if (clsGlobalVarClass.gAreaWisePricing.equals("Y"))
-                {
-                    if (cmbArea.getSelectedItem().toString().equalsIgnoreCase("All"))
-                    {
-                        clsGlobalVarClass.gQueryForSearch = "select a.strItemCode as ItemCode, a.strItemName as ItemName,b.strPosName as POSName,"
-                                + "c.strMenuName as MenuName,a.strPopular as Popular,d.strCostCenterName as CostCenterName,"
-                                + "IFNULL(e.strAreaName,'All') as Area,a.strHourlyPricing as HourlyPricing,longPricingId as ID "
-                                + "from tblmenuitempricingdtl a left outer join tblareamaster e on a.strAreaCode=e.strAreaCode "
-                                + "left outer join tblposmaster b on (a.strPOSCode=b.strPOSCode or a.strPosCode='All') "
-                                + "left outer join tblmenuhd c on a.strMenuCode=c.strMenuCode "
-                                + "left outer join tblcostcentermaster d on a.strCostCenterCode=d.strCostCenterCode ";
-                    }
-                    else
-                    {
-                        clsGlobalVarClass.gQueryForSearch = "select a.strItemCode as ItemCode, a.strItemName as ItemName,b.strPosName as POSName,"
-                                + "c.strMenuName as MenuName,a.strPopular as Popular,d.strCostCenterName as CostCenterName,"
-                                + "IFNULL(e.strAreaName,'All') as Area,a.strHourlyPricing as HourlyPricing,longPricingId as ID "
-                                + "from tblmenuitempricingdtl a left outer join tblareamaster e on a.strAreaCode=e.strAreaCode "
-                                + "left outer join tblposmaster b on (a.strPOSCode=b.strPOSCode or a.strPosCode='All') "
-                                + "left outer join tblmenuhd c on a.strMenuCode=c.strMenuCode "
-                                + "left outer join tblcostcentermaster d on a.strCostCenterCode=d.strCostCenterCode ";
-                    }
-                }
-                else
-                {
-                    clsGlobalVarClass.gQueryForSearch = "select a.strItemCode as ItemCode, a.strItemName as ItemName,"
-                            + "b.strPosName as POSName,c.strMenuName as MenuName,a.strPopular as Popular,"
-                            + "d.strCostCenterName as CostCenterName,a.strHourlyPricing as HourlyPricing,longPricingId as ID "
-                            + "from tblmenuitempricingdtl a left outer join tblposmaster b on (a.strPOSCode=b.strPOSCode or a.strPosCode='All')"
-                            + "left outer join tblmenuhd c on a.strMenuCode=c.strMenuCode "
-                            + "left outer join tblcostcentermaster d on a.strCostCenterCode=d.strCostCenterCode ";
-                }
-                if (!txtItemName.getText().trim().isEmpty())
-                {
-                    clsGlobalVarClass.gQueryForSearch += "and a.strItemName = '" + txtItemName.getText() + "' ";
-                }
-                if (!cmbPOSNames.getSelectedItem().toString().equals("All"))
-                {
-                    if (clsGlobalVarClass.gQueryForSearch.contains("where"))
-                    {
-                        //clsGlobalVarClass.gQueryForSearch+="and b.strPosName = '"+cmbPOSNames.getSelectedItem().toString()+"' ";
-                        clsGlobalVarClass.gQueryForSearch += "and b.strPosCode = '" + posCode + "' ";
-                    }
-                    else
-                    {
-                        //clsGlobalVarClass.gQueryForSearch+="where b.strPosName = '"+cmbPOSNames.getSelectedItem().toString()+"' ";
-                        clsGlobalVarClass.gQueryForSearch += "where b.strPosCode = '" + posCode + "' ";
-                    }
-                }
-                if (!cmbMenuNames.getSelectedItem().toString().trim().isEmpty())
-                {
-                    if (clsGlobalVarClass.gQueryForSearch.contains("where"))
-                    {
-                        //clsGlobalVarClass.gQueryForSearch+="and c.strMenuName = '"+cmbMenuNames.getSelectedItem().toString()+"' ";
-                        clsGlobalVarClass.gQueryForSearch += "and c.strMenuCode = '" + menuCode + "' ";
-                    }
-                    else
-                    {
-                        //clsGlobalVarClass.gQueryForSearch+="where c.strMenuName = '"+cmbMenuNames.getSelectedItem().toString()+"' ";
-                        clsGlobalVarClass.gQueryForSearch += "where c.strMenuCode = '" + menuCode + "' ";
-                    }
-                }
-                if (!cmbCostCenter.getSelectedItem().toString().trim().isEmpty())
-                {
-                    if (clsGlobalVarClass.gQueryForSearch.contains("where"))
-                    {
-                        if (!cmbCostCenter.getSelectedItem().toString().trim().equals("All"))
-                        {
-                            clsGlobalVarClass.gQueryForSearch += "and d.strCostCenterCode = '" + costCenterCode + "' ";
-                        }
-                    }
-                    else
-                    {
-                        if (!cmbCostCenter.getSelectedItem().toString().trim().equals("All"))
-                        {
-                            clsGlobalVarClass.gQueryForSearch += "where d.strCostCenterCode = '" + costCenterCode + "' ";
-                        }
-                    }
-                }
+		if (clsGlobalVarClass.gAreaWisePricing.equals("Y"))
+		{
+		    if (cmbArea.getSelectedItem().toString().equalsIgnoreCase("All"))
+		    {
+			clsGlobalVarClass.gQueryForSearch = "select a.strItemCode as ItemCode, a.strItemName as ItemName,b.strPosName as POSName,"
+				+ "c.strMenuName as MenuName,a.strPopular as Popular,d.strCostCenterName as CostCenterName,"
+				+ "IFNULL(e.strAreaName,'All') as Area,a.strHourlyPricing as HourlyPricing,longPricingId as ID "
+				+ "from tblmenuitempricingdtl a left outer join tblareamaster e on a.strAreaCode=e.strAreaCode "
+				+ "left outer join tblposmaster b on (a.strPOSCode=b.strPOSCode or a.strPosCode='All') "
+				+ "left outer join tblmenuhd c on a.strMenuCode=c.strMenuCode "
+				+ "left outer join tblcostcentermaster d on a.strCostCenterCode=d.strCostCenterCode ";
+		    }
+		    else
+		    {
+			clsGlobalVarClass.gQueryForSearch = "select a.strItemCode as ItemCode, a.strItemName as ItemName,b.strPosName as POSName,"
+				+ "c.strMenuName as MenuName,a.strPopular as Popular,d.strCostCenterName as CostCenterName,"
+				+ "IFNULL(e.strAreaName,'All') as Area,a.strHourlyPricing as HourlyPricing,longPricingId as ID "
+				+ "from tblmenuitempricingdtl a left outer join tblareamaster e on a.strAreaCode=e.strAreaCode "
+				+ "left outer join tblposmaster b on (a.strPOSCode=b.strPOSCode or a.strPosCode='All') "
+				+ "left outer join tblmenuhd c on a.strMenuCode=c.strMenuCode "
+				+ "left outer join tblcostcentermaster d on a.strCostCenterCode=d.strCostCenterCode ";
+		    }
+		}
+		else
+		{
+		    clsGlobalVarClass.gQueryForSearch = "select a.strItemCode as ItemCode, a.strItemName as ItemName,"
+			    + "b.strPosName as POSName,c.strMenuName as MenuName,a.strPopular as Popular,"
+			    + "d.strCostCenterName as CostCenterName,a.strHourlyPricing as HourlyPricing,longPricingId as ID "
+			    + "from tblmenuitempricingdtl a left outer join tblposmaster b on (a.strPOSCode=b.strPOSCode or a.strPosCode='All')"
+			    + "left outer join tblmenuhd c on a.strMenuCode=c.strMenuCode "
+			    + "left outer join tblcostcentermaster d on a.strCostCenterCode=d.strCostCenterCode ";
+		}
+		if (!txtItemName.getText().trim().isEmpty())
+		{
+		    clsGlobalVarClass.gQueryForSearch += "and a.strItemName = '" + txtItemName.getText() + "' ";
+		}
+		if (!cmbPOSNames.getSelectedItem().toString().equals("All"))
+		{
+		    if (clsGlobalVarClass.gQueryForSearch.contains("where"))
+		    {
+			//clsGlobalVarClass.gQueryForSearch+="and b.strPosName = '"+cmbPOSNames.getSelectedItem().toString()+"' ";
+			clsGlobalVarClass.gQueryForSearch += "and b.strPosCode = '" + posCode + "' ";
+		    }
+		    else
+		    {
+			//clsGlobalVarClass.gQueryForSearch+="where b.strPosName = '"+cmbPOSNames.getSelectedItem().toString()+"' ";
+			clsGlobalVarClass.gQueryForSearch += "where b.strPosCode = '" + posCode + "' ";
+		    }
+		}
+		if (!cmbMenuNames.getSelectedItem().toString().trim().isEmpty())
+		{
+		    if (clsGlobalVarClass.gQueryForSearch.contains("where"))
+		    {
+			//clsGlobalVarClass.gQueryForSearch+="and c.strMenuName = '"+cmbMenuNames.getSelectedItem().toString()+"' ";
+			clsGlobalVarClass.gQueryForSearch += "and c.strMenuCode = '" + menuCode + "' ";
+		    }
+		    else
+		    {
+			//clsGlobalVarClass.gQueryForSearch+="where c.strMenuName = '"+cmbMenuNames.getSelectedItem().toString()+"' ";
+			clsGlobalVarClass.gQueryForSearch += "where c.strMenuCode = '" + menuCode + "' ";
+		    }
+		}
+		if (!cmbCostCenter.getSelectedItem().toString().trim().isEmpty())
+		{
+		    if (clsGlobalVarClass.gQueryForSearch.contains("where"))
+		    {
+			if (!cmbCostCenter.getSelectedItem().toString().trim().equals("All"))
+			{
+			    clsGlobalVarClass.gQueryForSearch += "and d.strCostCenterCode = '" + costCenterCode + "' ";
+			}
+		    }
+		    else
+		    {
+			if (!cmbCostCenter.getSelectedItem().toString().trim().equals("All"))
+			{
+			    clsGlobalVarClass.gQueryForSearch += "where d.strCostCenterCode = '" + costCenterCode + "' ";
+			}
+		    }
+		}
 
-                if (clsGlobalVarClass.gAreaWisePricing.equals("Y"))
-                {
-                    if (!cmbArea.getSelectedItem().toString().equalsIgnoreCase("All"))
-                    {
-                        clsGlobalVarClass.gQueryForSearch += " and a.strAreaCode='" + selectedAreaCode + "' ";
-                    }
-                }
+		if (clsGlobalVarClass.gAreaWisePricing.equals("Y"))
+		{
+		    if (!cmbArea.getSelectedItem().toString().equalsIgnoreCase("All"))
+		    {
+			clsGlobalVarClass.gQueryForSearch += " and a.strAreaCode='" + selectedAreaCode + "' ";
+		    }
+		}
 
-                clsGlobalVarClass.gQueryForSearch += "order by a.strItemName asc";
-                //multiSearch=false;
-            }
-            else
-            {
-                clsUtility obj = new clsUtility();
-                obj.funCallForSearchForm("Price");
-            }
-            new frmSearchFormDialog(this, true).setVisible(true);
-            if (clsGlobalVarClass.gSearchItemClicked)
-            {
-                btnNew.setText("UPDATE");
-                btnNew.setMnemonic('u');
-                Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-                if (data.length > 0)
-                {
-                    funSetItemPriceInfo(data);
-                }
-                clsGlobalVarClass.gSearchItemClicked = false;
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+		clsGlobalVarClass.gQueryForSearch += "order by a.strItemName asc";
+		//multiSearch=false;
+	    }
+	    else
+	    {
+		clsUtility obj = new clsUtility();
+		obj.funCallForSearchForm("Price");
+	    }
+	    new frmSearchFormDialog(this, true).setVisible(true);
+	    if (clsGlobalVarClass.gSearchItemClicked)
+	    {
+		btnNew.setText("UPDATE");
+		btnNew.setMnemonic('u');
+		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+		if (data.length > 0)
+		{
+		    funSetItemPriceInfo(data);
+		}
+		clsGlobalVarClass.gSearchItemClicked = false;
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
     private void btnHelpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHelpMouseClicked
-        funGetItemPriceHelp();
+	funGetItemPriceHelp();
     }//GEN-LAST:event_btnHelpMouseClicked
 
     private void cmbSubMenuHeadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbSubMenuHeadKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbArea.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbArea.requestFocus();
+	}
     }//GEN-LAST:event_cmbSubMenuHeadKeyPressed
 
     private void cmbMenuNamesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbMenuNamesMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbMenuNamesMouseClicked
 
     private void cmbMenuNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMenuNamesActionPerformed
 
-        if (cmbMenuNames.getItemCount() > 0)
-        {
-            if (cmbMenuNames.getSelectedItem().toString().trim().length() > 0)
-            {
-                String menuHeadCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
-                funFillSubMenuCombo(menuHeadCode);
-            }
-        }
+	if (cmbMenuNames.getItemCount() > 0)
+	{
+	    if (cmbMenuNames.getSelectedItem().toString().trim().length() > 0)
+	    {
+		String menuHeadCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
+		funFillSubMenuCombo(menuHeadCode);
+	    }
+	}
     }//GEN-LAST:event_cmbMenuNamesActionPerformed
 
     private void cmbMenuNamesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbMenuNamesKeyPressed
-        // TODO add your handling code here:
-        multiSearch = true;
-        if (evt.getKeyCode() == 10)
-        {
-            cmbSubMenuHead.requestFocus();
-        }
+	// TODO add your handling code here:
+	multiSearch = true;
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbSubMenuHead.requestFocus();
+	}
     }//GEN-LAST:event_cmbMenuNamesKeyPressed
 
     private void cmbPOSNamesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbPOSNamesMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbPOSNamesMouseClicked
 
     private void cmbPOSNamesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbPOSNamesKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbMenuNames.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbMenuNames.requestFocus();
+	}
     }//GEN-LAST:event_cmbPOSNamesKeyPressed
 
     private void cmbAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbAreaKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbCostCenter.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbCostCenter.requestFocus();
+	}
 
     }//GEN-LAST:event_cmbAreaKeyPressed
 
     private void dteToDateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dteToDateKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbFromHour.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbFromHour.requestFocus();
+	}
     }//GEN-LAST:event_dteToDateKeyPressed
 
     private void cmbFromHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromHourKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
 
-        if (evt.getKeyCode() == 10)
-        {
-            cmbFromMin.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbFromMin.requestFocus();
+	}
     }//GEN-LAST:event_cmbFromHourKeyPressed
 
     private void cmbFromMinKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromMinKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbFromAMPM.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbFromAMPM.requestFocus();
+	}
     }//GEN-LAST:event_cmbFromMinKeyPressed
 
     private void cmbFromAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromAMPMKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbToHour.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbToHour.requestFocus();
+	}
     }//GEN-LAST:event_cmbFromAMPMKeyPressed
 
     private void cmbToHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToHourKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbToMin.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbToMin.requestFocus();
+	}
     }//GEN-LAST:event_cmbToHourKeyPressed
 
     private void cmbToMinKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToMinKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbToAMPM.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbToAMPM.requestFocus();
+	}
     }//GEN-LAST:event_cmbToMinKeyPressed
 
     private void cmbToAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToAMPMKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            cmbCostCenter.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbCostCenter.requestFocus();
+	}
     }//GEN-LAST:event_cmbToAMPMKeyPressed
 
     private void chkPopularKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_chkPopularKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtPriceSun.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtPriceSun.requestFocus();
+	}
     }//GEN-LAST:event_chkPopularKeyPressed
 
     private void cmbCostCenterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbCostCenterMouseClicked
-        // TODO add your handling code here:
-        multiSearch = true;
+	// TODO add your handling code here:
+	multiSearch = true;
     }//GEN-LAST:event_cmbCostCenterMouseClicked
 
     private void cmbCostCenterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbCostCenterKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            chkPopular.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    chkPopular.requestFocus();
+	}
     }//GEN-LAST:event_cmbCostCenterKeyPressed
 
     private void txtPriceSunFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPriceSunFocusLost
-        // TODO add your handling code here:
-        try
-        {
-            txtPriceMon.setText(txtPriceSun.getText());
-            txtPriceTue.setText(txtPriceSun.getText());
-            txtPriceWed.setText(txtPriceSun.getText());
-            txtPriceThu.setText(txtPriceSun.getText());
-            txtPriceFri.setText(txtPriceSun.getText());
-            txtPriceSat.setText(txtPriceSun.getText());
+	// TODO add your handling code here:
+	try
+	{
+	    txtPriceMon.setText(txtPriceSun.getText());
+	    txtPriceTue.setText(txtPriceSun.getText());
+	    txtPriceWed.setText(txtPriceSun.getText());
+	    txtPriceThu.setText(txtPriceSun.getText());
+	    txtPriceFri.setText(txtPriceSun.getText());
+	    txtPriceSat.setText(txtPriceSun.getText());
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtPriceSunFocusLost
 
     private void txtPriceSunMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPriceSunMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            if (txtPriceSun.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Sunday").setVisible(true);
-                txtPriceSun.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtPriceSun.getText(), "Double", "Enter Price For Sunday").setVisible(true);
-                txtPriceSun.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
+	// TODO add your handling code here:
+	try
+	{
+	    if (txtPriceSun.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Sunday").setVisible(true);
+		txtPriceSun.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtPriceSun.getText(), "Double", "Enter Price For Sunday").setVisible(true);
+		txtPriceSun.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtPriceSunMouseClicked
 
     private void txtPriceSunKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceSunKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtPriceMon.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtPriceMon.requestFocus();
+	}
     }//GEN-LAST:event_txtPriceSunKeyPressed
 
     private void txtPriceMonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPriceMonMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            if (txtPriceMon.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Monday").setVisible(true);
-                txtPriceMon.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtPriceMon.getText(), "Double", "Enter Price For Monday").setVisible(true);
-                txtPriceMon.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
+	// TODO add your handling code here:
+	try
+	{
+	    if (txtPriceMon.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Monday").setVisible(true);
+		txtPriceMon.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtPriceMon.getText(), "Double", "Enter Price For Monday").setVisible(true);
+		txtPriceMon.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtPriceMonMouseClicked
 
     private void txtPriceMonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceMonKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtPriceTue.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtPriceTue.requestFocus();
+	}
     }//GEN-LAST:event_txtPriceMonKeyPressed
 
     private void txtPriceTueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPriceTueMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            if (txtPriceTue.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Tuesday").setVisible(true);
-                txtPriceTue.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtPriceTue.getText(), "Double", "Enter Price For Tuesday").setVisible(true);
-                txtPriceTue.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	// TODO add your handling code here:
+	try
+	{
+	    if (txtPriceTue.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Tuesday").setVisible(true);
+		txtPriceTue.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtPriceTue.getText(), "Double", "Enter Price For Tuesday").setVisible(true);
+		txtPriceTue.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtPriceTueMouseClicked
 
     private void txtPriceTueKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceTueKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtPriceWed.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtPriceWed.requestFocus();
+	}
     }//GEN-LAST:event_txtPriceTueKeyPressed
 
     private void txtPriceWedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPriceWedMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            if (txtPriceWed.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Wednesday").setVisible(true);
-                txtPriceWed.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtPriceWed.getText(), "Double", "Enter Price For Wednesday").setVisible(true);
-                txtPriceWed.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	// TODO add your handling code here:
+	try
+	{
+	    if (txtPriceWed.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Wednesday").setVisible(true);
+		txtPriceWed.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtPriceWed.getText(), "Double", "Enter Price For Wednesday").setVisible(true);
+		txtPriceWed.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtPriceWedMouseClicked
 
     private void txtPriceWedKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceWedKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtPriceThu.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtPriceThu.requestFocus();
+	}
     }//GEN-LAST:event_txtPriceWedKeyPressed
 
     private void txtPriceSatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPriceSatMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            if (txtPriceSat.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Saturday").setVisible(true);
-                txtPriceSat.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	// TODO add your handling code here:
+	try
+	{
+	    if (txtPriceSat.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Saturday").setVisible(true);
+		txtPriceSat.setText(clsGlobalVarClass.gNumerickeyboardValue);
 
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtPriceSat.getText(), "Double", "Enter Price For Saturday").setVisible(true);
-                txtPriceSat.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtPriceSat.getText(), "Double", "Enter Price For Saturday").setVisible(true);
+		txtPriceSat.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtPriceSatMouseClicked
 
     private void txtPriceSatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceSatKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            btnNew.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    btnNew.requestFocus();
+	}
     }//GEN-LAST:event_txtPriceSatKeyPressed
 
     private void txtPriceFriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPriceFriMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            if (txtPriceFri.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Friday").setVisible(true);
-                txtPriceFri.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtPriceFri.getText(), "Double", "Enter Price For Friday").setVisible(true);
-                txtPriceFri.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	// TODO add your handling code here:
+	try
+	{
+	    if (txtPriceFri.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Friday").setVisible(true);
+		txtPriceFri.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtPriceFri.getText(), "Double", "Enter Price For Friday").setVisible(true);
+		txtPriceFri.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtPriceFriMouseClicked
 
     private void txtPriceFriKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceFriKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtPriceSat.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtPriceSat.requestFocus();
+	}
     }//GEN-LAST:event_txtPriceFriKeyPressed
 
     private void txtPriceThuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPriceThuMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            if (txtPriceThu.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Thursday").setVisible(true);
-                txtPriceThu.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtPriceThu.getText(), "Double", "Enter Price For Thursday").setVisible(true);
-                txtPriceThu.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	// TODO add your handling code here:
+	try
+	{
+	    if (txtPriceThu.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Double", "Enter Price For Thursday").setVisible(true);
+		txtPriceThu.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtPriceThu.getText(), "Double", "Enter Price For Thursday").setVisible(true);
+		txtPriceThu.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtPriceThuMouseClicked
 
     private void txtPriceThuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceThuKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtPriceFri.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtPriceFri.requestFocus();
+	}
     }//GEN-LAST:event_txtPriceThuKeyPressed
 
     private void btnCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelMouseClicked
-        // TODO add your handling code here:
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("Price Menu");
+	// TODO add your handling code here:
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("Price Menu");
     }//GEN-LAST:event_btnCancelMouseClicked
 
     private void btnResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMouseClicked
-        // TODO add your handling code here:
-        funResetField();
+	// TODO add your handling code here:
+	funResetField();
     }//GEN-LAST:event_btnResetMouseClicked
 
     public void funSaveAndUpdateOperations()
     {
-        try
-        {
+	try
+	{
 
-            String areaCode = "", hourlyPrice = "No";
-            if (mapArea.size() > 0)
-            {
-                areaCode = mapArea.get(cmbArea.getSelectedItem().toString());
-            }
-            if (txtPriceSun.getText().trim().length() == 0 || txtPriceMon.getText().trim().length() == 0
-                    || txtPriceTue.getText().trim().length() == 0 || txtPriceWed.getText().trim().length() == 0
-                    || txtPriceThu.getText().trim().length() == 0 || txtPriceSat.getText().trim().length() == 0)
-            {
-                JOptionPane.showMessageDialog(this, "Please Enter All Day Price!");
-                return;
-            }
+	    String areaCode = "", hourlyPrice = "No";
+	    if (mapArea.size() > 0)
+	    {
+		areaCode = mapArea.get(cmbArea.getSelectedItem().toString());
+	    }
+	    if (txtPriceSun.getText().trim().length() == 0 || txtPriceMon.getText().trim().length() == 0
+		    || txtPriceTue.getText().trim().length() == 0 || txtPriceWed.getText().trim().length() == 0
+		    || txtPriceThu.getText().trim().length() == 0 || txtPriceSat.getText().trim().length() == 0)
+	    {
+		JOptionPane.showMessageDialog(this, "Please Enter All Day Price!");
+		return;
+	    }
 
-            String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
+	    String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());	  
 
-            if (flag)
-            {
-                funInsertItemPrice(areaCode);
-            }
-            else
-            {
-                funUpdateItemPrice(areaCode);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    if (flag)
+	    {
+		funInsertItemPrice(areaCode);
+	    }
+	    else
+	    {
+		funUpdateItemPrice(areaCode);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
     private void btnNewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseClicked
-        // TODO add your handling code here:
-        funSaveAndUpdateOperations();
+	// TODO add your handling code here:
+	funSaveAndUpdateOperations();
     }//GEN-LAST:event_btnNewMouseClicked
 
     private void btnNewKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNewKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            funSaveAndUpdateOperations();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    funSaveAndUpdateOperations();
+	}
     }//GEN-LAST:event_btnNewKeyPressed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        // TODO add your handling code here:
-        funSaveAndUpdateOperations();
+	// TODO add your handling code here:
+	funSaveAndUpdateOperations();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
-        funResetField();
+	// TODO add your handling code here:
+	funResetField();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("Price Menu");
+	// TODO add your handling code here:
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("Price Menu");
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txtItemCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtItemCodeKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            btnHelp.requestFocus();
-        }
-        if (evt.getKeyChar() == '?' || evt.getKeyChar() == '/')
-        {
-            funMenuItemForPrice();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    btnHelp.requestFocus();
+	}
+	if (evt.getKeyChar() == '?' || evt.getKeyChar() == '/')
+	{
+	    funMenuItemForPrice();
+	}
 
     }//GEN-LAST:event_txtItemCodeKeyPressed
 
     private void btnHelpMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHelpMouseEntered
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnHelpMouseEntered
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("Price Menu");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("Price Menu");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("Price Menu");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("Price Menu");
     }//GEN-LAST:event_formWindowClosing
 
     /**
@@ -2006,49 +2006,49 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(frmMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(frmMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(frmMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(frmMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+	 */
+	try
+	{
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+	    {
+		if ("Nimbus".equals(info.getName()))
+		{
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	}
+	catch (ClassNotFoundException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (InstantiationException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (IllegalAccessException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	catch (javax.swing.UnsupportedLookAndFeelException ex)
+	{
+	    java.util.logging.Logger.getLogger(frmMenuItemPricing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
+	//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new frmMenuItemPricing().setVisible(true);
-            }
-        });
+	/* Create and display the form */
+	java.awt.EventQueue.invokeLater(new Runnable()
+	{
+	    public void run()
+	    {
+		new frmMenuItemPricing().setVisible(true);
+	    }
+	});
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2124,9 +2124,9 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private String funGetMenuCode(String menuHeadName)
     {
-        String menuHeadCode = "";
-        menuHeadCode = mapMenuHead.get(cmbMenuNames.getSelectedItem().toString());
-        return menuHeadCode;
+	String menuHeadCode = "";
+	menuHeadCode = mapMenuHead.get(cmbMenuNames.getSelectedItem().toString());
+	return menuHeadCode;
     }
 
     /**
@@ -2137,32 +2137,32 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private String funGetSubMenuCode(String subMenuName)
     {
-        String subCode = "NA";
-        ResultSet rsMenuHeadName = null;
-        String subMName = subMenuName;
-        try
-        {
-            if (subMenuName.equalsIgnoreCase("--SELECT--") || subMenuName.trim().length() == 0)
-            {
-                subCode = "NA";
-            }
-            else
-            {
-                String sql = "select strSubMenuHeadCode "
-                        + "from tblsubmenuhead "
-                        + "where strSubMenuHeadName='" + subMName + "' "
-                        + "group by strSubMenuHeadCode";
-                rsMenuHeadName = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                rsMenuHeadName.next();
-                subCode = rsMenuHeadName.getString(1);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        return subCode;
+	String subCode = "NA";
+	ResultSet rsMenuHeadName = null;
+	String subMName = subMenuName;
+	try
+	{
+	    if (subMenuName.equalsIgnoreCase("--SELECT--") || subMenuName.trim().length() == 0)
+	    {
+		subCode = "NA";
+	    }
+	    else
+	    {
+		String sql = "select strSubMenuHeadCode "
+			+ "from tblsubmenuhead "
+			+ "where strSubMenuHeadName='" + subMName + "' "
+			+ "group by strSubMenuHeadCode";
+		rsMenuHeadName = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		rsMenuHeadName.next();
+		subCode = rsMenuHeadName.getString(1);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	return subCode;
     }
 
     /**
@@ -2172,197 +2172,197 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funInsertItemPrice(String areaCode)
     {
-        try
-        {
-            String hourlyPrice = "No";
-            btnNew.setText("SAVE");
+	try
+	{
+	    String hourlyPrice = "No";
+	    btnNew.setText("SAVE");
 
-            java.util.Date dt = new java.util.Date();
-            time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-            date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-            dteCreated = date + " " + time;
-            dteEdited = date + " " + time;
+	    java.util.Date dt = new java.util.Date();
+	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+	    dteCreated = date + " " + time;
+	    dteEdited = date + " " + time;
 
-            dt = dteFromDate.getDate();
-            time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-            date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-            dteFrom = date + " " + time;
+	    dt = dteFromDate.getDate();
+	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+	    dteFrom = date + " " + time;
 
-            dt = dteToDate.getDate();
-            time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-            date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-            dteTo = date + " " + time;
+	    dt = dteToDate.getDate();
+	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+	    dteTo = date + " " + time;
 
-            Date fromDt = dteFromDate.getDate();
-            Date toDt = dteToDate.getDate();
-            if ((toDt.getTime() - fromDt.getTime()) < 0)
-            {
-                new frmOkPopUp(this, "Invalid date", "Error", 1).setVisible(true);
-                return;
-            }
-            if (cmbMenuNames.getSelectedItem().equals(" "))
-            {
-                cmbMenuNames.requestFocus();
-                new frmOkPopUp(this, "Please select menu", "Error", 1).setVisible(true);
-                return;
-            }
-            if (cmbCostCenter.getItemCount() == 0)
-            {
-                cmbCostCenter.requestFocus();
-                new frmOkPopUp(this, "Please select cost center", "Error", 1).setVisible(true);
-                return;
-            }
-            if (funCheckNegativeValue())
-            {
-                new frmOkPopUp(this, "Invalid Amount", "Error", 1).setVisible(true);
-                return;
-            }
-            if ((!cmbFromHour.getSelectedItem().toString().equalsIgnoreCase("HH")) && (cmbToHour.getSelectedItem().toString().equalsIgnoreCase("HH")))
-            {
-                new frmOkPopUp(this, "Please Select To Time", "Error", 1).setVisible(true);
-                return;
-            }
-            if ((cmbFromHour.getSelectedItem().toString().equalsIgnoreCase("HH")) && (!cmbToHour.getSelectedItem().toString().equalsIgnoreCase("HH")))
-            {
-                new frmOkPopUp(this, "Please Select From Time", "Error", 1).setVisible(true);
-                return;
-            }
-            if (cmbCostCenter.getSelectedItem().toString().equals("All"))
-            {
-                new frmOkPopUp(this, "Please Select Cost Center", "Error", 1).setVisible(true);
-                return;
-            }
-            if (chkHourlyPricing.isSelected())
-            {
-                if (funCheckFromToTime())
-                {
-                    String fromHour = cmbFromHour.getSelectedItem().toString();
-                    String fromMin = cmbFromMin.getSelectedItem().toString();
-                    String toHour = cmbToHour.getSelectedItem().toString();
-                    String toMin = cmbToMin.getSelectedItem().toString();
-                    String fromAMPM = cmbFromAMPM.getSelectedItem().toString();
-                    String toAMPM = cmbToAMPM.getSelectedItem().toString();
+	    Date fromDt = dteFromDate.getDate();
+	    Date toDt = dteToDate.getDate();
+	    if ((toDt.getTime() - fromDt.getTime()) < 0)
+	    {
+		new frmOkPopUp(this, "Invalid date", "Error", 1).setVisible(true);
+		return;
+	    }
+	    if (cmbMenuNames.getSelectedItem().equals(" "))
+	    {
+		cmbMenuNames.requestFocus();
+		new frmOkPopUp(this, "Please select menu", "Error", 1).setVisible(true);
+		return;
+	    }
+	    if (cmbCostCenter.getItemCount() == 0)
+	    {
+		cmbCostCenter.requestFocus();
+		new frmOkPopUp(this, "Please select cost center", "Error", 1).setVisible(true);
+		return;
+	    }
+	    if (funCheckNegativeValue())
+	    {
+		new frmOkPopUp(this, "Invalid Amount", "Error", 1).setVisible(true);
+		return;
+	    }
+	    if ((!cmbFromHour.getSelectedItem().toString().equalsIgnoreCase("HH")) && (cmbToHour.getSelectedItem().toString().equalsIgnoreCase("HH")))
+	    {
+		new frmOkPopUp(this, "Please Select To Time", "Error", 1).setVisible(true);
+		return;
+	    }
+	    if ((cmbFromHour.getSelectedItem().toString().equalsIgnoreCase("HH")) && (!cmbToHour.getSelectedItem().toString().equalsIgnoreCase("HH")))
+	    {
+		new frmOkPopUp(this, "Please Select From Time", "Error", 1).setVisible(true);
+		return;
+	    }
+	    if (cmbCostCenter.getSelectedItem().toString().equals("All"))
+	    {
+		new frmOkPopUp(this, "Please Select Cost Center", "Error", 1).setVisible(true);
+		return;
+	    }
+	    if (chkHourlyPricing.isSelected())
+	    {
+		if (funCheckFromToTime())
+		{
+		    String fromHour = cmbFromHour.getSelectedItem().toString();
+		    String fromMin = cmbFromMin.getSelectedItem().toString();
+		    String toHour = cmbToHour.getSelectedItem().toString();
+		    String toMin = cmbToMin.getSelectedItem().toString();
+		    String fromAMPM = cmbFromAMPM.getSelectedItem().toString();
+		    String toAMPM = cmbToAMPM.getSelectedItem().toString();
 
-                    if (fromAMPM.trim().equalsIgnoreCase(toAMPM.trim()))
-                    {
-                        int fromTime = Integer.parseInt(fromHour + fromMin);
-                        int toTime = Integer.parseInt(toHour + toMin);
-                        //System.out.println("fromTime=" + fromTime + "\ttoTime=" + toTime);
-                        if (fromTime >= toTime)
-                        {
-                            new frmOkPopUp(this, "Invalid toTime.", "Error", 1).setVisible(true);
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    new frmOkPopUp(this, "Select Time for Hourly Pricing.", "Error", 1).setVisible(true);
-                    return;
-                }
-            }
+		    if (fromAMPM.trim().equalsIgnoreCase(toAMPM.trim()))
+		    {
+			int fromTime = Integer.parseInt(fromHour + fromMin);
+			int toTime = Integer.parseInt(toHour + toMin);
+			//System.out.println("fromTime=" + fromTime + "\ttoTime=" + toTime);
+			if (fromTime >= toTime)
+			{
+			    new frmOkPopUp(this, "Invalid toTime.", "Error", 1).setVisible(true);
+			    return;
+			}
+		    }
+		}
+		else
+		{
+		    new frmOkPopUp(this, "Select Time for Hourly Pricing.", "Error", 1).setVisible(true);
+		    return;
+		}
+	    }
 
-            if (chkHourlyPricing.isSelected())
-            {
-                hourlyPrice = "Yes";
-                String fromHour = cmbFromHour.getSelectedItem().toString();
-                String fromMin = cmbFromMin.getSelectedItem().toString();
-                String toHour = cmbToHour.getSelectedItem().toString();
-                String toMin = cmbToMin.getSelectedItem().toString();
+	    if (chkHourlyPricing.isSelected())
+	    {
+		hourlyPrice = "Yes";
+		String fromHour = cmbFromHour.getSelectedItem().toString();
+		String fromMin = cmbFromMin.getSelectedItem().toString();
+		String toHour = cmbToHour.getSelectedItem().toString();
+		String toMin = cmbToMin.getSelectedItem().toString();
 
-                if (fromHour.equals("HH") || fromMin.equals("HH") || toHour.equals("HH") || toMin.equals("MM"))
-                {
-                    new frmOkPopUp(this, "Invalid Time Entered.", "Error", 1).setVisible(true);
-                    return;
-                }
-            }
-            else if (funCheckFromToTime())
-            {
-                new frmOkPopUp(this, "Please Tick Hourly Pricing.", "Error", 1).setVisible(true);
-                return;
-            }
-            String menuName = cmbMenuNames.getSelectedItem().toString();
-            String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
-            String posName = cmbPOSNames.getSelectedItem().toString();
-            String menuCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
-            String costCenter = mapCostCenter.get(cmbCostCenter.getSelectedItem().toString());
+		if (fromHour.equals("HH") || fromMin.equals("HH") || toHour.equals("HH") || toMin.equals("MM"))
+		{
+		    new frmOkPopUp(this, "Invalid Time Entered.", "Error", 1).setVisible(true);
+		    return;
+		}
+	    }
+	    else if (funCheckFromToTime())
+	    {
+		new frmOkPopUp(this, "Please Tick Hourly Pricing.", "Error", 1).setVisible(true);
+		return;
+	    }
+	    String menuName = cmbMenuNames.getSelectedItem().toString();
+	    String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
+	    String posName = cmbPOSNames.getSelectedItem().toString();
+	    String menuCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
+	    String costCenter = mapCostCenter.get(cmbCostCenter.getSelectedItem().toString());
 
-            String subMenucode = "NA";
-            if (cmbSubMenuHead.getSelectedIndex() > 0)
-            {
-                subMenucode = funGetSubMenuCode(cmbSubMenuHead.getSelectedItem().toString());
-            }
-            popularItem = "N";
-            if (chkPopular.isSelected() == true)
-            {
-                popularItem = "Y";
-            }
+	    String subMenucode = "NA";
+	    if (cmbSubMenuHead.getSelectedIndex() > 0)
+	    {
+		subMenucode = funGetSubMenuCode(cmbSubMenuHead.getSelectedItem().toString());
+	    }
+	    popularItem = "N";
+	    if (chkPopular.isSelected() == true)
+	    {
+		popularItem = "Y";
+	    }
 
-            int exc = 0;
-            String tmeFrom = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMin.getSelectedItem().toString();
-            String tmeTo = cmbToHour.getSelectedItem().toString() + ":" + cmbToMin.getSelectedItem().toString();
+	    int exc = 0;
+	    String tmeFrom = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMin.getSelectedItem().toString();
+	    String tmeTo = cmbToHour.getSelectedItem().toString() + ":" + cmbToMin.getSelectedItem().toString();
 
-            sql = "select count(*) from tblmenuitempricingdtl "
-                    + "where (strPosCode='" + posCode + "' or strPosCode='All') "
-                    + "and strItemCode='" + txtItemCode.getText() + "' and strAreaCode='" + areaCode + "' "
-                    + "and strHourlyPricing='" + hourlyPrice + "'";
-            ResultSet rsItemPriceCount = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rsItemPriceCount.next();
-            if (rsItemPriceCount.getInt(1) == 0 || hourlyPrice.equals("Yes"))
-            {
-                insertQuery = "insert into tblmenuitempricingdtl(strItemCode,strItemName,strPosCode,strMenuCode"
-                        + ",strPopular,strPriceMonday,strPriceTuesday,strPriceWednesday,strPriceThursday,strPriceFriday"
-                        + ",strPriceSaturday,strPriceSunday,dteFromDate,dteToDate,tmeTimeFrom,strAMPMFrom,tmeTimeTo"
-                        + ",strAMPMTo,strCostCenterCode,strTextColor,strUserCreated,strUserEdited,dteDateCreated"
-                        + ",dteDateEdited,strAreaCode,strSubMenuHeadCode,strHourlyPricing,strClientCode) "
-                        + "values('" + txtItemCode.getText() + "','" + txtItemName.getText() + "','" + posCode + "','" + menuCode + "'"
-                        + ",'" + popularItem + "','" + txtPriceMon.getText() + "','" + txtPriceTue.getText() + "'"
-                        + ",'" + txtPriceWed.getText() + "','" + txtPriceThu.getText() + "','" + txtPriceFri.getText() + "','" + txtPriceSat.getText() + "'"
-                        + ",'" + txtPriceSun.getText() + "','" + dteFrom + "','" + dteTo + "','" + tmeFrom + "'"
-                        + ",'" + cmbFromAMPM.getSelectedItem() + "','" + tmeTo + "','" + cmbToAMPM.getSelectedItem().toString() + "','" + costCenter + "','" + cmbColor.getSelectedItem() + "','" + clsGlobalVarClass.gUserCode + "'"
-                        + ",'" + clsGlobalVarClass.gUserCode + "','" + dteCreated + "','" + dteEdited + "','" + areaCode + "','" + subMenucode + "'"
-                        + ",'" + hourlyPrice + "','" + clsGlobalVarClass.gClientCode + "')";
-                //System.out.println(insertQuery);
-                exc = clsGlobalVarClass.dbMysql.execute(insertQuery);
+	    sql = "select count(*) from tblmenuitempricingdtl "
+		    + "where (strPosCode='" + posCode + "' or strPosCode='All') "
+		    + "and strItemCode='" + txtItemCode.getText() + "' and strAreaCode='" + areaCode + "' "
+		    + "and strHourlyPricing='" + hourlyPrice + "'";
+	    ResultSet rsItemPriceCount = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rsItemPriceCount.next();
+	    if (rsItemPriceCount.getInt(1) == 0 || hourlyPrice.equals("Yes"))
+	    {
+		insertQuery = "insert into tblmenuitempricingdtl(strItemCode,strItemName,strPosCode,strMenuCode"
+			+ ",strPopular,strPriceMonday,strPriceTuesday,strPriceWednesday,strPriceThursday,strPriceFriday"
+			+ ",strPriceSaturday,strPriceSunday,dteFromDate,dteToDate,tmeTimeFrom,strAMPMFrom,tmeTimeTo"
+			+ ",strAMPMTo,strCostCenterCode,strTextColor,strUserCreated,strUserEdited,dteDateCreated"
+			+ ",dteDateEdited,strAreaCode,strSubMenuHeadCode,strHourlyPricing,strClientCode) "
+			+ "values('" + txtItemCode.getText() + "','" + txtItemName.getText() + "','" + posCode + "','" + menuCode + "'"
+			+ ",'" + popularItem + "','" + txtPriceMon.getText() + "','" + txtPriceTue.getText() + "'"
+			+ ",'" + txtPriceWed.getText() + "','" + txtPriceThu.getText() + "','" + txtPriceFri.getText() + "','" + txtPriceSat.getText() + "'"
+			+ ",'" + txtPriceSun.getText() + "','" + dteFrom + "','" + dteTo + "','" + tmeFrom + "'"
+			+ ",'" + cmbFromAMPM.getSelectedItem() + "','" + tmeTo + "','" + cmbToAMPM.getSelectedItem().toString() + "','" + costCenter + "','" + cmbColor.getSelectedItem() + "','" + clsGlobalVarClass.gUserCode + "'"
+			+ ",'" + clsGlobalVarClass.gUserCode + "','" + dteCreated + "','" + dteEdited + "','" + areaCode + "','" + subMenucode + "'"
+			+ ",'" + hourlyPrice + "','" + clsGlobalVarClass.gClientCode + "')";
+		//System.out.println(insertQuery);
+		exc = clsGlobalVarClass.dbMysql.execute(insertQuery);
 
-                sql = "select count(*) from tblmenuitempricinghd where strPosCode='" + posCode + "' and strMenuCode='" + menuCode + "'";
-                ResultSet menuRs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                menuRs.next();
-                if (menuRs.getInt(1) == 0)
-                {
-                    insertQuery = "insert into tblmenuitempricinghd(strPosCode,strMenuCode,strMenuName,strUserCreated"
-                            + ",strUserEdited,dteDateCreated,dteDateEdited) "
-                            + "values('" + posCode + "','" + menuCode + "','" + menuName + "','" + clsGlobalVarClass.gUserCode + "'"
-                            + ",'" + clsGlobalVarClass.gUserCode + "','" + dteCreated + "','" + dteEdited + "')";
-                    exc = clsGlobalVarClass.dbMysql.execute(insertQuery);
-                }
-                if (exc > 0)
-                {
-                    String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                            + " where strTableName='MenuItemPricing' ";
-                    clsGlobalVarClass.dbMysql.execute(sql);
-                    new frmOkPopUp(this, "Entry added Successfully", "Successfull", 3).setVisible(true);
-                    funResetField();
-                    if (!flagfrmItemMaster)
-                    {
-                        dispose();
-                        new frmMenuItemMaster().setVisible(true);
-                    }
-                }
-            }
-            else
-            {
-                String msg = "<html>Price for this item is already<br>set in " + posName + "</html>";
-                new frmOkPopUp(this, msg, "Error", 1).setVisible(true);
-            }
-            rsItemPriceCount.close();
+		sql = "select count(*) from tblmenuitempricinghd where strPosCode='" + posCode + "' and strMenuCode='" + menuCode + "'";
+		ResultSet menuRs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		menuRs.next();
+		if (menuRs.getInt(1) == 0)
+		{
+		    insertQuery = "insert into tblmenuitempricinghd(strPosCode,strMenuCode,strMenuName,strUserCreated"
+			    + ",strUserEdited,dteDateCreated,dteDateEdited) "
+			    + "values('" + posCode + "','" + menuCode + "','" + menuName + "','" + clsGlobalVarClass.gUserCode + "'"
+			    + ",'" + clsGlobalVarClass.gUserCode + "','" + dteCreated + "','" + dteEdited + "')";
+		    exc = clsGlobalVarClass.dbMysql.execute(insertQuery);
+		}
+		if (exc > 0)
+		{
+		    String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+			    + " where strTableName='MenuItemPricing' ";
+		    clsGlobalVarClass.dbMysql.execute(sql);
+		    new frmOkPopUp(this, "Entry added Successfully", "Successfull", 3).setVisible(true);
+		    funResetField();
+		    if (!flagfrmItemMaster)
+		    {
+			dispose();
+			new frmMenuItemMaster().setVisible(true);
+		    }
+		}
+	    }
+	    else
+	    {
+		String msg = "<html>Price for this item is already<br>set in " + posName + "</html>";
+		new frmOkPopUp(this, msg, "Error", 1).setVisible(true);
+	    }
+	    rsItemPriceCount.close();
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -2372,160 +2372,160 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private void funUpdateItemPrice(String areaCode)
     {
-        try
-        {
-            java.util.Date dt = new java.util.Date();
-            time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-            date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-            dteCreated = date + " " + time;
-            dteEdited = date + " " + time;
+	try
+	{
+	    java.util.Date dt = new java.util.Date();
+	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+	    dteCreated = date + " " + time;
+	    dteEdited = date + " " + time;
 
-            dt = dteFromDate.getDate();
-            time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-            date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-            dteFrom = date + " " + time;
+	    dt = dteFromDate.getDate();
+	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+	    dteFrom = date + " " + time;
 
-            dt = dteToDate.getDate();
-            time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-            date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-            dteTo = date + " " + time;
+	    dt = dteToDate.getDate();
+	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+	    dteTo = date + " " + time;
 
-            String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
-            String menuCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
-            String costCenter = mapCostCenter.get(cmbCostCenter.getSelectedItem().toString());
-            String SubMenuHeadName = cmbSubMenuHead.getSelectedItem().toString();
-            String subMenucode = funGetSubMenuCode(SubMenuHeadName);
+	    String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
+	    String menuCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
+	    String costCenter = mapCostCenter.get(cmbCostCenter.getSelectedItem().toString());
+	    String SubMenuHeadName = cmbSubMenuHead.getSelectedItem().toString();
+	    String subMenucode = funGetSubMenuCode(SubMenuHeadName);
 
-            popularItem = "N";
-            if (chkPopular.isSelected() == true)
-            {
-                popularItem = "Y";
-            }
-            Date fromDt = dteFromDate.getDate();
-            Date toDt = dteToDate.getDate();
-            if ((toDt.getTime() - fromDt.getTime()) < 0)
-            {
-                new frmOkPopUp(this, "Invalid date", "Error", 1).setVisible(true);
-            }
-            else if (cmbMenuNames.getSelectedItem().equals(" "))
-            {
-                cmbMenuNames.requestFocus();
-                new frmOkPopUp(this, "Please select menu", "Error", 1).setVisible(true);
-            }
-            else if (cmbCostCenter.getItemCount() == 0)
-            {
-                cmbCostCenter.requestFocus();
-                new frmOkPopUp(this, "Please select cost center", "Error", 1).setVisible(true);
-            }
-            else if (funCheckNegativeValue())
-            {
-                new frmOkPopUp(this, "Invalid Amount", "Error", 1).setVisible(true);
-            }
-            else if ((!cmbFromHour.getSelectedItem().toString().equalsIgnoreCase("HH")) && (cmbToHour.getSelectedItem().toString().equalsIgnoreCase("HH")))
-            {
-                new frmOkPopUp(this, "Please Select To Time", "Error", 1).setVisible(true);
-            }
-            else if ((cmbFromHour.getSelectedItem().toString().equalsIgnoreCase("HH")) && (!cmbToHour.getSelectedItem().toString().equalsIgnoreCase("HH")))
-            {
-                new frmOkPopUp(this, "Please Select From Time", "Error", 1).setVisible(true);
-            }
-            else if (cmbCostCenter.getSelectedItem().toString().equals("All"))
-            {
-                new frmOkPopUp(this, "Please Select Cost Center", "Error", 1).setVisible(true);
-            }
-            else
-            {
-                String hourlyPrice = "No";
-                if (chkHourlyPricing.isSelected())
-                {
-                    hourlyPrice = "Yes";
-                    String fromHour = cmbFromHour.getSelectedItem().toString();
-                    String fromMin = cmbFromMin.getSelectedItem().toString();
-                    String toHour = cmbToHour.getSelectedItem().toString();
-                    String toMin = cmbToMin.getSelectedItem().toString();
+	    popularItem = "N";
+	    if (chkPopular.isSelected() == true)
+	    {
+		popularItem = "Y";
+	    }
+	    Date fromDt = dteFromDate.getDate();
+	    Date toDt = dteToDate.getDate();
+	    if ((toDt.getTime() - fromDt.getTime()) < 0)
+	    {
+		new frmOkPopUp(this, "Invalid date", "Error", 1).setVisible(true);
+	    }
+	    else if (cmbMenuNames.getSelectedItem().equals(" "))
+	    {
+		cmbMenuNames.requestFocus();
+		new frmOkPopUp(this, "Please select menu", "Error", 1).setVisible(true);
+	    }
+	    else if (cmbCostCenter.getItemCount() == 0)
+	    {
+		cmbCostCenter.requestFocus();
+		new frmOkPopUp(this, "Please select cost center", "Error", 1).setVisible(true);
+	    }
+	    else if (funCheckNegativeValue())
+	    {
+		new frmOkPopUp(this, "Invalid Amount", "Error", 1).setVisible(true);
+	    }
+	    else if ((!cmbFromHour.getSelectedItem().toString().equalsIgnoreCase("HH")) && (cmbToHour.getSelectedItem().toString().equalsIgnoreCase("HH")))
+	    {
+		new frmOkPopUp(this, "Please Select To Time", "Error", 1).setVisible(true);
+	    }
+	    else if ((cmbFromHour.getSelectedItem().toString().equalsIgnoreCase("HH")) && (!cmbToHour.getSelectedItem().toString().equalsIgnoreCase("HH")))
+	    {
+		new frmOkPopUp(this, "Please Select From Time", "Error", 1).setVisible(true);
+	    }
+	    else if (cmbCostCenter.getSelectedItem().toString().equals("All"))
+	    {
+		new frmOkPopUp(this, "Please Select Cost Center", "Error", 1).setVisible(true);
+	    }
+	    else
+	    {
+		String hourlyPrice = "No";
+		if (chkHourlyPricing.isSelected())
+		{
+		    hourlyPrice = "Yes";
+		    String fromHour = cmbFromHour.getSelectedItem().toString();
+		    String fromMin = cmbFromMin.getSelectedItem().toString();
+		    String toHour = cmbToHour.getSelectedItem().toString();
+		    String toMin = cmbToMin.getSelectedItem().toString();
 
-                    if (fromHour.equals("HH") || fromMin.equals("HH") || toHour.equals("HH") || toMin.equals("MM"))
-                    {
-                        new frmOkPopUp(this, "Invalid Time Entered.", "Error", 1).setVisible(true);
-                        return;
-                    }
-                    String fromAMPM = cmbFromAMPM.getSelectedItem().toString();
-                    String toAMPM = cmbToAMPM.getSelectedItem().toString();
-                    if (fromAMPM.trim().equalsIgnoreCase(toAMPM.trim()))
-                    {
-                        int fromTime = Integer.parseInt(fromHour + fromMin);
-                        int toTime = Integer.parseInt(toHour + toMin);
-                        //System.out.println("fromTime=" + fromTime + "\ttoTime=" + toTime);
-                        if (fromTime >= toTime)
-                        {
-                            new frmOkPopUp(this, "Invalid toTime.", "Error", 1).setVisible(true);
-                            return;
-                        }
-                    }
-                }
-                else if (funCheckFromToTime())
-                {
-                    new frmOkPopUp(this, "Please Tick Hourly Pricing.", "Error", 1).setVisible(true);
-                    return;
-                }
-                String tmeFrom = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMin.getSelectedItem().toString();
-                String tmeTo = cmbToHour.getSelectedItem().toString() + ":" + cmbToMin.getSelectedItem().toString();
+		    if (fromHour.equals("HH") || fromMin.equals("HH") || toHour.equals("HH") || toMin.equals("MM"))
+		    {
+			new frmOkPopUp(this, "Invalid Time Entered.", "Error", 1).setVisible(true);
+			return;
+		    }
+		    String fromAMPM = cmbFromAMPM.getSelectedItem().toString();
+		    String toAMPM = cmbToAMPM.getSelectedItem().toString();
+		    if (fromAMPM.trim().equalsIgnoreCase(toAMPM.trim()))
+		    {
+			int fromTime = Integer.parseInt(fromHour + fromMin);
+			int toTime = Integer.parseInt(toHour + toMin);
+			//System.out.println("fromTime=" + fromTime + "\ttoTime=" + toTime);
+			if (fromTime >= toTime)
+			{
+			    new frmOkPopUp(this, "Invalid toTime.", "Error", 1).setVisible(true);
+			    return;
+			}
+		    }
+		}
+		else if (funCheckFromToTime())
+		{
+		    new frmOkPopUp(this, "Please Tick Hourly Pricing.", "Error", 1).setVisible(true);
+		    return;
+		}
+		String tmeFrom = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMin.getSelectedItem().toString();
+		String tmeTo = cmbToHour.getSelectedItem().toString() + ":" + cmbToMin.getSelectedItem().toString();
 
-                if (funCheckItemFromDatetoDate(posCode, areaCode))
-                {
-                    insertQuery = "insert into tblitempricingauditdtl "
-                            + " select * from tblmenuitempricingdtl "
-                            + " where (strPosCode='" + posCode + "' or strPosCode='All') "
-                            + " and strItemCode='" + txtItemCode.getText() + "' and strAreaCode='" + oldAreaCode + "' "
-                            + " and strHourlyPricing='" + hourlyPrice + "' ";
-                    //System.out.println(insertQuery);
-                    clsGlobalVarClass.dbMysql.execute(insertQuery);
-                }
+		if (funCheckItemFromDatetoDate(posCode, areaCode))
+		{
+		    insertQuery = "insert into tblitempricingauditdtl "
+			    + " select * from tblmenuitempricingdtl "
+			    + " where (strPosCode='" + posCode + "' or strPosCode='All') "
+			    + " and strItemCode='" + txtItemCode.getText() + "' and strAreaCode='" + oldAreaCode + "' "
+			    + " and strHourlyPricing='" + hourlyPrice + "' ";
+		    //System.out.println(insertQuery);
+		    clsGlobalVarClass.dbMysql.execute(insertQuery);
+		}
 
-                updateQuery = "UPDATE tblmenuitempricingdtl "
-                        + " SET strItemName = '" + txtItemName.getText() + "',strPosCode='" + posCode + "',strMenuCode='" + menuCode + "'"
-                        + ",strPopular='" + popularItem + "',strPriceMonday='" + txtPriceMon.getText() + "'"
-                        + ",strPriceTuesday='" + txtPriceTue.getText() + "',strPriceWednesday='" + txtPriceWed.getText() + "'"
-                        + ",strPriceThursday='" + txtPriceThu.getText() + "',strPriceFriday='" + txtPriceFri.getText() + "'"
-                        + ",strPriceSaturday='" + txtPriceSat.getText() + "',strPriceSunday='" + txtPriceSun.getText() + "',dteFromDate='" + dteFrom + "'"
-                        + ",dteToDate='" + dteTo + "',tmeTimeFrom='" + tmeFrom + "',strAMPMFrom='" + cmbFromAMPM.getSelectedItem() + "'"
-                        + ",tmeTimeTo='" + tmeTo + "',strAMPMTo='" + cmbToAMPM.getSelectedItem().toString() + "'"
-                        + ",strCostCenterCode='" + costCenter + "',strTextColor='" + cmbColor.getSelectedItem() + "'"
-                        + ",strUserEdited='" + clsGlobalVarClass.gUserCode + "',dteDateEdited='" + dteEdited + "',strAreaCode='" + areaCode + "'"
-                        + ",strSubMenuHeadCode='" + subMenucode + "',strHourlyPricing='" + hourlyPrice + "'"
-                        + ",strClientCode='" + clsGlobalVarClass.gClientCode + "' "
-                        + "where longPricingId='" + longPrincingId + "' ";
+		updateQuery = "UPDATE tblmenuitempricingdtl "
+			+ " SET strItemName = '" + txtItemName.getText() + "',strPosCode='" + posCode + "',strMenuCode='" + menuCode + "'"
+			+ ",strPopular='" + popularItem + "',strPriceMonday='" + txtPriceMon.getText() + "'"
+			+ ",strPriceTuesday='" + txtPriceTue.getText() + "',strPriceWednesday='" + txtPriceWed.getText() + "'"
+			+ ",strPriceThursday='" + txtPriceThu.getText() + "',strPriceFriday='" + txtPriceFri.getText() + "'"
+			+ ",strPriceSaturday='" + txtPriceSat.getText() + "',strPriceSunday='" + txtPriceSun.getText() + "',dteFromDate='" + dteFrom + "'"
+			+ ",dteToDate='" + dteTo + "',tmeTimeFrom='" + tmeFrom + "',strAMPMFrom='" + cmbFromAMPM.getSelectedItem() + "'"
+			+ ",tmeTimeTo='" + tmeTo + "',strAMPMTo='" + cmbToAMPM.getSelectedItem().toString() + "'"
+			+ ",strCostCenterCode='" + costCenter + "',strTextColor='" + cmbColor.getSelectedItem() + "'"
+			+ ",strUserEdited='" + clsGlobalVarClass.gUserCode + "',dteDateEdited='" + dteEdited + "',strAreaCode='" + areaCode + "'"
+			+ ",strSubMenuHeadCode='" + subMenucode + "',strHourlyPricing='" + hourlyPrice + "'"
+			+ ",strClientCode='" + clsGlobalVarClass.gClientCode + "' "
+			+ "where longPricingId='" + longPrincingId + "' ";
 //                        + " WHERE strAreaCode='" + oldAreaCode + "' and strItemCode ='" + txtItemCode.getText() + "' "
 //                        + " and strHourlyPricing='" + hourlyPrice + "' and (strPosCode='" + oldPOSCode + "' or strPosCode='All') ";
-                //System.out.println(updateQuery);
-                clsGlobalVarClass.dbMysql.execute(updateQuery);
+		//System.out.println(updateQuery);
+		clsGlobalVarClass.dbMysql.execute(updateQuery);
 
-                if (posCode.equalsIgnoreCase("All"))
-                {
-                    String sqlDeleteDuplicates = "delete from tblmenuitempricingdtl "
-                            + "where strItemCode='" + txtItemCode.getText() + "' "
-                            + "and strPosCode!='All' ";
-                    clsGlobalVarClass.dbMysql.execute(sqlDeleteDuplicates);
-                }
+		if (posCode.equalsIgnoreCase("All"))
+		{
+		    String sqlDeleteDuplicates = "delete from tblmenuitempricingdtl "
+			    + "where strItemCode='" + txtItemCode.getText() + "' "
+			    + "and strPosCode!='All' ";
+		    clsGlobalVarClass.dbMysql.execute(sqlDeleteDuplicates);
+		}
 
-                String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                        + " where strTableName='MenuItemPricing' ";
-                clsGlobalVarClass.dbMysql.execute(sql);
-                new frmOkPopUp(this, "Updated Successfully", "Successfull", 3).setVisible(true);
-                funResetField();
-                /*
+		String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+			+ " where strTableName='MenuItemPricing' ";
+		clsGlobalVarClass.dbMysql.execute(sql);
+		new frmOkPopUp(this, "Updated Successfully", "Successfull", 3).setVisible(true);
+		funResetField();
+		/*
                  else
                  {
                  String msg="<html>Price for this item is not<br>set in "+posName+"</html>";
                  new frmOkPopUp(this,msg, "Error",1).setVisible(true);
                  }*/
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -2535,58 +2535,57 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private boolean funCheckFromToTime()
     {
-        boolean flg = false;
-        String fromHour = cmbFromHour.getSelectedItem().toString();
-        String fromMin = cmbFromMin.getSelectedItem().toString();
-        String toHour = cmbToHour.getSelectedItem().toString();
-        String toMin = cmbToMin.getSelectedItem().toString();
+	boolean flg = false;
+	String fromHour = cmbFromHour.getSelectedItem().toString();
+	String fromMin = cmbFromMin.getSelectedItem().toString();
+	String toHour = cmbToHour.getSelectedItem().toString();
+	String toMin = cmbToMin.getSelectedItem().toString();
 
-        if (!fromHour.equals("HH"))
-        {
-            if (!fromMin.equals("MM"))
-            {
-                if (!toHour.equals("HH"))
-                {
-                    if (!toMin.equals("MM"))
-                    {
-                        flg = true;
-                    }
-                }
-            }
-        }
-        return flg;
+	if (!fromHour.equals("HH"))
+	{
+	    if (!fromMin.equals("MM"))
+	    {
+		if (!toHour.equals("HH"))
+		{
+		    if (!toMin.equals("MM"))
+		    {
+			flg = true;
+		    }
+		}
+	    }
+	}
+	return flg;
     }
 
     private boolean funCheckItemFromDatetoDate(String posCode, String areaCode)
     {
-        boolean flgDate = false;
-        try
-        {
-            sql = "select count(*) from tblmenuitempricingdtl "
-                    + "where (strPosCode='" + posCode + "' or strPosCode='All') "
-                    + "and strItemCode='" + txtItemCode.getText() + "' "
-                    + "and strAreaCode='" + areaCode + "' "
-                    + "and date(dteToDate)!='" + dteTo + "' ";
-            //System.out.println(sql);
-            ResultSet cntRs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (cntRs.next())
-            {
-                if (cntRs.getInt(1) > 0)
-                {
-                    flgDate = true;
-                }
-            }
-            cntRs.close();
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgDate;
-        }
-    }
-
+	boolean flgDate = false;
+	try
+	{
+	    sql = "select count(*) from tblmenuitempricingdtl "
+		    + "where (strPosCode='" + posCode + "' or strPosCode='All') "
+		    + "and strItemCode='" + txtItemCode.getText() + "' "
+		    + "and strAreaCode='" + areaCode + "' "
+		    + "and date(dteToDate)!='" + dteTo + "' ";
+	    //System.out.println(sql);
+	    ResultSet cntRs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (cntRs.next())
+	    {
+		if (cntRs.getInt(1) > 0)
+		{
+		    flgDate = true;
+		}
+	    }
+	    cntRs.close();
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgDate;
+	}
+    }  
 }

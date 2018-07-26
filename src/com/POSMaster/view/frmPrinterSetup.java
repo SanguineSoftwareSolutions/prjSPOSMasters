@@ -3,44 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 package com.POSMaster.view;
 
 import com.POSGlobal.controller.clsGlobalVarClass;
 import com.POSGlobal.controller.clsUtility;
 import com.POSGlobal.view.frmAlfaNumericKeyBoard;
 import com.POSGlobal.view.frmOkPopUp;
-import com.POSGlobal.view.frmPropertySetup;
 import com.POSGlobal.view.frmSearchFormDialog;
 import com.POSMaster.controller.clsPrinterSetup;
-import com.POSPrinting.Utility.clsPrintingUtility;
 import com.POSPrinting.clsTestPrinter;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.Attribute;
-import javax.print.attribute.DocAttributeSet;
-import javax.print.attribute.HashDocAttributeSet;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.PrintServiceAttributeSet;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
