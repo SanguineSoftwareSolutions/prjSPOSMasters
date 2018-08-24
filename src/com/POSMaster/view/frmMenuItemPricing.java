@@ -33,8 +33,8 @@ public class frmMenuItemPricing extends javax.swing.JFrame
     private String insertQuery, updateQuery, sql, oldAreaCode;
     private boolean flag, multiSearch;
     private String time, date;
-    private String dteCreated, dteFrom, dteTo;
-    private String dteEdited, popularItem;
+
+    private String popularItem;
     private boolean flagfrmItemMaster;
     private HashMap<String, String> mapArea, mapPOS, mapCostCenter, mapMenuHead;
     private ArrayList<String> listSubMenuCode;
@@ -433,11 +433,11 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 		String[] spFromTime = rsItemPrice.getString(15).split(":");
 		String[] spToTime = rsItemPrice.getString(17).split(":");
 		cmbFromHour.setSelectedItem(spFromTime[0]);
-		cmbFromMin.setSelectedItem(spFromTime[1]);
-		cmbFromAMPM.setSelectedItem(rsItemPrice.getString(16));
+		cmbFromMinute.setSelectedItem(spFromTime[1]);
+		cmbFromTimeSeconds.setSelectedItem(spFromTime[2]);
 		cmbToHour.setSelectedItem(spToTime[0]);
-		cmbToMin.setSelectedItem(spToTime[1]);
-		cmbToAMPM.setSelectedItem(rsItemPrice.getString(18));
+		cmbToMinute.setSelectedItem(spToTime[1]);
+		cmbToTimeSeconds.setSelectedItem(spToTime[2]);
 
 		chkHourlyPricing.setSelected(false);
 		if (rsItemPrice.getString(27).equalsIgnoreCase("Yes"))
@@ -492,10 +492,10 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	    chkHourlyPricing.setSelected(false);
 	    cmbFromHour.setSelectedItem("HH");
 	    cmbToHour.setSelectedItem("HH");
-	    cmbFromMin.setSelectedItem("MM");
-	    cmbToMin.setSelectedItem("MM");
-	    cmbFromAMPM.setSelectedItem("AM");
-	    cmbToAMPM.setSelectedItem("AM");
+	    cmbFromMinute.setSelectedItem("MM");
+	    cmbToMinute.setSelectedItem("MM");
+	    cmbFromTimeSeconds.setSelectedItem("S");
+	    cmbToTimeSeconds.setSelectedItem("S");
 	}
 	catch (Exception e)
 	{
@@ -646,7 +646,8 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         panelheader = new javax.swing.JPanel();
         lblProductName = new javax.swing.JLabel();
@@ -689,13 +690,7 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         dteFromDate = new com.toedter.calendar.JDateChooser();
         lblFromDate = new javax.swing.JLabel();
         lblTimeFrom = new javax.swing.JLabel();
-        cmbFromHour = new javax.swing.JComboBox();
-        cmbFromMin = new javax.swing.JComboBox();
-        cmbFromAMPM = new javax.swing.JComboBox();
         lblToTime = new javax.swing.JLabel();
-        cmbToHour = new javax.swing.JComboBox();
-        cmbToMin = new javax.swing.JComboBox();
-        cmbToAMPM = new javax.swing.JComboBox();
         chkPopular = new javax.swing.JCheckBox();
         cmbCostCenter = new javax.swing.JComboBox();
         lblCostCenter = new javax.swing.JLabel();
@@ -716,16 +711,25 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         btnCancel = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnNew = new javax.swing.JButton();
+        cmbFromHour = new javax.swing.JComboBox();
+        cmbFromMinute = new javax.swing.JComboBox();
+        cmbFromTimeSeconds = new javax.swing.JComboBox();
+        cmbToHour = new javax.swing.JComboBox();
+        cmbToMinute = new javax.swing.JComboBox();
+        cmbToTimeSeconds = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
         setMinimumSize(new java.awt.Dimension(800, 600));
         setUndecorated(true);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosed(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosed(evt);
             }
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
@@ -795,13 +799,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblItemCode.setText("Item Code    :");
 
         txtItemCode.setEditable(false);
-        txtItemCode.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtItemCode.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtItemCodeMouseClicked(evt);
             }
         });
-        txtItemCode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtItemCode.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtItemCodeKeyPressed(evt);
             }
         });
@@ -810,11 +818,14 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         btnHelp.setForeground(new java.awt.Color(255, 255, 255));
         btnHelp.setText("...");
         btnHelp.setToolTipText("Open Items");
-        btnHelp.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnHelp.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnHelpMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
                 btnHelpMouseEntered(evt);
             }
         });
@@ -833,8 +844,10 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         cmbColor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Black", "Green", "Red", "BLUE", "CYAN", "ORANGE", "PINK", "YELLOW", "WHITE" }));
 
         cmbSubMenuHead.setBackground(new java.awt.Color(51, 102, 255));
-        cmbSubMenuHead.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbSubMenuHead.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbSubMenuHeadKeyPressed(evt);
             }
         });
@@ -845,18 +858,24 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         cmbMenuNames.setBackground(new java.awt.Color(51, 102, 255));
         cmbMenuNames.setForeground(new java.awt.Color(255, 255, 255));
         cmbMenuNames.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " " }));
-        cmbMenuNames.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        cmbMenuNames.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 cmbMenuNamesMouseClicked(evt);
             }
         });
-        cmbMenuNames.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cmbMenuNames.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 cmbMenuNamesActionPerformed(evt);
             }
         });
-        cmbMenuNames.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbMenuNames.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbMenuNamesKeyPressed(evt);
             }
         });
@@ -866,13 +885,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 
         cmbPOSNames.setBackground(new java.awt.Color(51, 102, 255));
         cmbPOSNames.setForeground(new java.awt.Color(255, 255, 255));
-        cmbPOSNames.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        cmbPOSNames.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 cmbPOSNamesMouseClicked(evt);
             }
         });
-        cmbPOSNames.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbPOSNames.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbPOSNamesKeyPressed(evt);
             }
         });
@@ -884,8 +907,10 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblArea.setText("Area            :");
 
         cmbArea.setBackground(new java.awt.Color(51, 102, 255));
-        cmbArea.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbArea.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbAreaKeyPressed(evt);
             }
         });
@@ -893,8 +918,10 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         chkHourlyPricing.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkHourlyPricing.setText("Hourly Pricing");
 
-        dteToDate.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        dteToDate.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 dteToDateKeyPressed(evt);
             }
         });
@@ -908,79 +935,31 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblTimeFrom.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblTimeFrom.setText("Time From    :");
 
-        cmbFromHour.setBackground(new java.awt.Color(51, 102, 255));
-        cmbFromHour.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cmbFromHour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "HH", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "00" }));
-        cmbFromHour.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbFromHourKeyPressed(evt);
-            }
-        });
-
-        cmbFromMin.setBackground(new java.awt.Color(51, 102, 255));
-        cmbFromMin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cmbFromMin.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MM", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
-        cmbFromMin.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbFromMinKeyPressed(evt);
-            }
-        });
-
-        cmbFromAMPM.setBackground(new java.awt.Color(51, 102, 255));
-        cmbFromAMPM.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cmbFromAMPM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AM", "PM" }));
-        cmbFromAMPM.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbFromAMPMKeyPressed(evt);
-            }
-        });
-
         lblToTime.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblToTime.setText("To Time        :");
 
-        cmbToHour.setBackground(new java.awt.Color(51, 102, 255));
-        cmbToHour.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cmbToHour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "HH", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "00" }));
-        cmbToHour.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbToHourKeyPressed(evt);
-            }
-        });
-
-        cmbToMin.setBackground(new java.awt.Color(51, 102, 255));
-        cmbToMin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cmbToMin.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MM", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
-        cmbToMin.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbToMinKeyPressed(evt);
-            }
-        });
-
-        cmbToAMPM.setBackground(new java.awt.Color(51, 102, 255));
-        cmbToAMPM.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cmbToAMPM.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AM", "PM" }));
-        cmbToAMPM.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbToAMPMKeyPressed(evt);
-            }
-        });
-
         chkPopular.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         chkPopular.setText("Popular");
-        chkPopular.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        chkPopular.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 chkPopularKeyPressed(evt);
             }
         });
 
         cmbCostCenter.setBackground(new java.awt.Color(51, 102, 255));
-        cmbCostCenter.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        cmbCostCenter.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 cmbCostCenterMouseClicked(evt);
             }
         });
-        cmbCostCenter.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbCostCenter.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbCostCenterKeyPressed(evt);
             }
         });
@@ -992,18 +971,24 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblPriceSun.setText("Sunday        :");
 
         txtPriceSun.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPriceSun.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
+        txtPriceSun.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 txtPriceSunFocusLost(evt);
             }
         });
-        txtPriceSun.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtPriceSun.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtPriceSunMouseClicked(evt);
             }
         });
-        txtPriceSun.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtPriceSun.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtPriceSunKeyPressed(evt);
             }
         });
@@ -1012,13 +997,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblPriceMon.setText("Monday        :");
 
         txtPriceMon.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPriceMon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtPriceMon.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtPriceMonMouseClicked(evt);
             }
         });
-        txtPriceMon.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtPriceMon.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtPriceMonKeyPressed(evt);
             }
         });
@@ -1027,13 +1016,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblPriceTue.setText("Tuesday          :");
 
         txtPriceTue.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPriceTue.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtPriceTue.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtPriceTueMouseClicked(evt);
             }
         });
-        txtPriceTue.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtPriceTue.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtPriceTueKeyPressed(evt);
             }
         });
@@ -1042,25 +1035,33 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblPriceWed.setText("Wednesday          :");
 
         txtPriceWed.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPriceWed.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtPriceWed.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtPriceWedMouseClicked(evt);
             }
         });
-        txtPriceWed.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtPriceWed.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtPriceWedKeyPressed(evt);
             }
         });
 
         txtPriceSat.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPriceSat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtPriceSat.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtPriceSatMouseClicked(evt);
             }
         });
-        txtPriceSat.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtPriceSat.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtPriceSatKeyPressed(evt);
             }
         });
@@ -1069,13 +1070,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblPriceSat.setText("Saturday        :");
 
         txtPriceFri.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPriceFri.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtPriceFri.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtPriceFriMouseClicked(evt);
             }
         });
-        txtPriceFri.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtPriceFri.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtPriceFriKeyPressed(evt);
             }
         });
@@ -1084,13 +1089,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         lblPriceFri.setText("Friday           :");
 
         txtPriceThu.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPriceThu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        txtPriceThu.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 txtPriceThuMouseClicked(evt);
             }
         });
-        txtPriceThu.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        txtPriceThu.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 txtPriceThuKeyPressed(evt);
             }
         });
@@ -1105,13 +1114,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         btnCancel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnCancel.setLabel("CLOSE");
         btnCancel.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnCancel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnCancel.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnCancelMouseClicked(evt);
             }
         });
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnCancelActionPerformed(evt);
             }
         });
@@ -1123,13 +1136,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         btnReset.setToolTipText("Reset All Fields");
         btnReset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnReset.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnReset.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnReset.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnResetMouseClicked(evt);
             }
         });
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnReset.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnResetActionPerformed(evt);
             }
         });
@@ -1141,19 +1158,86 @@ public class frmMenuItemPricing extends javax.swing.JFrame
         btnNew.setToolTipText("Save Item Pricing");
         btnNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNew.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnNew.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnNew.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnNewMouseClicked(evt);
             }
         });
-        btnNew.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnNew.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnNewActionPerformed(evt);
             }
         });
-        btnNew.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        btnNew.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 btnNewKeyPressed(evt);
+            }
+        });
+
+        cmbFromHour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "HH", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23" }));
+        cmbFromHour.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                cmbFromHourKeyPressed(evt);
+            }
+        });
+
+        cmbFromMinute.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MM", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
+        cmbFromMinute.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                cmbFromMinuteKeyPressed(evt);
+            }
+        });
+
+        cmbFromTimeSeconds.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "S", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
+        cmbFromTimeSeconds.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                cmbFromTimeSecondsActionPerformed(evt);
+            }
+        });
+        cmbFromTimeSeconds.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                cmbFromTimeSecondsKeyPressed(evt);
+            }
+        });
+
+        cmbToHour.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "HH", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23" }));
+        cmbToHour.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                cmbToHourKeyPressed(evt);
+            }
+        });
+
+        cmbToMinute.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MM", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
+        cmbToMinute.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                cmbToMinuteKeyPressed(evt);
+            }
+        });
+
+        cmbToTimeSeconds.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "S", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
+        cmbToTimeSeconds.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                cmbToTimeSecondsKeyPressed(evt);
             }
         });
 
@@ -1179,10 +1263,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
                                     .addComponent(dteFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(70, 70, 70)
                                     .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(panelbodyLayout.createSequentialGroup()
                                             .addGap(90, 90, 90)
-                                            .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(lblToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(panelbodyLayout.createSequentialGroup()
+                                                    .addComponent(cmbToHour, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(8, 8, 8)
+                                                    .addComponent(cmbToMinute, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(8, 8, 8)
+                                                    .addComponent(cmbToTimeSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGroup(panelbodyLayout.createSequentialGroup()
                                     .addComponent(lblPriceSun, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1212,34 +1303,28 @@ public class frmMenuItemPricing extends javax.swing.JFrame
                                     .addGap(0, 0, 0)
                                     .addComponent(txtPriceSat, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(panelbodyLayout.createSequentialGroup()
-                                    .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelbodyLayout.createSequentialGroup()
-                                            .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(panelbodyLayout.createSequentialGroup()
-                                                    .addGap(100, 100, 100)
-                                                    .addComponent(cmbCostCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(lblCostCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(110, 110, 110)
-                                            .addComponent(chkPopular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelbodyLayout.createSequentialGroup()
-                                            .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(btnHelp)
-                                                .addGroup(panelbodyLayout.createSequentialGroup()
-                                                    .addComponent(lblTimeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(10, 10, 10)
-                                                    .addComponent(cmbFromHour, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(10, 10, 10)
-                                                    .addComponent(cmbFromMin, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(10, 10, 10)
-                                                    .addComponent(cmbFromAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGap(20, 20, 20)
-                                            .addComponent(lblToTime, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(0, 0, 0)
-                                            .addComponent(cmbToHour, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(20, 20, 20)
-                                            .addComponent(cmbToMin, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(20, 20, 20)
-                                    .addComponent(cmbToAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(panelbodyLayout.createSequentialGroup()
+                                            .addGap(100, 100, 100)
+                                            .addComponent(cmbCostCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(lblCostCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(110, 110, 110)
+                                    .addComponent(chkPopular, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panelbodyLayout.createSequentialGroup()
+                                    .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(panelbodyLayout.createSequentialGroup()
+                                            .addComponent(btnHelp)
+                                            .addGap(20, 20, 20))
+                                        .addGroup(panelbodyLayout.createSequentialGroup()
+                                            .addComponent(lblTimeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(cmbFromHour, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(cmbFromMinute, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(cmbFromTimeSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(14, 14, 14)))
+                                    .addComponent(lblToTime, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(panelbodyLayout.createSequentialGroup()
                                     .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(panelbodyLayout.createSequentialGroup()
@@ -1317,17 +1402,23 @@ public class frmMenuItemPricing extends javax.swing.JFrame
                     .addComponent(dteFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
                 .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTimeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbFromHour, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbFromMin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbFromAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblToTime, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbToHour, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbToMin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbToAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                    .addGroup(panelbodyLayout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTimeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblToTime, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbFromHour, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbFromMinute, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbFromTimeSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(panelbodyLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbToMinute, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbToHour, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbToTimeSeconds))))
+                .addGap(16, 16, 16)
                 .addGroup(panelbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmbCostCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCostCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1596,55 +1687,6 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	    cmbFromHour.requestFocus();
 	}
     }//GEN-LAST:event_dteToDateKeyPressed
-
-    private void cmbFromHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromHourKeyPressed
-	// TODO add your handling code here:
-
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbFromMin.requestFocus();
-	}
-    }//GEN-LAST:event_cmbFromHourKeyPressed
-
-    private void cmbFromMinKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromMinKeyPressed
-	// TODO add your handling code here:
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbFromAMPM.requestFocus();
-	}
-    }//GEN-LAST:event_cmbFromMinKeyPressed
-
-    private void cmbFromAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbFromAMPMKeyPressed
-	// TODO add your handling code here:
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbToHour.requestFocus();
-	}
-    }//GEN-LAST:event_cmbFromAMPMKeyPressed
-
-    private void cmbToHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToHourKeyPressed
-	// TODO add your handling code here:
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbToMin.requestFocus();
-	}
-    }//GEN-LAST:event_cmbToHourKeyPressed
-
-    private void cmbToMinKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToMinKeyPressed
-	// TODO add your handling code here:
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbToAMPM.requestFocus();
-	}
-    }//GEN-LAST:event_cmbToMinKeyPressed
-
-    private void cmbToAMPMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbToAMPMKeyPressed
-	// TODO add your handling code here:
-	if (evt.getKeyCode() == 10)
-	{
-	    cmbCostCenter.requestFocus();
-	}
-    }//GEN-LAST:event_cmbToAMPMKeyPressed
 
     private void chkPopularKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_chkPopularKeyPressed
 	// TODO add your handling code here:
@@ -1928,7 +1970,7 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 		return;
 	    }
 
-	    String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());	  
+	    String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
 
 	    if (flag)
 	    {
@@ -2001,6 +2043,61 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	clsGlobalVarClass.hmActiveForms.remove("Price Menu");
     }//GEN-LAST:event_formWindowClosing
 
+    private void cmbFromHourKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbFromHourKeyPressed
+    {//GEN-HEADEREND:event_cmbFromHourKeyPressed
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbFromMinute.requestFocus();
+	}
+    }//GEN-LAST:event_cmbFromHourKeyPressed
+
+    private void cmbFromMinuteKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbFromMinuteKeyPressed
+    {//GEN-HEADEREND:event_cmbFromMinuteKeyPressed
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbFromTimeSeconds.requestFocus();
+	}
+    }//GEN-LAST:event_cmbFromMinuteKeyPressed
+
+    private void cmbFromTimeSecondsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbFromTimeSecondsActionPerformed
+    {//GEN-HEADEREND:event_cmbFromTimeSecondsActionPerformed
+	// TODO add your handling code here:
+    }//GEN-LAST:event_cmbFromTimeSecondsActionPerformed
+
+    private void cmbFromTimeSecondsKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbFromTimeSecondsKeyPressed
+    {//GEN-HEADEREND:event_cmbFromTimeSecondsKeyPressed
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbToHour.requestFocus();
+	}
+    }//GEN-LAST:event_cmbFromTimeSecondsKeyPressed
+
+    private void cmbToHourKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbToHourKeyPressed
+    {//GEN-HEADEREND:event_cmbToHourKeyPressed
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbToMinute.requestFocus();
+	}
+    }//GEN-LAST:event_cmbToHourKeyPressed
+
+    private void cmbToMinuteKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbToMinuteKeyPressed
+    {//GEN-HEADEREND:event_cmbToMinuteKeyPressed
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    cmbToTimeSeconds.requestFocus();
+	}
+    }//GEN-LAST:event_cmbToMinuteKeyPressed
+
+    private void cmbToTimeSecondsKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_cmbToTimeSecondsKeyPressed
+    {//GEN-HEADEREND:event_cmbToTimeSecondsKeyPressed
+
+    }//GEN-LAST:event_cmbToTimeSecondsKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -2061,15 +2158,15 @@ public class frmMenuItemPricing extends javax.swing.JFrame
     private javax.swing.JComboBox cmbArea;
     private javax.swing.JComboBox cmbColor;
     private javax.swing.JComboBox cmbCostCenter;
-    private javax.swing.JComboBox cmbFromAMPM;
     private javax.swing.JComboBox cmbFromHour;
-    private javax.swing.JComboBox cmbFromMin;
+    private javax.swing.JComboBox cmbFromMinute;
+    private javax.swing.JComboBox cmbFromTimeSeconds;
     private javax.swing.JComboBox cmbMenuNames;
     private javax.swing.JComboBox cmbPOSNames;
     private javax.swing.JComboBox cmbSubMenuHead;
-    private javax.swing.JComboBox cmbToAMPM;
     private javax.swing.JComboBox cmbToHour;
-    private javax.swing.JComboBox cmbToMin;
+    private javax.swing.JComboBox cmbToMinute;
+    private javax.swing.JComboBox cmbToTimeSeconds;
     private com.toedter.calendar.JDateChooser dteFromDate;
     private com.toedter.calendar.JDateChooser dteToDate;
     private javax.swing.Box.Filler filler4;
@@ -2178,20 +2275,6 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	    btnNew.setText("SAVE");
 
 	    java.util.Date dt = new java.util.Date();
-	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-	    dteCreated = date + " " + time;
-	    dteEdited = date + " " + time;
-
-	    dt = dteFromDate.getDate();
-	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-	    dteFrom = date + " " + time;
-
-	    dt = dteToDate.getDate();
-	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-	    dteTo = date + " " + time;
 
 	    Date fromDt = dteFromDate.getDate();
 	    Date toDt = dteToDate.getDate();
@@ -2236,24 +2319,22 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	    {
 		if (funCheckFromToTime())
 		{
-		    String fromHour = cmbFromHour.getSelectedItem().toString();
-		    String fromMin = cmbFromMin.getSelectedItem().toString();
-		    String toHour = cmbToHour.getSelectedItem().toString();
-		    String toMin = cmbToMin.getSelectedItem().toString();
-		    String fromAMPM = cmbFromAMPM.getSelectedItem().toString();
-		    String toAMPM = cmbToAMPM.getSelectedItem().toString();
 
-		    if (fromAMPM.trim().equalsIgnoreCase(toAMPM.trim()))
-		    {
-			int fromTime = Integer.parseInt(fromHour + fromMin);
-			int toTime = Integer.parseInt(toHour + toMin);
-			//System.out.println("fromTime=" + fromTime + "\ttoTime=" + toTime);
-			if (fromTime >= toTime)
-			{
-			    new frmOkPopUp(this, "Invalid toTime.", "Error", 1).setVisible(true);
-			    return;
-			}
-		    }
+		    String currentDate = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+		    String strFromTime = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMinute.getSelectedItem().toString() + ":" + cmbFromTimeSeconds.getSelectedItem().toString();
+		    String strToTime = cmbToHour.getSelectedItem().toString() + ":" + cmbToMinute.getSelectedItem().toString() + ":" + cmbToTimeSeconds.getSelectedItem().toString();
+
+		    //String fromTime = currentDate + " " + funConvertTime(strFromTime);
+		    //String toTime = currentDate + " " + funConvertTime(strToTime);
+		    String fromTime = currentDate + " " + strFromTime;
+		    String toTime = currentDate + " " + strToTime;
+		    clsUtility objUtility = new clsUtility();
+		    //long diff1 = objUtility.funCompareTime(fromTime, toTime);
+//		    if (diff1 <= 0)
+//		    {
+//			JOptionPane.showMessageDialog(this, "Please Enter vaild TO Time");
+//			return;
+//		    }
 		}
 		else
 		{
@@ -2266,11 +2347,11 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	    {
 		hourlyPrice = "Yes";
 		String fromHour = cmbFromHour.getSelectedItem().toString();
-		String fromMin = cmbFromMin.getSelectedItem().toString();
+		String fromMin = cmbFromMinute.getSelectedItem().toString();
 		String toHour = cmbToHour.getSelectedItem().toString();
-		String toMin = cmbToMin.getSelectedItem().toString();
+		String toMin = cmbToMinute.getSelectedItem().toString();
 
-		if (fromHour.equals("HH") || fromMin.equals("HH") || toHour.equals("HH") || toMin.equals("MM"))
+		if (fromHour.equalsIgnoreCase("HH") || fromMin.equalsIgnoreCase("HH") || toHour.equalsIgnoreCase("HH") || toMin.equalsIgnoreCase("MM"))
 		{
 		    new frmOkPopUp(this, "Invalid Time Entered.", "Error", 1).setVisible(true);
 		    return;
@@ -2299,8 +2380,16 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	    }
 
 	    int exc = 0;
-	    String tmeFrom = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMin.getSelectedItem().toString();
-	    String tmeTo = cmbToHour.getSelectedItem().toString() + ":" + cmbToMin.getSelectedItem().toString();
+	    String tmeFrom = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMinute.getSelectedItem().toString() + ":" + cmbFromTimeSeconds.getSelectedItem().toString();
+	    String tmeTo = cmbToHour.getSelectedItem().toString() + ":" + cmbToMinute.getSelectedItem().toString() + ":" + cmbToTimeSeconds.getSelectedItem().toString();
+
+	    Date fromDate = dteFromDate.getDate();
+	    Date toDate = dteToDate.getDate();
+
+	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+	    String strFromDate = simpleDateFormat.format(fromDate);
+	    String strToDate = simpleDateFormat.format(toDate);
 
 	    sql = "select count(*) from tblmenuitempricingdtl "
 		    + "where (strPosCode='" + posCode + "' or strPosCode='All') "
@@ -2318,9 +2407,9 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 			+ "values('" + txtItemCode.getText() + "','" + txtItemName.getText() + "','" + posCode + "','" + menuCode + "'"
 			+ ",'" + popularItem + "','" + txtPriceMon.getText() + "','" + txtPriceTue.getText() + "'"
 			+ ",'" + txtPriceWed.getText() + "','" + txtPriceThu.getText() + "','" + txtPriceFri.getText() + "','" + txtPriceSat.getText() + "'"
-			+ ",'" + txtPriceSun.getText() + "','" + dteFrom + "','" + dteTo + "','" + tmeFrom + "'"
-			+ ",'" + cmbFromAMPM.getSelectedItem() + "','" + tmeTo + "','" + cmbToAMPM.getSelectedItem().toString() + "','" + costCenter + "','" + cmbColor.getSelectedItem() + "','" + clsGlobalVarClass.gUserCode + "'"
-			+ ",'" + clsGlobalVarClass.gUserCode + "','" + dteCreated + "','" + dteEdited + "','" + areaCode + "','" + subMenucode + "'"
+			+ ",'" + txtPriceSun.getText() + "','" + strFromDate + "','" + strToDate + "','" + tmeFrom + "'"
+			+ ",'AM','" + tmeTo + "','AM','" + costCenter + "','" + cmbColor.getSelectedItem() + "','" + clsGlobalVarClass.gUserCode + "'"
+			+ ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + areaCode + "','" + subMenucode + "'"
 			+ ",'" + hourlyPrice + "','" + clsGlobalVarClass.gClientCode + "')";
 		//System.out.println(insertQuery);
 		exc = clsGlobalVarClass.dbMysql.execute(insertQuery);
@@ -2333,7 +2422,7 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 		    insertQuery = "insert into tblmenuitempricinghd(strPosCode,strMenuCode,strMenuName,strUserCreated"
 			    + ",strUserEdited,dteDateCreated,dteDateEdited) "
 			    + "values('" + posCode + "','" + menuCode + "','" + menuName + "','" + clsGlobalVarClass.gUserCode + "'"
-			    + ",'" + clsGlobalVarClass.gUserCode + "','" + dteCreated + "','" + dteEdited + "')";
+			    + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "')";
 		    exc = clsGlobalVarClass.dbMysql.execute(insertQuery);
 		}
 		if (exc > 0)
@@ -2375,20 +2464,6 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	try
 	{
 	    java.util.Date dt = new java.util.Date();
-	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-	    dteCreated = date + " " + time;
-	    dteEdited = date + " " + time;
-
-	    dt = dteFromDate.getDate();
-	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-	    dteFrom = date + " " + time;
-
-	    dt = dteToDate.getDate();
-	    time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-	    date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-	    dteTo = date + " " + time;
 
 	    String posCode = mapPOS.get(cmbPOSNames.getSelectedItem().toString());
 	    String menuCode = funGetMenuCode(cmbMenuNames.getSelectedItem().toString());
@@ -2438,29 +2513,44 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 		String hourlyPrice = "No";
 		if (chkHourlyPricing.isSelected())
 		{
+		    if (funCheckFromToTime())
+		    {
+
+			String currentDate = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+			String strFromTime = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMinute.getSelectedItem().toString() + ":" + cmbFromTimeSeconds.getSelectedItem().toString();
+			String strToTime = cmbToHour.getSelectedItem().toString() + ":" + cmbToMinute.getSelectedItem().toString() + ":" + cmbToTimeSeconds.getSelectedItem().toString();
+
+			//String fromTime = currentDate + " " + funConvertTime(strFromTime);
+			//String toTime = currentDate + " " + funConvertTime(strToTime);
+			String fromTime = currentDate + " " + strFromTime;
+			String toTime = currentDate + " " + strToTime;
+			clsUtility objUtility = new clsUtility();
+			long diff1 = objUtility.funCompareTime(fromTime, toTime);
+//			if (diff1 <= 0)
+//			{
+//			    JOptionPane.showMessageDialog(this, "Please Enter vaild TO Time");
+//			    return;
+//			}
+		    }
+		    else
+		    {
+			new frmOkPopUp(this, "Select Time for Hourly Pricing.", "Error", 1).setVisible(true);
+			return;
+		    }
+		}
+
+		if (chkHourlyPricing.isSelected())
+		{
 		    hourlyPrice = "Yes";
 		    String fromHour = cmbFromHour.getSelectedItem().toString();
-		    String fromMin = cmbFromMin.getSelectedItem().toString();
+		    String fromMin = cmbFromMinute.getSelectedItem().toString();
 		    String toHour = cmbToHour.getSelectedItem().toString();
-		    String toMin = cmbToMin.getSelectedItem().toString();
+		    String toMin = cmbToMinute.getSelectedItem().toString();
 
-		    if (fromHour.equals("HH") || fromMin.equals("HH") || toHour.equals("HH") || toMin.equals("MM"))
+		    if (fromHour.equalsIgnoreCase("HH") || fromMin.equalsIgnoreCase("HH") || toHour.equalsIgnoreCase("HH") || toMin.equalsIgnoreCase("MM"))
 		    {
 			new frmOkPopUp(this, "Invalid Time Entered.", "Error", 1).setVisible(true);
 			return;
-		    }
-		    String fromAMPM = cmbFromAMPM.getSelectedItem().toString();
-		    String toAMPM = cmbToAMPM.getSelectedItem().toString();
-		    if (fromAMPM.trim().equalsIgnoreCase(toAMPM.trim()))
-		    {
-			int fromTime = Integer.parseInt(fromHour + fromMin);
-			int toTime = Integer.parseInt(toHour + toMin);
-			//System.out.println("fromTime=" + fromTime + "\ttoTime=" + toTime);
-			if (fromTime >= toTime)
-			{
-			    new frmOkPopUp(this, "Invalid toTime.", "Error", 1).setVisible(true);
-			    return;
-			}
 		    }
 		}
 		else if (funCheckFromToTime())
@@ -2468,8 +2558,8 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 		    new frmOkPopUp(this, "Please Tick Hourly Pricing.", "Error", 1).setVisible(true);
 		    return;
 		}
-		String tmeFrom = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMin.getSelectedItem().toString();
-		String tmeTo = cmbToHour.getSelectedItem().toString() + ":" + cmbToMin.getSelectedItem().toString();
+		String tmeFrom = cmbFromHour.getSelectedItem().toString() + ":" + cmbFromMinute.getSelectedItem().toString() + ":" + cmbFromTimeSeconds.getSelectedItem().toString();
+		String tmeTo = cmbToHour.getSelectedItem().toString() + ":" + cmbToMinute.getSelectedItem().toString() + ":" + cmbToTimeSeconds.getSelectedItem().toString();
 
 		if (funCheckItemFromDatetoDate(posCode, areaCode))
 		{
@@ -2482,16 +2572,24 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 		    clsGlobalVarClass.dbMysql.execute(insertQuery);
 		}
 
+		Date fromDate = dteFromDate.getDate();
+		Date toDate = dteToDate.getDate();
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		String strFromDate = simpleDateFormat.format(fromDate);
+		String strToDate = simpleDateFormat.format(toDate);
+
 		updateQuery = "UPDATE tblmenuitempricingdtl "
 			+ " SET strItemName = '" + txtItemName.getText() + "',strPosCode='" + posCode + "',strMenuCode='" + menuCode + "'"
 			+ ",strPopular='" + popularItem + "',strPriceMonday='" + txtPriceMon.getText() + "'"
 			+ ",strPriceTuesday='" + txtPriceTue.getText() + "',strPriceWednesday='" + txtPriceWed.getText() + "'"
 			+ ",strPriceThursday='" + txtPriceThu.getText() + "',strPriceFriday='" + txtPriceFri.getText() + "'"
-			+ ",strPriceSaturday='" + txtPriceSat.getText() + "',strPriceSunday='" + txtPriceSun.getText() + "',dteFromDate='" + dteFrom + "'"
-			+ ",dteToDate='" + dteTo + "',tmeTimeFrom='" + tmeFrom + "',strAMPMFrom='" + cmbFromAMPM.getSelectedItem() + "'"
-			+ ",tmeTimeTo='" + tmeTo + "',strAMPMTo='" + cmbToAMPM.getSelectedItem().toString() + "'"
+			+ ",strPriceSaturday='" + txtPriceSat.getText() + "',strPriceSunday='" + txtPriceSun.getText() + "',dteFromDate='" + strFromDate + "'"
+			+ ",dteToDate='" + strToDate + "',tmeTimeFrom='" + tmeFrom + "',strAMPMFrom='AM'"
+			+ ",tmeTimeTo='" + tmeTo + "',strAMPMTo='AM'"
 			+ ",strCostCenterCode='" + costCenter + "',strTextColor='" + cmbColor.getSelectedItem() + "'"
-			+ ",strUserEdited='" + clsGlobalVarClass.gUserCode + "',dteDateEdited='" + dteEdited + "',strAreaCode='" + areaCode + "'"
+			+ ",strUserEdited='" + clsGlobalVarClass.gUserCode + "',dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "',strAreaCode='" + areaCode + "'"
 			+ ",strSubMenuHeadCode='" + subMenucode + "',strHourlyPricing='" + hourlyPrice + "'"
 			+ ",strClientCode='" + clsGlobalVarClass.gClientCode + "' "
 			+ "where longPricingId='" + longPrincingId + "' ";
@@ -2535,25 +2633,17 @@ public class frmMenuItemPricing extends javax.swing.JFrame
      */
     private boolean funCheckFromToTime()
     {
-	boolean flg = false;
+	boolean flg = true;
 	String fromHour = cmbFromHour.getSelectedItem().toString();
-	String fromMin = cmbFromMin.getSelectedItem().toString();
+	String fromMin = cmbFromMinute.getSelectedItem().toString();
 	String toHour = cmbToHour.getSelectedItem().toString();
-	String toMin = cmbToMin.getSelectedItem().toString();
+	String toMin = cmbToMinute.getSelectedItem().toString();
 
-	if (!fromHour.equals("HH"))
+	if (fromHour.equalsIgnoreCase("HH") || toHour.equalsIgnoreCase("HH") || fromMin.equalsIgnoreCase("MM") || toMin.equalsIgnoreCase("MM"))
 	{
-	    if (!fromMin.equals("MM"))
-	    {
-		if (!toHour.equals("HH"))
-		{
-		    if (!toMin.equals("MM"))
-		    {
-			flg = true;
-		    }
-		}
-	    }
+	    flg = false;
 	}
+
 	return flg;
     }
 
@@ -2562,11 +2652,20 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	boolean flgDate = false;
 	try
 	{
+
+	    Date fromDate = dteFromDate.getDate();
+	    Date toDate = dteToDate.getDate();
+
+	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+	    String strFromDate = simpleDateFormat.format(fromDate);
+	    String strToDate = simpleDateFormat.format(toDate);
+
 	    sql = "select count(*) from tblmenuitempricingdtl "
 		    + "where (strPosCode='" + posCode + "' or strPosCode='All') "
 		    + "and strItemCode='" + txtItemCode.getText() + "' "
 		    + "and strAreaCode='" + areaCode + "' "
-		    + "and date(dteToDate)!='" + dteTo + "' ";
+		    + "and date(dteToDate)!='" + strToDate + "' ";
 	    //System.out.println(sql);
 	    ResultSet cntRs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
 	    if (cntRs.next())
@@ -2587,5 +2686,5 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	{
 	    return flgDate;
 	}
-    }  
+    }
 }

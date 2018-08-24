@@ -13,6 +13,7 @@ import com.POSGlobal.view.frmOkPopUp;
 import com.POSGlobal.view.frmSearchFormDialog;
 import com.POSPrinting.Utility.clsPrintingUtility;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;

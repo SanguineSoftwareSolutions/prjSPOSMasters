@@ -1392,7 +1392,7 @@ public class frmTDH extends javax.swing.JFrame
     {
         try
         {
-            sql = " select strItemName,strItemCode from tblmenuitempricingdtl where strMenuCode='" + menuHeadCode + "' ;";
+            sql = " select strItemName,strItemCode from tblmenuitempricingdtl where strMenuCode='" + menuHeadCode + "' group by strItemCode ";
             ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
             cmbTDHOnItem.setEnabled(true);
             cmbTDHOnItem.removeAllItems();
