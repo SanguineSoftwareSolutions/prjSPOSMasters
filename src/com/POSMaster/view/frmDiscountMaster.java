@@ -1395,7 +1395,7 @@ public class frmDiscountMaster extends javax.swing.JFrame
             return;
         }
         double dblDiscValue = Double.parseDouble(txtDiscountValue.getText().trim());
-        if (dblDiscValue <= 0 || dblDiscValue > 99)
+        if (dblDiscValue <= 0 )
         {
             new frmOkPopUp(this, "Invalid Discount Value", "Error", 0).setVisible(true);
             return;
