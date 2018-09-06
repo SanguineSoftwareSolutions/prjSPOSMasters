@@ -8,7 +8,7 @@ package com.POSMaster.controller;
 
 public class clsMenuItemDtl {
 
-    private String itemCode;
+    private String  itemCode;
     
     private String itemName;
     
