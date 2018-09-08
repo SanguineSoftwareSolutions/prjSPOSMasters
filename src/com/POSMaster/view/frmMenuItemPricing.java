@@ -16,6 +16,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,7 @@ public class frmMenuItemPricing extends javax.swing.JFrame
     private Map<String, String> mapCostCenterCodeWithName;
     private Map<String, String> mapMenuHeadCodeWithName;
     private Map<String, String> mapSubMenuHeadCodeWithName;
+    private DecimalFormat gDecimalFormat = clsGlobalVarClass.funGetGlobalDecimalFormatter();
 
     /**
      * This method is used to initialize frmMenuItemPricing
@@ -359,13 +361,14 @@ public class frmMenuItemPricing extends javax.swing.JFrame
 	    {
 		txtItemCode.setText(rsItemPrice.getString(1));
 		txtItemName.setText(rsItemPrice.getString(2));
-		txtPriceMon.setText(rsItemPrice.getString(6));
-		txtPriceTue.setText(rsItemPrice.getString(7));
-		txtPriceWed.setText(rsItemPrice.getString(8));
-		txtPriceThu.setText(rsItemPrice.getString(9));
-		txtPriceFri.setText(rsItemPrice.getString(10));
-		txtPriceSat.setText(rsItemPrice.getString(11));
-		txtPriceSun.setText(rsItemPrice.getString(12));
+		
+		txtPriceMon.setText(gDecimalFormat.format(rsItemPrice.getDouble(6)));
+		txtPriceTue.setText(gDecimalFormat.format(rsItemPrice.getDouble(7)));
+		txtPriceWed.setText(gDecimalFormat.format(rsItemPrice.getDouble(8)));
+		txtPriceThu.setText(gDecimalFormat.format(rsItemPrice.getDouble(9)));
+		txtPriceFri.setText(gDecimalFormat.format(rsItemPrice.getDouble(10)));
+		txtPriceSat.setText(gDecimalFormat.format(rsItemPrice.getDouble(11)));
+		txtPriceSun.setText(gDecimalFormat.format(rsItemPrice.getDouble(12)));
 
 		cmbColor.setSelectedItem(rsItemPrice.getString(20));
 		String costCenterCode = rsItemPrice.getString(19);

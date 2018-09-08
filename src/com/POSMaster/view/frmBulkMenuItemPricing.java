@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -73,7 +74,8 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
     private ArrayList valuesList;
     private Set<String> keySet;
     private ArrayList keyList;
-    clsUtility objUtility = new clsUtility();
+    private clsUtility objUtility = new clsUtility();
+    private DecimalFormat gDecimalFormat = clsGlobalVarClass.funGetGlobalDecimalFormatter();
 
     /**
      * Creates new form frmBulkMenuItemPricing
@@ -113,7 +115,7 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         fct = new clsFixedColumnTable(2, srollPane);
         fct.getFixedTable().getTableHeader().setReorderingAllowed(false);
         fct.getFixedTable().setRowHeight(25);
-        priceText.setDocument(new clsTextFieldOnlyNumber(6, 3).new JNumberFieldFilter());
+        priceText.setDocument(new clsTextFieldOnlyNumber(7,3).new JNumberFieldFilter());
         funLoadColorComboBox();
         funLoadPopularComboBox();
         funLoadmapPosCode();
@@ -152,7 +154,8 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         panelHeader = new javax.swing.JPanel();
         lblProductName = new javax.swing.JLabel();
@@ -199,11 +202,14 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         setExtendedState(MAXIMIZED_BOTH);
         setMinimumSize(new java.awt.Dimension(800, 600));
         setUndecorated(true);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosed(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosed(evt);
             }
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
@@ -279,13 +285,17 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         btnExecute.setToolTipText("Execute");
         btnExecute.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnExecute.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnExecute.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnExecute.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnExecuteActionPerformed(evt);
             }
         });
-        btnExecute.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        btnExecute.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 btnExecuteKeyPressed(evt);
             }
         });
@@ -297,8 +307,10 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         btnUpdate.setToolTipText("Update Data");
         btnUpdate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnUpdate.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnUpdate.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnUpdateActionPerformed(evt);
             }
         });
@@ -310,8 +322,10 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         btnExport.setToolTipText("Export To Excel File");
         btnExport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnExport.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnExport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnExport.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnExportActionPerformed(evt);
             }
         });
@@ -323,97 +337,129 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         btnExit.setToolTipText("Close Menu Item Pricing");
         btnExit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnExit.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnExit.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnExitMouseClicked(evt);
             }
         });
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnExit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnExitActionPerformed(evt);
             }
         });
-        btnExit.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
-            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
+        btnExit.addVetoableChangeListener(new java.beans.VetoableChangeListener()
+        {
+            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException
+            {
                 btnExitVetoableChange(evt);
             }
         });
 
-        cmbPosCode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cmbPosCode.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 cmbPosCodeActionPerformed(evt);
             }
         });
-        cmbPosCode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbPosCode.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbPosCodeKeyPressed(evt);
             }
         });
 
-        cmbMenuHead.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbMenuHead.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbMenuHeadKeyPressed(evt);
             }
         });
 
-        cmbCostCenter.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbCostCenter.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbCostCenterKeyPressed(evt);
             }
         });
 
-        cmbArea.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cmbArea.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 cmbAreaActionPerformed(evt);
             }
         });
-        cmbArea.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbArea.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbAreaKeyPressed(evt);
             }
         });
 
         tblPriceDtl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Item Code", "Item Name", "Menu Name", "Popular", "PriceSunday", "PriceMonday", "PriceTuesday", "PriceWednesday", "PriceThursday", "PriceFriday", "PriceSaturday", "FromDate", "ToDate", "TimeFrom", "AMPMFrom", "TimeTo", "AMPMTo", "CostCenter", "TextColor", "Area ", "SubMenuHeadCode", "HourlyPricing", "Is Expired"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         tblPriceDtl.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tblPriceDtl.setRowHeight(25);
         tblPriceDtl.getTableHeader().setReorderingAllowed(false);
-        tblPriceDtl.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        tblPriceDtl.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 tblPriceDtlFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 tblPriceDtlFocusLost(evt);
             }
         });
-        tblPriceDtl.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        tblPriceDtl.addInputMethodListener(new java.awt.event.InputMethodListener()
+        {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt)
+            {
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt)
+            {
                 tblPriceDtlInputMethodTextChanged(evt);
             }
         });
-        tblPriceDtl.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        tblPriceDtl.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 tblPriceDtlKeyPressed(evt);
             }
         });
         srollPane.setViewportView(tblPriceDtl);
-        if (tblPriceDtl.getColumnModel().getColumnCount() > 0) {
+        if (tblPriceDtl.getColumnModel().getColumnCount() > 0)
+        {
             tblPriceDtl.getColumnModel().getColumn(0).setResizable(false);
             tblPriceDtl.getColumnModel().getColumn(1).setPreferredWidth(220);
             tblPriceDtl.getColumnModel().getColumn(2).setPreferredWidth(220);
@@ -429,8 +475,10 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         btnReset.setToolTipText("Reset All Fields");
         btnReset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnReset.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnReset.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnResetActionPerformed(evt);
             }
         });
@@ -443,13 +491,17 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         btnChangePrice.setEnabled(false);
         btnChangePrice.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnChangePrice.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnChangePrice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnChangePrice.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnChangePriceActionPerformed(evt);
             }
         });
-        btnChangePrice.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        btnChangePrice.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 btnChangePriceKeyPressed(evt);
             }
         });
@@ -457,20 +509,26 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
         lblSortBy.setText("Sort By");
 
         cmbSortBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "NONE", "Item Code", "Item Name", "Menu Head", "Cost Center", "Area", "POS" }));
-        cmbSortBy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cmbSortBy.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 cmbSortByActionPerformed(evt);
             }
         });
-        cmbSortBy.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        cmbSortBy.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 cmbSortByKeyPressed(evt);
             }
         });
 
         cmbExpiredItem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Yes", "No" }));
-        cmbExpiredItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cmbExpiredItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 cmbExpiredItemActionPerformed(evt);
             }
         });
@@ -857,9 +915,9 @@ public class frmBulkMenuItemPricing extends javax.swing.JFrame
                 Object[] itemRows =
                 {
                     rs.getString(1), rs.getString(2), rs.getString(4), rs.getString(5),
-                    rs.getString(6), rs.getString(7), rs.getString(8),
-                    rs.getString(9), rs.getString(10), rs.getString(11),
-                    rs.getString(12), rs.getString(13), rs.getString(14), rs.getString(15),
+                    gDecimalFormat.format(rs.getDouble(6)),gDecimalFormat.format(rs.getDouble(7)),gDecimalFormat.format(rs.getDouble(8)),
+                    gDecimalFormat.format(rs.getDouble(9)),gDecimalFormat.format(rs.getDouble(10)),gDecimalFormat.format(rs.getDouble(11)),
+                    gDecimalFormat.format(rs.getDouble(12)), rs.getString(13), rs.getString(14), rs.getString(15),
                     rs.getString(16), rs.getString(17), rs.getString(18), rs.getString(20),
                     rs.getString(21), rs.getString(23), rs.getString(26), rs.getString(25), rs.getString(27)
                 };
