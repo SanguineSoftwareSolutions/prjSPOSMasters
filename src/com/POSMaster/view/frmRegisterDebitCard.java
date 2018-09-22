@@ -36,75 +36,74 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
     private String custemerCode = "", extCode = "";
     private Map<String, String> hmCardType;
     clsUtility objUtility = new clsUtility();
-    Thread objThread=null;
-    
+    Thread objThread = null;
 
     /**
      * This method is used to initialize frmRegisterDebitCard
      */
     public frmRegisterDebitCard()
     {
-        initComponents();
-        try
-        {
-            Timer timer = new Timer(500, new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    Date date1 = new Date();
-                    String newstr = String.format("%tr", date1);
-                    String dateAndTime = clsGlobalVarClass.gPOSDateToDisplay + " " + newstr;
-                    lblDate.setText(dateAndTime);
-                }
-            });
-            timer.setRepeats(true);
-            timer.setCoalesce(true);
-            timer.setInitialDelay(0);
-            timer.start();
+	initComponents();
+	try
+	{
+	    Timer timer = new Timer(500, new ActionListener()
+	    {
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+		    Date date1 = new Date();
+		    String newstr = String.format("%tr", date1);
+		    String dateAndTime = clsGlobalVarClass.gPOSDateToDisplay + " " + newstr;
+		    lblDate.setText(dateAndTime);
+		}
+	    });
+	    timer.setRepeats(true);
+	    timer.setCoalesce(true);
+	    timer.setInitialDelay(0);
+	    timer.start();
 
-            lblUserCode.setText(clsGlobalVarClass.gUserCode);
-            lblPosName.setText(clsGlobalVarClass.gPOSName);
-            lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
+	    lblUserCode.setText(clsGlobalVarClass.gUserCode);
+	    lblPosName.setText(clsGlobalVarClass.gPOSName);
+	    lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
 
-            java.util.Date dt = new java.util.Date();
-            int day = dt.getDate();
-            int month = dt.getMonth() + 1;
-            int year = dt.getYear() + 1900;
-            String dte = day + "-" + month + "-" + year;
-            lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
-            java.util.Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dte);
-            hmCardType = new HashMap<String, String>();
-            sql = "select strCardTypeCode,strCardName,strCustomerCompulsory "
-                    + "from tbldebitcardtype where strClientCode='" + clsGlobalVarClass.gClientCode + "'";
-            ResultSet rsFillComboBox = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            cmbCardType.addItem(" ");
-            while (rsFillComboBox.next())
-            {
-                hmCardType.put(rsFillComboBox.getString(2), rsFillComboBox.getString(1) + "," + rsFillComboBox.getString(3));
-                cmbCardType.addItem(rsFillComboBox.getString(2));
-            }
-            rsFillComboBox.close();
-            txtCardString.requestFocus();
-            funSetShortCutKeys();
-            
-            ReaderThread objReader=new ReaderThread();
-            objThread=new Thread(objReader);
-            objThread.start();
+	    java.util.Date dt = new java.util.Date();
+	    int day = dt.getDate();
+	    int month = dt.getMonth() + 1;
+	    int year = dt.getYear() + 1900;
+	    String dte = day + "-" + month + "-" + year;
+	    lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
+	    java.util.Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dte);
+	    hmCardType = new HashMap<String, String>();
+	    sql = "select strCardTypeCode,strCardName,strCustomerCompulsory "
+		    + "from tbldebitcardtype where strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+	    ResultSet rsFillComboBox = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    cmbCardType.addItem(" ");
+	    while (rsFillComboBox.next())
+	    {
+		hmCardType.put(rsFillComboBox.getString(2), rsFillComboBox.getString(1) + "," + rsFillComboBox.getString(3));
+		cmbCardType.addItem(rsFillComboBox.getString(2));
+	    }
+	    rsFillComboBox.close();
+	    txtCardString.requestFocus();
+	    funSetShortCutKeys();
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	    ReaderThread objReader = new ReaderThread();
+	    objThread = new Thread(objReader);
+	    objThread.start();
+
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     private void funSetShortCutKeys()
     {
-        btnCancel.setMnemonic('c');
-        btnNew.setMnemonic('s');
-        btnReset.setMnemonic('r');
+	btnCancel.setMnemonic('c');
+	btnNew.setMnemonic('s');
+	btnReset.setMnemonic('r');
 
     }
 
@@ -115,10 +114,10 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     public void setData(Object[] data)
     {
-        txtCustomerName.setText(data[1].toString());
-        custemerCode = data[0].toString();
-        extCode = data[0].toString();
-        funCheckCustomerForCard(custemerCode);
+	txtCustomerName.setText(data[1].toString());
+	custemerCode = data[0].toString();
+	extCode = data[0].toString();
+	funCheckCustomerForCard(custemerCode);
     }
 
     /**
@@ -126,54 +125,68 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private void funSaveButtonPressed()
     {
-        try
-        {
-            String cardCode = hmCardType.get(cmbCardType.getSelectedItem().toString().trim());
-            String[] spCard = cardCode.split(",");
-            String custCompulsory = spCard[1];
-            String selectedCardCode = spCard[0];
-            if (cmbOperation.getSelectedItem().toString().equals("Register"))
-            {
-                if (!clsGlobalVarClass.validateEmpty(txtCardString.getText()))
-                {
-                    JOptionPane.showMessageDialog(this, "Swipe the Card");
-                    txtCardString.requestFocus();
-                    return;
-                }
-                if (!clsGlobalVarClass.validateEmpty(selectedCardCode))
-                {
-                    JOptionPane.showMessageDialog(this, "Please Select Card Type");
-                    return;
-                }
-                if (custCompulsory.equalsIgnoreCase("Y"))
-                {
-                    if (!clsGlobalVarClass.validateEmpty(txtCustomerName.getText()))
-                    {
-                        JOptionPane.showMessageDialog(this, "Please Select Custemer");
-                        return;
-                    }
-                }
-                funRegisterCard(selectedCardCode);
-            }
-            else
-            {
-                if (!clsGlobalVarClass.validateEmpty(txtCardString.getText()))
-                {
-                    new frmOkPopUp(this, "Error", " Please Enter Card No.", 0).setVisible(true);
-                    txtCardString.requestFocus();
-                }
-                else
-                {
-                    funDelistCard();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            //clsGlobalVarClass.dbMysql.funRollbackTransaction();
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	try
+	{
+	    if (!clsGlobalVarClass.validateEmpty(txtCardString.getText()))
+	    {
+		JOptionPane.showMessageDialog(this, "Swipe the Card");
+		txtCardString.requestFocus();
+		return;
+	    }
+
+	    if (cmbCardType.getSelectedItem() == null || cmbCardType.getSelectedItem().toString().trim().isEmpty())
+	    {
+		JOptionPane.showMessageDialog(this, "Please select the card type.");
+		txtCardString.requestFocus();
+		return;
+	    }
+
+	    String cardCode = hmCardType.get(cmbCardType.getSelectedItem().toString().trim());
+	    String[] spCard = cardCode.split(",");
+	    String custCompulsory = spCard[1];
+	    String selectedCardCode = spCard[0];
+	    if (cmbOperation.getSelectedItem().toString().equals("Register"))
+	    {
+		if (!clsGlobalVarClass.validateEmpty(txtCardString.getText()))
+		{
+		    JOptionPane.showMessageDialog(this, "Swipe the Card");
+		    txtCardString.requestFocus();
+		    return;
+		}
+		if (!clsGlobalVarClass.validateEmpty(selectedCardCode))
+		{
+		    JOptionPane.showMessageDialog(this, "Please Select Card Type");
+		    return;
+		}
+		if (custCompulsory.equalsIgnoreCase("Y"))
+		{
+		    if (!clsGlobalVarClass.validateEmpty(txtCustomerName.getText()))
+		    {
+			JOptionPane.showMessageDialog(this, "Please Select Custemer");
+			return;
+		    }
+		}
+		funRegisterCard(selectedCardCode);
+	    }
+	    else
+	    {
+		if (!clsGlobalVarClass.validateEmpty(txtCardString.getText()))
+		{
+		    new frmOkPopUp(this, "Error", " Please Enter Card No.", 0).setVisible(true);
+		    txtCardString.requestFocus();
+		}
+		else
+		{
+		    funDelistCard();
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    //clsGlobalVarClass.dbMysql.funRollbackTransaction();
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -183,43 +196,48 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private void funCheckDebitCardStatus(String cardNo)
     {
-        try
-        {
-            sql = "select count(*) from tbldebitcardmaster where strCardString='" + cardNo + "'";
-            ResultSet rsCardStatus = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsCardStatus.next())
-            {
-                int count = rsCardStatus.getInt(1);
-                if (count > 0)
-                {
-                    rsCardStatus.close();
-                    sql = "select strStatus,strCustomerCode,intPassword "
-                            + "from tbldebitcardmaster where strCardString='" + cardNo + "'";
-                    rsCardStatus = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                    if (rsCardStatus.next())
-                    {
-                        if (rsCardStatus.getString(1).equalsIgnoreCase("Deactive"))
-                        {
-                            lblCardStatus.setText("Expired");
-                        }
-                        else
-                        {
-                            lblCardStatus.setText("Active");
-                        }
-                        txtCustomerName.setText(funGetCustomerName(rsCardStatus.getString(2)));
-                        txtCustomerName.setEnabled(false);
-                    }
-                    rsCardStatus.close();
-                }
-            }
-            rsCardStatus.close();
+	try
+	{
+	    sql = "select count(*) from tbldebitcardmaster where strCardString='" + cardNo + "'";
+	    ResultSet rsCardStatus = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsCardStatus.next())
+	    {
+		int count = rsCardStatus.getInt(1);
+		if (count > 0)
+		{
+		    rsCardStatus.close();
+		    sql = "select a.strStatus,a.strCustomerCode,a.intPassword,a.strManualNo ,b.strCardName "
+			    + "from tbldebitcardmaster a ,tbldebitcardtype b "
+			    + "where a.strCardTypeCode=b.strCardTypeCode "
+			    + "and a.strCardString='" + cardNo + "' ";
+		    rsCardStatus = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		    if (rsCardStatus.next())
+		    {
+			if (rsCardStatus.getString(1).equalsIgnoreCase("Deactive"))
+			{
+			    lblCardStatus.setText("Expired");
+			}
+			else
+			{
+			    lblCardStatus.setText("Active");
+			}
+			txtCustomerName.setText(funGetCustomerName(rsCardStatus.getString(2)));
+			txtCustomerName.setEnabled(false);
+			txtManualCardNo.setText(rsCardStatus.getString(4));
+			cmbCardType.setSelectedItem(rsCardStatus.getString(5));
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+		    }
+		    rsCardStatus.close();
+		}
+	    }
+	    rsCardStatus.close();
+
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -230,26 +248,26 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private String funGetCustomerName(String customerCode)
     {
-        String customerName = "";
-        try
-        {
-            sql = "select strCustomerName from tblcustomermaster where strCustomerCode='" + customerCode + "'";
-            ResultSet rsCustomerData = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsCustomerData.next())
-            {
-                customerName = rsCustomerData.getString(1);
-            }
-            rsCustomerData.close();
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            return customerName;
-        }
+	String customerName = "";
+	try
+	{
+	    sql = "select strCustomerName from tblcustomermaster where strCustomerCode='" + customerCode + "'";
+	    ResultSet rsCustomerData = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsCustomerData.next())
+	    {
+		customerName = rsCustomerData.getString(1);
+	    }
+	    rsCustomerData.close();
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return customerName;
+	}
     }
 
     /**
@@ -260,41 +278,41 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private boolean funCheckCustomerForCard(String customerCode)
     {
-        boolean flgCustomerCount = false;
-        try
-        {
-            sql = "select count(*) from tbldebitcardmaster "
-                    + "where strCustomerCode='" + customerCode + "' and strStatus='Active'";
-            ResultSet rsCustomerData = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsCustomerData.next())
-            {
-                int count = rsCustomerData.getInt(1);
-                rsCustomerData.close();
-                if (count > 0)
-                {
-                    flgCustomerCount = true;
-                    sql = "select strCardNo from tbldebitcardmaster "
-                            + "where strCustomerCode='" + customerCode + "' and strStatus='Active'";
-                    rsCustomerData = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-                    if (rsCustomerData.next())
-                    {
-                        clsGlobalVarClass.gDebitCardNo = rsCustomerData.getString(1);
-                        txtCardString.setText(rsCustomerData.getString(1));
-                    }
-                    rsCustomerData.close();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            flgCustomerCount = false;
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            return flgCustomerCount;
-        }
+	boolean flgCustomerCount = false;
+	try
+	{
+	    sql = "select count(*) from tbldebitcardmaster "
+		    + "where strCustomerCode='" + customerCode + "' and strStatus='Active'";
+	    ResultSet rsCustomerData = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsCustomerData.next())
+	    {
+		int count = rsCustomerData.getInt(1);
+		rsCustomerData.close();
+		if (count > 0)
+		{
+		    flgCustomerCount = true;
+		    sql = "select strCardNo from tbldebitcardmaster "
+			    + "where strCustomerCode='" + customerCode + "' and strStatus='Active'";
+		    rsCustomerData = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+		    if (rsCustomerData.next())
+		    {
+			clsGlobalVarClass.gDebitCardNo = rsCustomerData.getString(1);
+			txtCardString.setText(rsCustomerData.getString(1));
+		    }
+		    rsCustomerData.close();
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    flgCustomerCount = false;
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    return flgCustomerCount;
+	}
     }
 
     /**
@@ -302,43 +320,46 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private void funResetFields()
     {
-        txtCardString.setText("");
-        cmbOperation.setSelectedItem("Register");
-        cmbCardType.setSelectedIndex(0);
-        txtCustomerName.setText("");
-        custemerCode = "";
-        txtCustomerName.setEnabled(true);
-        cmbCardType.requestFocus();
-        clsGlobalVarClass.gDebitCardNo = null;
+	txtCardString.setText("");
+	cmbOperation.setSelectedItem("Register");
+	cmbCardType.setSelectedIndex(0);
+	txtCustomerName.setText("");
+	custemerCode = "";
+	txtCustomerName.setEnabled(true);
+	cmbCardType.requestFocus();
+	clsGlobalVarClass.gDebitCardNo = null;
+	txtManualCardNo.setText("");
+	lblCardStatus.setText("");
+
     }
 
     private long funGetDebitCardNo() throws Exception
     {
-        long lastNo = 0;
-        sql = "select count(dblLastNo) from tblinternal where strTransactionType='CardNo'";
-        ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        rs.next();
-        int cntDelBoyCategory = rs.getInt(1);
-        rs.close();
-        if (cntDelBoyCategory > 0)
-        {
-            sql = "select dblLastNo from tblinternal where strTransactionType='CardNo'";
-            rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            rs.next();
-            long code = rs.getLong(1);
-            code = code + 1;
-            lastNo = code;
-            rs.close();
-        }
-        else
-        {
-            lastNo = 1;
-        }
-        String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
-                + "where strTransactionType='CardNo'";
-        clsGlobalVarClass.dbMysql.execute(updateSql);
+	long lastNo = 0;
+	sql = "select count(dblLastNo) from tblinternal where strTransactionType='CardNo'";
+	ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	rs.next();
+	int cntDelBoyCategory = rs.getInt(1);
+	rs.close();
+	if (cntDelBoyCategory > 0)
+	{
+	    sql = "select dblLastNo from tblinternal where strTransactionType='CardNo'";
+	    rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    rs.next();
+	    long code = rs.getLong(1);
+	    code = code + 1;
+	    lastNo = code;
+	    rs.close();
+	}
+	else
+	{
+	    lastNo = 1;
+	}
+	String updateSql = "update tblinternal set dblLastNo=" + lastNo + " "
+		+ "where strTransactionType='CardNo'";
+	clsGlobalVarClass.dbMysql.execute(updateSql);
 
-        return lastNo;
+	return lastNo;
     }
 
     /**
@@ -349,88 +370,110 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private void funRegisterCard(String cardCode) throws Exception
     {
-        //clsGlobalVarClass.dbMysql.funStartTransaction();
-        String cardStatus = "";
-        if (cmbOperation.getSelectedItem().toString().equalsIgnoreCase("Register"))
-        {
-            cardStatus = "Active";
-        }
-        else
-        {
-            cardStatus = "Deactive";
-        }
-        String sqlCheckDuplicate = "";
-        sqlCheckDuplicate = "select strCardNo from tbldebitcardmaster "
-                + "where strCardString='" + txtCardString.getText().trim() + "'";
-        ResultSet rsCheckDuplicate = clsGlobalVarClass.dbMysql.executeResultSet(sqlCheckDuplicate);
-        if (rsCheckDuplicate.next())
-        {
-            new frmOkPopUp(this, "This Card Is Already Register", "Error", 0).setVisible(true);
-            txtCardString.setText("");
-            txtCardString.requestFocus();
-            return;
-        }
-        rsCheckDuplicate.close();
+	//clsGlobalVarClass.dbMysql.funStartTransaction();
+	String cardStatus = "";
+	if (cmbOperation.getSelectedItem().toString().equalsIgnoreCase("Register"))
+	{
+	    cardStatus = "Active";
+	}
+	else
+	{
+	    cardStatus = "Deactive";
+	}
+	String sqlCheckDuplicate = "";
+	sqlCheckDuplicate = "select strCardNo from tbldebitcardmaster "
+		+ "where strCardString='" + txtCardString.getText().trim() + "'";
+	ResultSet rsCheckDuplicate = clsGlobalVarClass.dbMysql.executeResultSet(sqlCheckDuplicate);
+	if (rsCheckDuplicate.next())
+	{
+	    new frmOkPopUp(this, "This Card Is Already Register", "Error", 0).setVisible(true);
+	    txtCardString.setText("");
+	    txtCardString.requestFocus();
+	    return;
+	}
+	rsCheckDuplicate.close();
 
-        if (!custemerCode.isEmpty())
-        {
-            if (funCheckCustomerForCard(custemerCode))
-            {
-                JOptionPane.showMessageDialog(this, "This Customer Is Already Registered with another Card");
-                txtCustomerName.requestFocus();
-                return;
-            }
-        }
-        if (cardStatus.equals("Active")) //for register card
-        {
-            sql = "select dblCardValueFixed,dblMinCharge,right(strCardTypeCode,3) "
-                    + "from tbldebitcardtype "
-                    + "where strCardTypeCode='" + cardCode + "'";
-            redeemAmt = 0.0;
+	String manualCardNo = txtManualCardNo.getText().trim();
 
-            String cardTypeCode = "";
-            ResultSet rsCardValue = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsCardValue.next())
-            {
-                cardValue = Double.parseDouble(rsCardValue.getString(1));
-                minCharges = Double.parseDouble(rsCardValue.getString(2));
-                redeemAmt = redeemAmt - (cardValue + minCharges);
-                cardTypeCode = rsCardValue.getString(3);
-            }
-            rsCardValue.close();
+	if (!manualCardNo.isEmpty())
+	{
+	    sqlCheckDuplicate = "select strCardNo from tbldebitcardmaster "
+		    + "where strManualNo='" + txtManualCardNo.getText().trim() + "'";
+	    rsCheckDuplicate = clsGlobalVarClass.dbMysql.executeResultSet(sqlCheckDuplicate);
+	    if (rsCheckDuplicate.next())
+	    {
+		new frmOkPopUp(this, "Duplicate manual card no.", "Error", 0).setVisible(true);
+		txtManualCardNo.setText("");
+		txtManualCardNo.requestFocus();
+		return;
+	    }
+	    rsCheckDuplicate.close();
+	}
 
-            long lastNo = funGetDebitCardNo();
-            String cardNo = cardTypeCode + String.format("%06d", lastNo);
+	if (manualCardNo.isEmpty())
+	{
+	    manualCardNo = "NA";
+	}
 
-            sql = "insert into tbldebitcardmaster (strCardTypeCode,strCardNo,dblRedeemAmt,strStatus,"
-                    + "strUserCreated,dteDateCreated,strCustomerCode,strDataPostFlag,strClientCode,strCardString) "
-                    + "values('" + cardCode + "','" + cardNo + "','" + redeemAmt + "','" + cardStatus + "'"
-                    + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
-                    + ",'" + custemerCode + "','N','" + clsGlobalVarClass.gClientCode + "','" + txtCardString.getText() + "')";
-            clsGlobalVarClass.dbMysql.execute(sql);
+	if (!custemerCode.isEmpty())
+	{
+	    if (funCheckCustomerForCard(custemerCode))
+	    {
+		JOptionPane.showMessageDialog(this, "This Customer Is Already Registered with another Card");
+		txtCustomerName.requestFocus();
+		return;
+	    }
+	}
+	if (cardStatus.equals("Active")) //for register card
+	{
+	    sql = "select dblCardValueFixed,dblMinCharge,right(strCardTypeCode,3) "
+		    + "from tbldebitcardtype "
+		    + "where strCardTypeCode='" + cardCode + "'";
+	    redeemAmt = 0.0;
 
-            if (clsGlobalVarClass.gRFIDInterface.equalsIgnoreCase("Y"))
-            {
-                // Post Registered Debit Card from JPOS to RMS
-                int rows = funPostDebitCardInfoToRMS();
-                if (rows > 0)
-                {
-                    //clsGlobalVarClass.dbMysql.funCommitTransaction();
-                    JOptionPane.showMessageDialog(this, "Entry Added Successfully");
-                    funResetFields();
-                }
-                else
-                {
-                    //clsGlobalVarClass.dbMysql.funRollbackTransaction();
-                }
-            }
-            else
-            {
-                //clsGlobalVarClass.dbMysql.funCommitTransaction();
-                JOptionPane.showMessageDialog(this, "Entry Added Successfully");
-                funResetFields();
-            }
-        }
+	    String cardTypeCode = "";
+	    ResultSet rsCardValue = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsCardValue.next())
+	    {
+		cardValue = Double.parseDouble(rsCardValue.getString(1));
+		minCharges = Double.parseDouble(rsCardValue.getString(2));
+		redeemAmt = redeemAmt - (cardValue + minCharges);
+		cardTypeCode = rsCardValue.getString(3);
+	    }
+	    rsCardValue.close();
+
+	    long lastNo = funGetDebitCardNo();
+	    String cardNo = cardTypeCode + String.format("%06d", lastNo);
+
+	    sql = "insert into tbldebitcardmaster (strCardTypeCode,strCardNo,dblRedeemAmt,strStatus,"
+		    + "strUserCreated,dteDateCreated,strCustomerCode,strDataPostFlag,strClientCode,strCardString,strManualNo) "
+		    + "values('" + cardCode + "','" + cardNo + "','" + redeemAmt + "','" + cardStatus + "'"
+		    + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
+		    + ",'" + custemerCode + "','N','" + clsGlobalVarClass.gClientCode + "','" + txtCardString.getText() + "','" + manualCardNo + "')";
+	    clsGlobalVarClass.dbMysql.execute(sql);
+
+	    if (clsGlobalVarClass.gRFIDInterface.equalsIgnoreCase("Y"))
+	    {
+		// Post Registered Debit Card from JPOS to RMS
+		int rows = funPostDebitCardInfoToRMS();
+		if (rows > 0)
+		{
+		    //clsGlobalVarClass.dbMysql.funCommitTransaction();
+		    JOptionPane.showMessageDialog(this, "Entry Added Successfully");
+		    funResetFields();
+		}
+		else
+		{
+		    //clsGlobalVarClass.dbMysql.funRollbackTransaction();
+		}
+	    }
+	    else
+	    {
+		//clsGlobalVarClass.dbMysql.funCommitTransaction();
+		JOptionPane.showMessageDialog(this, "Entry Added Successfully");
+		funResetFields();
+	    }
+	}
 
     }
 
@@ -441,62 +484,62 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private int funPostDebitCardInfoToRMS()
     {
-        Connection conRMS = null;
-        String status = "E";
-        int insertedRows = 0;
-        try
-        {
-            String rmsConURL = "jdbc:sqlserver://" + clsGlobalVarClass.gRFIDDBServerName + ":1433;user=" + clsGlobalVarClass.gRFIDDBUserName + ";password=" + clsGlobalVarClass.gRFIDDBPassword + ";database=" + clsGlobalVarClass.gRFIDDBName + "";
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conRMS = DriverManager.getConnection(rmsConURL);
-            conRMS.setAutoCommit(false);
-            Statement st = conRMS.createStatement();
+	Connection conRMS = null;
+	String status = "E";
+	int insertedRows = 0;
+	try
+	{
+	    String rmsConURL = "jdbc:sqlserver://" + clsGlobalVarClass.gRFIDDBServerName + ":1433;user=" + clsGlobalVarClass.gRFIDDBUserName + ";password=" + clsGlobalVarClass.gRFIDDBPassword + ";database=" + clsGlobalVarClass.gRFIDDBName + "";
+	    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	    conRMS = DriverManager.getConnection(rmsConURL);
+	    conRMS.setAutoCommit(false);
+	    Statement st = conRMS.createStatement();
 
-            sql = "select strCustomerCode,strStatus from tbldebitcardmaster "
-                    + "where strCardString='" + txtCardString.getText().trim() + "'";
-            ResultSet rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-            if (rsCustCode.next())
-            {
-                if (rsCustCode.getString(2).equals("Active"))
-                {
-                    status = "A";
-                }
-                else
-                {
-                    status = "E";
-                }
-                sql = "insert into tblCustomerDebitCard(strCustomerCode,strDebitCardString,strStatus) "
-                        + "values('" + extCode + "','" + txtCardString.getText().trim() + "','" + status + "')";
-                System.out.println(sql);
-                insertedRows = st.executeUpdate(sql);
-            }
-            rsCustCode.close();
-            conRMS.commit();
+	    sql = "select strCustomerCode,strStatus from tbldebitcardmaster "
+		    + "where strCardString='" + txtCardString.getText().trim() + "'";
+	    ResultSet rsCustCode = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	    if (rsCustCode.next())
+	    {
+		if (rsCustCode.getString(2).equals("Active"))
+		{
+		    status = "A";
+		}
+		else
+		{
+		    status = "E";
+		}
+		sql = "insert into tblCustomerDebitCard(strCustomerCode,strDebitCardString,strStatus) "
+			+ "values('" + extCode + "','" + txtCardString.getText().trim() + "','" + status + "')";
+		System.out.println(sql);
+		insertedRows = st.executeUpdate(sql);
+	    }
+	    rsCustCode.close();
+	    conRMS.commit();
 
-        }
-        catch (Exception e)
-        {
-            try
-            {
-                conRMS.rollback();
-            }
-            catch (Exception ex)
-            {
-            }
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                conRMS.close();
-            }
-            catch (Exception ex)
-            {
-            }
-            return insertedRows;
-        }
+	}
+	catch (Exception e)
+	{
+	    try
+	    {
+		conRMS.rollback();
+	    }
+	    catch (Exception ex)
+	    {
+	    }
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    try
+	    {
+		conRMS.close();
+	    }
+	    catch (Exception ex)
+	    {
+	    }
+	    return insertedRows;
+	}
     }
 
     /**
@@ -506,43 +549,43 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private int funDelistDebitCardFromRMS()
     {
-        Connection conRMS = null;
-        int updatedRows = 0;
-        try
-        {
-            String rmsConURL = "jdbc:sqlserver://" + clsGlobalVarClass.gRFIDDBServerName + ":1433;user=" + clsGlobalVarClass.gRFIDDBUserName + ";password=" + clsGlobalVarClass.gRFIDDBPassword + ";database=" + clsGlobalVarClass.gRFIDDBName + "";
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conRMS = DriverManager.getConnection(rmsConURL);
-            conRMS.setAutoCommit(false);
-            Statement st = conRMS.createStatement();
-            sql = "update tblcustomerdebitcard set strStatus='E' where strDebitCardString='" + txtCardString.getText().trim() + "'";
-            updatedRows = st.executeUpdate(sql);
-            conRMS.commit();
+	Connection conRMS = null;
+	int updatedRows = 0;
+	try
+	{
+	    String rmsConURL = "jdbc:sqlserver://" + clsGlobalVarClass.gRFIDDBServerName + ":1433;user=" + clsGlobalVarClass.gRFIDDBUserName + ";password=" + clsGlobalVarClass.gRFIDDBPassword + ";database=" + clsGlobalVarClass.gRFIDDBName + "";
+	    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	    conRMS = DriverManager.getConnection(rmsConURL);
+	    conRMS.setAutoCommit(false);
+	    Statement st = conRMS.createStatement();
+	    sql = "update tblcustomerdebitcard set strStatus='E' where strDebitCardString='" + txtCardString.getText().trim() + "'";
+	    updatedRows = st.executeUpdate(sql);
+	    conRMS.commit();
 
-        }
-        catch (Exception e)
-        {
-            try
-            {
-                conRMS.rollback();
-            }
-            catch (Exception ex)
-            {
-            }
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                conRMS.close();
-            }
-            catch (Exception ex)
-            {
-            }
-            return updatedRows;
-        }
+	}
+	catch (Exception e)
+	{
+	    try
+	    {
+		conRMS.rollback();
+	    }
+	    catch (Exception ex)
+	    {
+	    }
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    try
+	    {
+		conRMS.close();
+	    }
+	    catch (Exception ex)
+	    {
+	    }
+	    return updatedRows;
+	}
     }
 
     /**
@@ -552,52 +595,52 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private void funDelistCard() throws Exception
     {
-        //clsGlobalVarClass.dbMysql.funStartTransaction();
-        String cardStatus = "";
-        if (cmbOperation.getSelectedItem().toString().equalsIgnoreCase("Register"))
-        {
-            cardStatus = "Active";
-        }
-        else
-        {
-            cardStatus = "Deactive";
-        }
+	//clsGlobalVarClass.dbMysql.funStartTransaction();
+	String cardStatus = "";
+	if (cmbOperation.getSelectedItem().toString().equalsIgnoreCase("Register"))
+	{
+	    cardStatus = "Active";
+	}
+	else
+	{
+	    cardStatus = "Deactive";
+	}
 
-        String cardNoToDelist = "";
-        cardNoToDelist = "select count(*) from tbldebitcardmaster "
-                + "where strCardString='" + txtCardString.getText().trim() + "'and strStatus='Active'";
-        ResultSet rsCheckCard = null;
-        rsCheckCard = clsGlobalVarClass.dbMysql.executeResultSet(cardNoToDelist);
-        if (rsCheckCard.next())
-        {
-            int cn1 = rsCheckCard.getInt(1);
-            if (cn1 > 0)
-            {
-                //code set stastus of card deactive
-                sql = "update tbldebitcardmaster set strStatus='" + cardStatus + "' "
-                        + "where strCardString='" + txtCardString.getText().trim() + "'";
-                clsGlobalVarClass.dbMysql.execute(sql);
-                if (clsGlobalVarClass.gRFIDInterface.equalsIgnoreCase("Y"))
-                {
-                    if (funDelistDebitCardFromRMS() > 0)
-                    {
-                        //clsGlobalVarClass.dbMysql.funCommitTransaction();
-                        JOptionPane.showMessageDialog(this, "Card Delist Successfully");
-                    }
-                    else
-                    {
-                        //clsGlobalVarClass.dbMysql.funRollbackTransaction();
-                    }
-                    funResetFields();
-                }
-            }
-            else
-            {
-                //clsGlobalVarClass.dbMysql.funCommitTransaction();
-                JOptionPane.showMessageDialog(this, "Card Delist Successfully");
-                funResetFields();
-            }
-        }
+	String cardNoToDelist = "";
+	cardNoToDelist = "select count(*) from tbldebitcardmaster "
+		+ "where strCardString='" + txtCardString.getText().trim() + "'and strStatus='Active'";
+	ResultSet rsCheckCard = null;
+	rsCheckCard = clsGlobalVarClass.dbMysql.executeResultSet(cardNoToDelist);
+	if (rsCheckCard.next())
+	{
+	    int cn1 = rsCheckCard.getInt(1);
+	    if (cn1 > 0)
+	    {
+		//code set stastus of card deactive
+		sql = "update tbldebitcardmaster set strStatus='" + cardStatus + "' "
+			+ "where strCardString='" + txtCardString.getText().trim() + "'";
+		clsGlobalVarClass.dbMysql.execute(sql);
+		if (clsGlobalVarClass.gRFIDInterface.equalsIgnoreCase("Y"))
+		{
+		    if (funDelistDebitCardFromRMS() > 0)
+		    {
+			//clsGlobalVarClass.dbMysql.funCommitTransaction();
+			JOptionPane.showMessageDialog(this, "Card Delist Successfully");
+		    }
+		    else
+		    {
+			//clsGlobalVarClass.dbMysql.funRollbackTransaction();
+		    }
+		    funResetFields();
+		}
+	    }
+	    else
+	    {
+		//clsGlobalVarClass.dbMysql.funCommitTransaction();
+		JOptionPane.showMessageDialog(this, "Card Delist Successfully");
+		funResetFields();
+	    }
+	}
     }
 
     /**
@@ -605,24 +648,24 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
      */
     private void funSelectCustomer()
     {
-        try
-        {
-            clsUtility obj = new clsUtility();
-            obj.funCallForSearchForm("CustomerMaster");
-            new frmSearchFormDialog(this, true).setVisible(true);
-            if (clsGlobalVarClass.gSearchItemClicked)
-            {
+	try
+	{
+	    clsUtility obj = new clsUtility();
+	    obj.funCallForSearchForm("CustomerMaster");
+	    new frmSearchFormDialog(this, true).setVisible(true);
+	    if (clsGlobalVarClass.gSearchItemClicked)
+	    {
 
-                Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-                setData(data);
-                clsGlobalVarClass.gSearchItemClicked = false;
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+		setData(data);
+		clsGlobalVarClass.gSearchItemClicked = false;
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -669,6 +712,8 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
         btnCancel = new javax.swing.JButton();
         lblCardStatus = new javax.swing.JLabel();
         txtCardString = new javax.swing.JPasswordField();
+        lblManualNo = new javax.swing.JLabel();
+        txtManualCardNo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
@@ -749,7 +794,7 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
         lblFormName.setText("Register Debit Card");
 
         lblCardType.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblCardType.setText("Debit Card Type     :");
+        lblCardType.setText("Debit Card Type         : ");
 
         cmbCardType.addActionListener(new java.awt.event.ActionListener()
         {
@@ -767,7 +812,7 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
         });
 
         lblCardNum.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblCardNum.setText("Card Number         :");
+        lblCardNum.setText("Card Number             :");
 
         btnSwipeCard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnSwipeCard.setForeground(new java.awt.Color(255, 255, 255));
@@ -792,7 +837,7 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
         });
 
         lblCustomerName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblCustomerName.setText("Customer Name     :");
+        lblCustomerName.setText("Customer Name         :");
 
         txtCustomerName.setEditable(false);
         txtCustomerName.setBackground(new java.awt.Color(204, 204, 204));
@@ -819,7 +864,7 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
         });
 
         lblOperation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblOperation.setText("Operation             :");
+        lblOperation.setText("Operation                 :");
 
         cmbOperation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cmbOperation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Register", "Delist" }));
@@ -919,6 +964,9 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
             }
         });
 
+        lblManualNo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblManualNo.setText(" Manual Number        :");
+
         javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
@@ -926,28 +974,36 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
             .addGroup(panelBodyLayout.createSequentialGroup()
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBodyLayout.createSequentialGroup()
-                        .addGap(210, 210, 210)
+                        .addGap(215, 215, 215)
                         .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addComponent(lblCardType, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(cmbCardType, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addComponent(lblCardNum, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtCardString, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelBodyLayout.createSequentialGroup()
+                                        .addComponent(lblCardType, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(20, 20, 20)
+                                        .addComponent(cmbCardType, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelBodyLayout.createSequentialGroup()
+                                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
+                                                .addComponent(lblManualNo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(10, 10, 10)
+                                                .addComponent(txtManualCardNo))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
+                                                .addComponent(lblCardNum, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(txtCardString, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnSwipeCard, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSwipeCard, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblCardStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addComponent(lblCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addComponent(lblOperation, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblCustomerName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblOperation, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(10, 10, 10)
-                                .addComponent(cmbOperation, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblCardStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbOperation, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCustomerName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -965,15 +1021,12 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
         panelBodyLayout.setVerticalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBodyLayout.createSequentialGroup()
-                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(25, 25, 25)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblCardStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelBodyLayout.createSequentialGroup()
-                        .addGap(174, 174, 174)
-                        .addComponent(lblCardStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
                         .addComponent(lblFormName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
+                        .addGap(68, 68, 68)
                         .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCardType, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbCardType, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -981,16 +1034,20 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
                         .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblCardNum, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCardString, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSwipeCard, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblOperation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbOperation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(132, 132, 132)))
+                            .addComponent(btnSwipeCard, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblManualNo, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(txtManualCardNo))
+                .addGap(18, 18, 18)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblOperation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbOperation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1010,39 +1067,38 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
     }//GEN-LAST:event_cmbCardTypeActionPerformed
 
     private void btnSwipeCardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSwipeCardMouseClicked
-        // TODO add your handling code here:
-        clsUtility obj = new clsUtility();
-       
-        if (clsGlobalVarClass.gEnableNFCInterface)
-        {
-            //new frmSwipCardPopUp(this, "frmRegisterDebitCard",objReaderer).setVisible(true);
-        }
-        else
-        {
-             new frmSwipCardPopUp(this, "frmRegisterDebitCard").setVisible(true);
-             
-             
-            if (null != clsGlobalVarClass.gDebitCardNo)
-            {
-                txtCardString.setText(clsGlobalVarClass.gDebitCardNo);
-                if (obj.funValidateDebitCardString(clsGlobalVarClass.gDebitCardNo))
-                {
-                    funCheckDebitCardStatus(clsGlobalVarClass.gDebitCardNo);
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(this, "Invalid Card No");
-                }
-            }
-        }
+	// TODO add your handling code here:
+	clsUtility obj = new clsUtility();
+
+	if (clsGlobalVarClass.gEnableNFCInterface)
+	{
+	    //new frmSwipCardPopUp(this, "frmRegisterDebitCard",objReaderer).setVisible(true);
+	}
+	else
+	{
+	    new frmSwipCardPopUp(this, "frmRegisterDebitCard").setVisible(true);
+
+	    if (null != clsGlobalVarClass.gDebitCardNo)
+	    {
+		txtCardString.setText(clsGlobalVarClass.gDebitCardNo);
+		if (obj.funValidateDebitCardString(clsGlobalVarClass.gDebitCardNo))
+		{
+		    funCheckDebitCardStatus(clsGlobalVarClass.gDebitCardNo);
+		}
+		else
+		{
+		    JOptionPane.showMessageDialog(this, "Invalid Card No");
+		}
+	    }
+	}
     }//GEN-LAST:event_btnSwipeCardMouseClicked
 
     private void txtCustomerNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCustomerNameMouseClicked
-        // TODO add your handling code here:
-        if (txtCustomerName.isEnabled())
-        {
-            funSelectCustomer();
-        }
+	// TODO add your handling code here:
+	if (txtCustomerName.isEnabled())
+	{
+	    funSelectCustomer();
+	}
     }//GEN-LAST:event_txtCustomerNameMouseClicked
 
     private void txtCustomerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomerNameActionPerformed
@@ -1050,96 +1106,96 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
     }//GEN-LAST:event_txtCustomerNameActionPerformed
 
     private void cmbOperationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOperationActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbOperationActionPerformed
 
     private void btnNewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseClicked
-        // TODO add your handling code here:
-        funSaveButtonPressed();
+	// TODO add your handling code here:
+	funSaveButtonPressed();
     }//GEN-LAST:event_btnNewMouseClicked
 
     private void btnResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMouseClicked
-        funResetFields();
+	funResetFields();
     }//GEN-LAST:event_btnResetMouseClicked
 
     private void btnCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelMouseClicked
-        // TODO add your handling code here:
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("DebitCardRegister");
+	// TODO add your handling code here:
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("DebitCardRegister");
     }//GEN-LAST:event_btnCancelMouseClicked
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
-        clsGlobalVarClass.gDebitCardNo = null;
-        if(null!=objThread)
-        {
-            objThread.stop();
-        }
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("DebitCardRegister");
+	// TODO add your handling code here:
+	clsGlobalVarClass.gDebitCardNo = null;
+	if (null != objThread)
+	{
+	    objThread.stop();
+	}
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("DebitCardRegister");
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void cmbCardTypeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbCardTypeKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            txtCardString.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    txtCardString.requestFocus();
+	}
 
     }//GEN-LAST:event_cmbCardTypeKeyPressed
 
     private void txtCustomerNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerNameKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
 
     }//GEN-LAST:event_txtCustomerNameKeyPressed
 
     private void cmbOperationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbOperationKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
 
-        if (evt.getKeyCode() == 10)
-        {
-            btnNew.requestFocus();
-        }
+	if (evt.getKeyCode() == 10)
+	{
+	    btnNew.requestFocus();
+	}
     }//GEN-LAST:event_cmbOperationKeyPressed
 
     private void btnNewKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNewKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            funSaveButtonPressed();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    funSaveButtonPressed();
+	}
     }//GEN-LAST:event_btnNewKeyPressed
 
     private void btnSwipeCardKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSwipeCardKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
 
-        }
+	}
     }//GEN-LAST:event_btnSwipeCardKeyPressed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        // TODO add your handling code here:
-        funSaveButtonPressed();
+	// TODO add your handling code here:
+	funSaveButtonPressed();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
-        funResetFields();
+	// TODO add your handling code here:
+	funResetFields();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void txtCardStringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCardStringActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtCardStringActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("DebitCardRegister");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("DebitCardRegister");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("DebitCardRegister");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("DebitCardRegister");
     }//GEN-LAST:event_formWindowClosing
 
 
@@ -1160,6 +1216,7 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblFormName;
     private javax.swing.JLabel lblHOSign;
+    private javax.swing.JLabel lblManualNo;
     private javax.swing.JLabel lblModuleName;
     private javax.swing.JLabel lblOperation;
     private javax.swing.JLabel lblPosName;
@@ -1171,7 +1228,7 @@ public class frmRegisterDebitCard extends javax.swing.JFrame
     private javax.swing.JPanel panelLayout;
     public static javax.swing.JPasswordField txtCardString;
     private javax.swing.JTextField txtCustomerName;
+    private javax.swing.JTextField txtManualCardNo;
     // End of variables declaration//GEN-END:variables
 
-   
 }
