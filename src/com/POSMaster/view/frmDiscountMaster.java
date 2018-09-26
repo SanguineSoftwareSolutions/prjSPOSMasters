@@ -43,75 +43,75 @@ public class frmDiscountMaster extends javax.swing.JFrame
      */
     public frmDiscountMaster()
     {
-        initComponents();
-        try
-        {
-            objUtility = new clsUtility();
-            Timer timer = new Timer(500, new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    Date date1 = new Date();
-                    String newstr = String.format("%tr", date1);
-                    String dateAndTime = clsGlobalVarClass.gPOSDateToDisplay + " " + newstr;
-                    lblDate.setText(dateAndTime);
-                }
-            });
-            timer.setRepeats(true);
-            timer.setCoalesce(true);
-            timer.setInitialDelay(0);
-            timer.start();
-            lblUserCode.setText(clsGlobalVarClass.gUserCode);
-            lblPosName.setText(clsGlobalVarClass.gPOSName);
-            lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
-            lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
-            txtDiscountCode.requestFocus();
-            dteFromDate.setDate(objUtility.funGetDateToSetCalenderDate());
-            dteToDate.setDate(objUtility.funGetDateToSetCalenderDate());
-            funLoadPOSCombo();
+	initComponents();
+	try
+	{
+	    objUtility = new clsUtility();
+	    Timer timer = new Timer(500, new ActionListener()
+	    {
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+		    Date date1 = new Date();
+		    String newstr = String.format("%tr", date1);
+		    String dateAndTime = clsGlobalVarClass.gPOSDateToDisplay + " " + newstr;
+		    lblDate.setText(dateAndTime);
+		}
+	    });
+	    timer.setRepeats(true);
+	    timer.setCoalesce(true);
+	    timer.setInitialDelay(0);
+	    timer.start();
+	    lblUserCode.setText(clsGlobalVarClass.gUserCode);
+	    lblPosName.setText(clsGlobalVarClass.gPOSName);
+	    lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
+	    lblModuleName.setText(clsGlobalVarClass.gSelectedModule);
+	    txtDiscountCode.requestFocus();
+	    dteFromDate.setDate(objUtility.funGetDateToSetCalenderDate());
+	    dteToDate.setDate(objUtility.funGetDateToSetCalenderDate());
+	    funLoadPOSCombo();
 
-            funSetShortCutKeys();
-            funDiscOnComboClicked();
+	    funSetShortCutKeys();
+	    funDiscOnComboClicked();
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 
     }
 
     private void funSetShortCutKeys()
     {
-        btnCancel.setMnemonic('c');
-        btnNew.setMnemonic('s');
-        btnReset.setMnemonic('r');
+	btnCancel.setMnemonic('c');
+	btnNew.setMnemonic('s');
+	btnReset.setMnemonic('r');
 
     }
 
     private void funLoadPOSCombo()
     {
-        try
-        {
-            ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet("select strPOSCode,strPOSName from tblposmaster ");
-            mapPOSCode = new HashMap<String, String>();
-            mapPOSName = new HashMap<String, String>();
-            cmbPosCode.addItem("All");
-            mapPOSCode.put("All", "All");
-            mapPOSName.put("All", "All");
-            while (rsPOS.next())
-            {
-                cmbPosCode.addItem(rsPOS.getString(2));
-                mapPOSCode.put(rsPOS.getString(1), rsPOS.getString(2));
-                mapPOSName.put(rsPOS.getString(2), rsPOS.getString(1));
-            }
+	try
+	{
+	    ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet("select strPOSCode,strPOSName from tblposmaster ");
+	    mapPOSCode = new HashMap<String, String>();
+	    mapPOSName = new HashMap<String, String>();
+	    cmbPosCode.addItem("All");
+	    mapPOSCode.put("All", "All");
+	    mapPOSName.put("All", "All");
+	    while (rsPOS.next())
+	    {
+		cmbPosCode.addItem(rsPOS.getString(2));
+		mapPOSCode.put(rsPOS.getString(1), rsPOS.getString(2));
+		mapPOSName.put(rsPOS.getString(2), rsPOS.getString(1));
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -121,58 +121,89 @@ public class frmDiscountMaster extends javax.swing.JFrame
      */
     private void funSetDiscountData(Object[] data) throws Exception
     {
-        sql = "select * from tbldischd a "
-                + " where  a.strDiscCode='" + data[0].toString() + "'";
-        ResultSet rsDisc = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        if (rsDisc.next())
-        {
-            txtDiscountCode.setText(rsDisc.getString(1));//code
-            txtDiscountName.setText(rsDisc.getString(2));
+	sql = "select * from tbldischd a "
+		+ " where  a.strDiscCode='" + data[0].toString() + "'";
+	ResultSet rsDisc = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	if (rsDisc.next())
+	{
+	    txtDiscountCode.setText(rsDisc.getString(1));//code
+	    txtDiscountName.setText(rsDisc.getString(2));
 
-            btnNew.setText("UPDATE");//updated
-            btnNew.setMnemonic('u');
+	    btnNew.setText("UPDATE");//updated
+	    btnNew.setMnemonic('u');
 
-            cmbPosCode.setSelectedItem(mapPOSCode.get(rsDisc.getString(3)));
+	    cmbPosCode.setSelectedItem(mapPOSCode.get(rsDisc.getString(3)));
 
-            String discOn = rsDisc.getString(5);
-            cmbDiscountOn.setSelectedItem(discOn);
-            cmbDiscountOn.setEnabled(false);
-            if (discOn.equalsIgnoreCase("All"))
-            {
-                txtDiscountOnCode.setText("All");
-                lblDiscOnValue.setText("All");
-            }
-            else
-            {
-                txtDiscountOnCode.setText("");
-                lblDiscOnValue.setText("");
-            }
+	    String discOn = rsDisc.getString(5);
+	    cmbDiscountOn.setSelectedItem(discOn);
+	    cmbDiscountOn.setEnabled(false);
+	    if (discOn.equalsIgnoreCase("All"))
+	    {
+		txtDiscountOnCode.setText("All");
+		lblDiscOnValue.setText("All");
+	    }
+	    else
+	    {
+		txtDiscountOnCode.setText("");
+		lblDiscOnValue.setText("");
+	    }
 
-            txtDiscountValue.setText("0.00");
-            dteFromDate.setDate(rsDisc.getDate(6));
-            dteToDate.setDate(rsDisc.getDate(7));
+	    txtDiscountValue.setText("0.00");
+	    dteFromDate.setDate(rsDisc.getDate(6));
+	    dteToDate.setDate(rsDisc.getDate(7));
 
-            rsDisc.close();
-            txtDiscountCode.requestFocus();
-        }
-        rsDisc.close();
+	    //operation type  for discount on
+	    String dineIn = rsDisc.getString(13);
+	    if (dineIn.equalsIgnoreCase("Y"))
+	    {
+		chkDineIn.setSelected(true);
+	    }
+	    else
+	    {
+		chkDineIn.setSelected(false);
+	    }
 
-        DefaultTableModel dtm = (DefaultTableModel) tblDiscDtl.getModel();
-        dtm.setRowCount(0);
+	    String homeDelivery = rsDisc.getString(14);
+	    if (homeDelivery.equalsIgnoreCase("Y"))
+	    {
+		chkHomeDelivery.setSelected(true);
+	    }
+	    else
+	    {
+		chkHomeDelivery.setSelected(false);
+	    }
 
-        sql = "select * from tbldiscdtl a "
-                + " where  a.strDiscCode='" + data[0].toString() + "'";
-        rsDisc = clsGlobalVarClass.dbMysql.executeResultSet(sql);
-        while (rsDisc.next())
-        {
-            Object row[] =
-            {
-                rsDisc.getString(2), rsDisc.getString(3), rsDisc.getString(4), rsDisc.getString(5)
-            };
+	    String takeAway = rsDisc.getString(15);
+	    if (takeAway.equalsIgnoreCase("Y"))
+	    {
+		chkTakeAway.setSelected(true);
+	    }
+	    else
+	    {
+		chkTakeAway.setSelected(false);
+	    }
 
-            dtm.addRow(row);
-        }
-        rsDisc.close();
+	    rsDisc.close();
+	    txtDiscountCode.requestFocus();
+	}
+	rsDisc.close();
+
+	DefaultTableModel dtm = (DefaultTableModel) tblDiscDtl.getModel();
+	dtm.setRowCount(0);
+
+	sql = "select * from tbldiscdtl a "
+		+ " where  a.strDiscCode='" + data[0].toString() + "'";
+	rsDisc = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+	while (rsDisc.next())
+	{
+	    Object row[] =
+	    {
+		rsDisc.getString(2), rsDisc.getString(3), rsDisc.getString(4), rsDisc.getString(5)
+	    };
+
+	    dtm.addRow(row);
+	}
+	rsDisc.close();
     }
 
     /**
@@ -180,305 +211,352 @@ public class frmDiscountMaster extends javax.swing.JFrame
      */
     private void funSelectDiscountCode()
     {
-        try
-        {
-            clsUtility obj = new clsUtility();
-            obj.funCallForSearchForm("DiscountMaster");
-            new frmSearchFormDialog(this, true).setVisible(true);
-            if (clsGlobalVarClass.gSearchItemClicked)
-            {
-                btnNew.setText("UPDATE");
-                btnNew.setMnemonic('u');
-                Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-                funSetDiscountData(data);
-                clsGlobalVarClass.gSearchItemClicked = false;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	try
+	{
+	    clsUtility obj = new clsUtility();
+	    obj.funCallForSearchForm("DiscountMaster");
+	    new frmSearchFormDialog(this, true).setVisible(true);
+	    if (clsGlobalVarClass.gSearchItemClicked)
+	    {
+		btnNew.setText("UPDATE");
+		btnNew.setMnemonic('u');
+		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+		funSetDiscountData(data);
+		clsGlobalVarClass.gSearchItemClicked = false;
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     public void funSelectDiscountOn()
     {
-        try
-        {
-            clsUtility obj = new clsUtility();
-            if (cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("Item"))
-            {
-                obj.funCallForSearchForm("MenuItem");
-            }
-            else if (cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("Group"))
-            {
-                obj.funCallForSearchForm("Group");
-            }
-            else if (cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("SubGroup"))
-            {
-                obj.funCallForSearchForm("SubGroup");
-            }
-            new frmSearchFormDialog(this, true).setVisible(true);
-            if (clsGlobalVarClass.gSearchItemClicked)
-            {
-                Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
-                txtDiscountOnCode.setText(data[0].toString());
-                lblDiscOnValue.setText(data[1].toString());
-                clsGlobalVarClass.gSearchItemClicked = false;
-            }
-            else
-            {
-                txtDiscountOnCode.setText("");
-                lblDiscOnValue.setText("");
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	try
+	{
+	    clsUtility obj = new clsUtility();
+	    if (cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("Item"))
+	    {
+		obj.funCallForSearchForm("MenuItem");
+	    }
+	    else if (cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("Group"))
+	    {
+		obj.funCallForSearchForm("Group");
+	    }
+	    else if (cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("SubGroup"))
+	    {
+		obj.funCallForSearchForm("SubGroup");
+	    }
+	    new frmSearchFormDialog(this, true).setVisible(true);
+	    if (clsGlobalVarClass.gSearchItemClicked)
+	    {
+		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+		txtDiscountOnCode.setText(data[0].toString());
+		lblDiscOnValue.setText(data[1].toString());
+		clsGlobalVarClass.gSearchItemClicked = false;
+	    }
+	    else
+	    {
+		txtDiscountOnCode.setText("");
+		lblDiscOnValue.setText("");
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     public void funSaveDiscount()
     {
-        try
-        {
-            String posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
+	try
+	{
+	    String posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
 
-            Date dteFromDat = dteFromDate.getDate();
-            int d1 = dteFromDat.getDate();
-            int m1 = dteFromDat.getMonth() + 1;
-            int y1 = dteFromDat.getYear() + 1900;
-            //int validDateSum1 = d1 + m1 + y1;
-            String strFromDate = y1 + "-" + m1 + "-" + d1;
+	    Date dteFromDat = dteFromDate.getDate();
+	    int d1 = dteFromDat.getDate();
+	    int m1 = dteFromDat.getMonth() + 1;
+	    int y1 = dteFromDat.getYear() + 1900;
+	    //int validDateSum1 = d1 + m1 + y1;
+	    String strFromDate = y1 + "-" + m1 + "-" + d1;
 
-            Date dteToDat = dteToDate.getDate();
-            int d = dteToDat.getDate();
-            int m = dteToDat.getMonth() + 1;
-            int y = dteToDat.getYear() + 1900;
-            //int validDateSum = d + m + y;
-            String strToDate = y + "-" + m + "-" + d;
+	    Date dteToDat = dteToDate.getDate();
+	    int d = dteToDat.getDate();
+	    int m = dteToDat.getMonth() + 1;
+	    int y = dteToDat.getYear() + 1900;
+	    //int validDateSum = d + m + y;
+	    String strToDate = y + "-" + m + "-" + d;
 
-            String discountCode = funGetDiscountCode();
-            String discName = txtDiscountName.getText().trim();
-            String discOn = cmbDiscountOn.getSelectedItem().toString();
+	    String discountCode = funGetDiscountCode();
+	    String discName = txtDiscountName.getText().trim();
+	    String discOn = cmbDiscountOn.getSelectedItem().toString();
 
-            String insertSql = "INSERT INTO tbldischd (strDiscCode, strDiscName, strPOSCode, strClientCode,"
-                    + " strDiscOn,dteFromDate,dteToDate"
-                    + ",strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strDataPostFlag) "
-                    + " VALUES ('" + discountCode + "','" + discName + "','" + posCode + "', '" + clsGlobalVarClass.gClientCode + "'"
-                    + ",'" + discOn + "','" + strFromDate + "', '" + strToDate + "'"
-                    + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
-                    + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
-                    + ",'N');";
-            clsGlobalVarClass.dbMysql.execute(insertSql);
+	    //operation type  for discount on
+	    String dineIn = "N";
+	    if (chkDineIn.isSelected())
+	    {
+		dineIn = "Y";
+	    }
 
-            StringBuffer sqlDtl = new StringBuffer("INSERT INTO tbldiscdtl (strDiscCode, strDiscOnCode, strDiscOnName, strDiscountType"
-                    + ",dblDiscountValue,strClientCode "
-                    + ",strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strDataPostFlag) "
-                    + " VALUES ");
-            boolean insert = false;
-            for (int row = 0; row < tblDiscDtl.getRowCount(); row++)
-            {
-                insert = true;
-                String discOnCode = tblDiscDtl.getValueAt(row, 0).toString();
-                String discOnName = tblDiscDtl.getValueAt(row, 1).toString();
-                String discountType = tblDiscDtl.getValueAt(row, 2).toString();
-                String discountValue = tblDiscDtl.getValueAt(row, 3).toString();
+	    String homeDelivery = "N";
+	    if (chkHomeDelivery.isSelected())
+	    {
+		homeDelivery = "Y";
+	    }
 
-                if (row == 0)
-                {
-                    sqlDtl.append("('" + discountCode + "','" + discOnCode + "','" + discOnName + "','" + discountType + "','" + discountValue + "'"
-                            + ",'" + clsGlobalVarClass.gClientCode + "' "
-                            + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
-                            + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
-                            + ",'N')");
-                }
-                else
-                {
-                    sqlDtl.append(",('" + discountCode + "','" + discOnCode + "','" + discOnName + "','" + discountType + "','" + discountValue + "'"
-                            + ",'" + clsGlobalVarClass.gClientCode + "' "
-                            + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
-                            + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
-                            + ",'N')");
-                }
-            }
-            if (insert)
-            {
-                clsGlobalVarClass.dbMysql.execute(sqlDtl.toString());
-                String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                        + " where strTableName='DiscountMaster' ";
-                clsGlobalVarClass.dbMysql.execute(sql);
-                new frmOkPopUp(this, "Entry Added Successfully", "Successfull", 3).setVisible(true);
-                funResetField();
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	    String takeAway = "N";
+	    if (chkTakeAway.isSelected())
+	    {
+		takeAway = "Y";
+	    }
+
+	    String insertSql = "INSERT INTO tbldischd (strDiscCode, strDiscName, strPOSCode, strClientCode,"
+		    + " strDiscOn,dteFromDate,dteToDate"
+		    + ",strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strDataPostFlag "
+		    + ",strDineIn,strHomeDelivery,strTakeAway) "
+		    + " VALUES ('" + discountCode + "','" + discName + "','" + posCode + "', '" + clsGlobalVarClass.gClientCode + "'"
+		    + ",'" + discOn + "','" + strFromDate + "', '" + strToDate + "'"
+		    + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
+		    + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
+		    + ",'N' "
+		    + ",'" + dineIn + "','" + homeDelivery + "','" + takeAway + "')";
+	    clsGlobalVarClass.dbMysql.execute(insertSql);
+
+	    StringBuffer sqlDtl = new StringBuffer("INSERT INTO tbldiscdtl (strDiscCode, strDiscOnCode, strDiscOnName, strDiscountType"
+		    + ",dblDiscountValue,strClientCode "
+		    + ",strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strDataPostFlag) "
+		    + " VALUES ");
+	    boolean insert = false;
+	    for (int row = 0; row < tblDiscDtl.getRowCount(); row++)
+	    {
+		insert = true;
+		String discOnCode = tblDiscDtl.getValueAt(row, 0).toString();
+		String discOnName = tblDiscDtl.getValueAt(row, 1).toString();
+		String discountType = tblDiscDtl.getValueAt(row, 2).toString();
+		String discountValue = tblDiscDtl.getValueAt(row, 3).toString();
+
+		if (row == 0)
+		{
+		    sqlDtl.append("('" + discountCode + "','" + discOnCode + "','" + discOnName + "','" + discountType + "','" + discountValue + "'"
+			    + ",'" + clsGlobalVarClass.gClientCode + "' "
+			    + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
+			    + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
+			    + ",'N')");
+		}
+		else
+		{
+		    sqlDtl.append(",('" + discountCode + "','" + discOnCode + "','" + discOnName + "','" + discountType + "','" + discountValue + "'"
+			    + ",'" + clsGlobalVarClass.gClientCode + "' "
+			    + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
+			    + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
+			    + ",'N')");
+		}
+	    }
+	    if (insert)
+	    {
+		clsGlobalVarClass.dbMysql.execute(sqlDtl.toString());
+		String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+			+ " where strTableName='DiscountMaster' ";
+		clsGlobalVarClass.dbMysql.execute(sql);
+		new frmOkPopUp(this, "Entry Added Successfully", "Successfull", 3).setVisible(true);
+
+		funResetField();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     public void funUpdateDiscount()
     {
 
-        try
-        {
-            String posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
+	try
+	{
+	    String posCode = mapPOSName.get(cmbPosCode.getSelectedItem().toString());
 
-            Date dteFromDat = dteFromDate.getDate();
-            int d1 = dteFromDat.getDate();
-            int m1 = dteFromDat.getMonth() + 1;
-            int y1 = dteFromDat.getYear() + 1900;
-            //int validDateSum1 = d1 + m1 + y1;
-            String strFromDate = y1 + "-" + m1 + "-" + d1;
+	    Date dteFromDat = dteFromDate.getDate();
+	    int d1 = dteFromDat.getDate();
+	    int m1 = dteFromDat.getMonth() + 1;
+	    int y1 = dteFromDat.getYear() + 1900;
+	    //int validDateSum1 = d1 + m1 + y1;
+	    String strFromDate = y1 + "-" + m1 + "-" + d1;
 
-            Date dteToDat = dteToDate.getDate();
-            int d = dteToDat.getDate();
-            int m = dteToDat.getMonth() + 1;
-            int y = dteToDat.getYear() + 1900;
-            //int validDateSum = d + m + y;
-            String strToDate = y + "-" + m + "-" + d;
+	    Date dteToDat = dteToDate.getDate();
+	    int d = dteToDat.getDate();
+	    int m = dteToDat.getMonth() + 1;
+	    int y = dteToDat.getYear() + 1900;
+	    //int validDateSum = d + m + y;
+	    String strToDate = y + "-" + m + "-" + d;
 
-            String discountCode = txtDiscountCode.getText();
-            String discName = txtDiscountName.getText().trim();
-            String discOn = cmbDiscountOn.getSelectedItem().toString();
+	    String discountCode = txtDiscountCode.getText();
+	    String discName = txtDiscountName.getText().trim();
+	    String discOn = cmbDiscountOn.getSelectedItem().toString();
 
-            String updateQuery = "Update tbldischd "
-                    + "SET strDiscName=? ,strPOSCode=? "
-                    + ",dteFromDate=?,dteToDate=? "
-                    + ",strUserEdited=?,dteDateEdited=? "
-                    + "WHERE strDiscCode =? ";
-            PreparedStatement pre = clsGlobalVarClass.conPrepareStatement.prepareStatement(updateQuery);
-            pre.setString(1, discName);
-            pre.setString(2, posCode);
-            pre.setString(3, strFromDate);
-            pre.setString(4, strToDate);
-            pre.setString(5, clsGlobalVarClass.gUserCode);
-            pre.setString(6, clsGlobalVarClass.gPOSDateForTransaction);
-            pre.setString(7, discountCode);
-            int exc = pre.executeUpdate();
-            pre.close();
+	    //operation type  for discount on
+	    String dineIn = "N";
+	    if (chkDineIn.isSelected())
+	    {
+		dineIn = "Y";
+	    }
 
-            String deleteSql = "delete from tbldiscdtl "
-                    + "where strDiscCode='" + discountCode + "' ";
-            clsGlobalVarClass.dbMysql.execute(deleteSql.toString());
+	    String homeDelivery = "N";
+	    if (chkHomeDelivery.isSelected())
+	    {
+		homeDelivery = "Y";
+	    }
 
-            StringBuffer sqlDtl = new StringBuffer("INSERT INTO tbldiscdtl (strDiscCode, strDiscOnCode, strDiscOnName, strDiscountType"
-                    + ",dblDiscountValue,strClientCode "
-                    + ",strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strDataPostFlag) "
-                    + " VALUES ");
-            boolean insert = false;
-            for (int row = 0; row < tblDiscDtl.getRowCount(); row++)
-            {
-                insert = true;
-                String discOnCode = tblDiscDtl.getValueAt(row, 0).toString();
-                String discOnName = tblDiscDtl.getValueAt(row, 1).toString();
-                String discountType = tblDiscDtl.getValueAt(row, 2).toString();
-                String discountValue = tblDiscDtl.getValueAt(row, 3).toString();
+	    String takeAway = "N";
+	    if (chkTakeAway.isSelected())
+	    {
+		takeAway = "Y";
+	    }
 
-                if (row == 0)
-                {
-                    sqlDtl.append("('" + discountCode + "','" + discOnCode + "','" + discOnName + "','" + discountType + "','" + discountValue + "'"
-                            + ",'" + clsGlobalVarClass.gClientCode + "' "
-                            + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
-                            + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
-                            + ",'N')");
-                }
-                else
-                {
-                    sqlDtl.append(",('" + discountCode + "','" + discOnCode + "','" + discOnName + "','" + discountType + "','" + discountValue + "'"
-                            + ",'" + clsGlobalVarClass.gClientCode + "' "
-                            + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
-                            + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
-                            + ",'N')");
-                }
-            }
-            if (insert)
-            {
-                clsGlobalVarClass.dbMysql.execute(sqlDtl.toString());
+	    String updateQuery = "Update tbldischd "
+		    + "SET strDiscName=? ,strPOSCode=? "
+		    + ",dteFromDate=?,dteToDate=? "
+		    + ",strUserEdited=?,dteDateEdited=? "
+		    + ",strDineIn=?,strHomeDelivery=?,strTakeAway=?"
+		    + "WHERE strDiscCode =? ";
+	    PreparedStatement pre = clsGlobalVarClass.conPrepareStatement.prepareStatement(updateQuery);
+	    pre.setString(1, discName);
+	    pre.setString(2, posCode);
+	    pre.setString(3, strFromDate);
+	    pre.setString(4, strToDate);
+	    pre.setString(5, clsGlobalVarClass.gUserCode);
+	    pre.setString(6, clsGlobalVarClass.gPOSDateForTransaction);
+	    pre.setString(7, dineIn);
+	    pre.setString(8, homeDelivery);
+	    pre.setString(9, takeAway);
 
-                String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
-                        + " where strTableName='DiscountMaster' ";
-                clsGlobalVarClass.dbMysql.execute(sql);
-                new frmOkPopUp(this, "Entry Added Successfully", "Successfull", 3).setVisible(true);
-                funResetField();
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+	    pre.setString(10, discountCode);
+	    int exc = pre.executeUpdate();
+	    pre.close();
+
+	    String deleteSql = "delete from tbldiscdtl "
+		    + "where strDiscCode='" + discountCode + "' ";
+	    clsGlobalVarClass.dbMysql.execute(deleteSql.toString());
+
+	    StringBuffer sqlDtl = new StringBuffer("INSERT INTO tbldiscdtl (strDiscCode, strDiscOnCode, strDiscOnName, strDiscountType"
+		    + ",dblDiscountValue,strClientCode "
+		    + ",strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strDataPostFlag) "
+		    + " VALUES ");
+	    boolean insert = false;
+	    for (int row = 0; row < tblDiscDtl.getRowCount(); row++)
+	    {
+		insert = true;
+		String discOnCode = tblDiscDtl.getValueAt(row, 0).toString();
+		String discOnName = tblDiscDtl.getValueAt(row, 1).toString();
+		String discountType = tblDiscDtl.getValueAt(row, 2).toString();
+		String discountValue = tblDiscDtl.getValueAt(row, 3).toString();
+
+		if (row == 0)
+		{
+		    sqlDtl.append("('" + discountCode + "','" + discOnCode + "','" + discOnName + "','" + discountType + "','" + discountValue + "'"
+			    + ",'" + clsGlobalVarClass.gClientCode + "' "
+			    + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
+			    + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
+			    + ",'N')");
+		}
+		else
+		{
+		    sqlDtl.append(",('" + discountCode + "','" + discOnCode + "','" + discOnName + "','" + discountType + "','" + discountValue + "'"
+			    + ",'" + clsGlobalVarClass.gClientCode + "' "
+			    + ",'" + clsGlobalVarClass.gUserCode + "', '" + clsGlobalVarClass.gUserCode + "'"
+			    + ",'" + clsGlobalVarClass.gPOSDateForTransaction + "' ,'" + clsGlobalVarClass.gPOSDateForTransaction + "'"
+			    + ",'N')");
+		}
+	    }
+	    if (insert)
+	    {
+		clsGlobalVarClass.dbMysql.execute(sqlDtl.toString());
+
+		String sql = "update tblmasteroperationstatus set dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "' "
+			+ " where strTableName='DiscountMaster' ";
+		clsGlobalVarClass.dbMysql.execute(sql);
+		new frmOkPopUp(this, "Entry Added Successfully", "Successfull", 3).setVisible(true);
+
+		funResetField();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     private String funGetDiscountCode()
     {
 
-        String discountCode = "";
+	String discountCode = "";
 
-        try
-        {
+	try
+	{
 
-            selectQuery = "select count(*) from tbldischd ";
-            ResultSet countSet1 = clsGlobalVarClass.dbMysql.executeResultSet(selectQuery);
-            countSet1.next();
-            int cn = countSet1.getInt(1);
-            countSet1.close();
-            if (cn > 0)
-            {
-                selectQuery = "select max(strDiscCode) from tbldischd ";
-                ResultSet countSet = clsGlobalVarClass.dbMysql.executeResultSet(selectQuery);
-                countSet.next();
-                code = countSet.getString(1);
-                StringBuilder sb = new StringBuilder(code);
-                String ss = sb.delete(0, 1).toString();
-                for (int i = 0; i < ss.length(); i++)
-                {
-                    if (ss.charAt(i) != '0')
-                    {
-                        strCode = ss.substring(i, ss.length());
-                        break;
-                    }
-                }
-                int intCode = Integer.parseInt(strCode);
-                intCode++;
+	    selectQuery = "select count(*) from tbldischd ";
+	    ResultSet countSet1 = clsGlobalVarClass.dbMysql.executeResultSet(selectQuery);
+	    countSet1.next();
+	    int cn = countSet1.getInt(1);
+	    countSet1.close();
+	    if (cn > 0)
+	    {
+		selectQuery = "select max(strDiscCode) from tbldischd ";
+		ResultSet countSet = clsGlobalVarClass.dbMysql.executeResultSet(selectQuery);
+		countSet.next();
+		code = countSet.getString(1);
+		StringBuilder sb = new StringBuilder(code);
+		String ss = sb.delete(0, 1).toString();
+		for (int i = 0; i < ss.length(); i++)
+		{
+		    if (ss.charAt(i) != '0')
+		    {
+			strCode = ss.substring(i, ss.length());
+			break;
+		    }
+		}
+		int intCode = Integer.parseInt(strCode);
+		intCode++;
 
-                if (intCode < 10)
-                {
-                    discountCode = "D00000" + intCode;
-                }
-                else if (intCode < 100)
-                {
-                    discountCode = "D0000" + intCode;
-                }
-                else if (intCode < 1000)
-                {
-                    discountCode = "D000" + intCode;
-                }
-                else if (intCode < 10000)
-                {
-                    discountCode = "D00" + intCode;
-                }
-                else if (intCode < 100000)
-                {
-                    discountCode = "D0" + intCode;
-                }
-                else if (intCode < 1000000)
-                {
-                    discountCode = "D" + intCode;
-                }
+		if (intCode < 10)
+		{
+		    discountCode = "D00000" + intCode;
+		}
+		else if (intCode < 100)
+		{
+		    discountCode = "D0000" + intCode;
+		}
+		else if (intCode < 1000)
+		{
+		    discountCode = "D000" + intCode;
+		}
+		else if (intCode < 10000)
+		{
+		    discountCode = "D00" + intCode;
+		}
+		else if (intCode < 100000)
+		{
+		    discountCode = "D0" + intCode;
+		}
+		else if (intCode < 1000000)
+		{
+		    discountCode = "D" + intCode;
+		}
 
-            }
-            else
-            {
-                code = "0";
-                discountCode = "D000001";
-            }
+	    }
+	    else
+	    {
+		code = "0";
+		discountCode = "D000001";
+	    }
 
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return discountCode;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return discountCode;
     }
 
     /**
@@ -487,21 +565,25 @@ public class frmDiscountMaster extends javax.swing.JFrame
     private void funResetField()
     {
 
-        txtDiscountCode.requestFocus();
-        btnNew.setText("SAVE");
-        btnNew.setMnemonic('s');
-        flag = false;
-        txtDiscountCode.setText("");
-        txtDiscountName.setText("");
-        txtDiscountOnCode.setText("");
-        txtDiscountValue.setText("0.00");
-        cmbDiscountType.setSelectedIndex(0);
-        cmbDiscountOn.setSelectedIndex(0);
-        cmbPosCode.setSelectedIndex(0);
-        cmbDiscountOn.setEnabled(true);
+	txtDiscountCode.requestFocus();
+	btnNew.setText("SAVE");
+	btnNew.setMnemonic('s');
+	flag = false;
+	txtDiscountCode.setText("");
+	txtDiscountName.setText("");
+	txtDiscountOnCode.setText("");
+	txtDiscountValue.setText("0.00");
+	cmbDiscountType.setSelectedIndex(0);
+	cmbDiscountOn.setSelectedIndex(0);
+	cmbPosCode.setSelectedIndex(0);
+	cmbDiscountOn.setEnabled(true);
 
-        DefaultTableModel dtm = (DefaultTableModel) tblDiscDtl.getModel();
-        dtm.setRowCount(0);
+	chkDineIn.setSelected(true);
+	chkHomeDelivery.setSelected(false);
+	chkTakeAway.setSelected(false);
+
+	DefaultTableModel dtm = (DefaultTableModel) tblDiscDtl.getModel();
+	dtm.setRowCount(0);
 
     }
 
@@ -558,6 +640,10 @@ public class frmDiscountMaster extends javax.swing.JFrame
         btnAdd = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         lblDiscOnValue = new javax.swing.JLabel();
+        lblDiscOnOperationType = new javax.swing.JLabel();
+        chkHomeDelivery = new javax.swing.JCheckBox();
+        chkDineIn = new javax.swing.JCheckBox();
+        chkTakeAway = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -948,6 +1034,20 @@ public class frmDiscountMaster extends javax.swing.JFrame
             }
         });
 
+        lblDiscOnOperationType.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblDiscOnOperationType.setText("Discount On :");
+
+        chkHomeDelivery.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkHomeDelivery.setText("Home Delivery");
+        chkHomeDelivery.setOpaque(false);
+
+        chkDineIn.setSelected(true);
+        chkDineIn.setText("Dinning In");
+        chkDineIn.setOpaque(false);
+
+        chkTakeAway.setText("Take Away");
+        chkTakeAway.setOpaque(false);
+
         javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
@@ -975,8 +1075,7 @@ public class frmDiscountMaster extends javax.swing.JFrame
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(panelBodyLayout.createSequentialGroup()
                             .addComponent(lblDiscountCode, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -988,7 +1087,14 @@ public class frmDiscountMaster extends javax.swing.JFrame
                             .addComponent(lblCounterUserCode1)
                             .addGap(25, 25, 25)
                             .addComponent(cmbPosCode, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap())
+                            .addGap(18, 18, 18)
+                            .addComponent(lblDiscOnOperationType, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(chkDineIn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(chkHomeDelivery, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(22, 22, 22)
+                            .addComponent(chkTakeAway, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(panelBodyLayout.createSequentialGroup()
                             .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(panelBodyLayout.createSequentialGroup()
@@ -1005,8 +1111,11 @@ public class frmDiscountMaster extends javax.swing.JFrame
                                 .addComponent(lbDiscountPer2, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
                             .addGap(18, 18, 18)
                             .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblDiscOnValue, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))))))
+                                .addGroup(panelBodyLayout.createSequentialGroup()
+                                    .addComponent(dteToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(lblDiscOnValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBodyLayout.setVerticalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1019,10 +1128,15 @@ public class frmDiscountMaster extends javax.swing.JFrame
                     .addComponent(txtDiscountCode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblCounterUserCode1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
-                        .addComponent(cmbPosCode, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1)))
+                    .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblCounterUserCode1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
+                            .addComponent(cmbPosCode, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(1, 1, 1)))
+                    .addComponent(lblDiscOnOperationType, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkDineIn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkHomeDelivery, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkTakeAway, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelBodyLayout.createSequentialGroup()
@@ -1075,228 +1189,228 @@ public class frmDiscountMaster extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("Discount Master");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("Discount Master");
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
-        clsGlobalVarClass.hmActiveForms.remove("Discount Master");
+	// TODO add your handling code here:
+	clsGlobalVarClass.hmActiveForms.remove("Discount Master");
     }//GEN-LAST:event_formWindowClosing
 
     private void cmbDiscountTypeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbDiscountTypeKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbDiscountTypeKeyPressed
 
     private void btnNewKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNewKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            if (btnNew.getText().equalsIgnoreCase("SAVE"))
-            {
-                //Add new cost center
-                funSaveDiscount();
-            }
-            else
-            {
-                //Update existing cost center
-                funUpdateDiscount();
-            }
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    if (btnNew.getText().equalsIgnoreCase("SAVE"))
+	    {
+		//Add new cost center
+		funSaveDiscount();
+	    }
+	    else
+	    {
+		//Update existing cost center
+		funUpdateDiscount();
+	    }
+	}
     }//GEN-LAST:event_btnNewKeyPressed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        // TODO add your handling code here:
-        funSaveUpdate();
+	// TODO add your handling code here:
+	funSaveUpdate();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnNewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseClicked
-        // TODO add your handling code here:
-        if (btnNew.getText().equalsIgnoreCase("SAVE"))
-        {
-            //Add new cost center
-            funSaveDiscount();
-        }
-        else
-        {
-            //Update existing cost center
-            funUpdateDiscount();
-        }
+	// TODO add your handling code here:
+	if (btnNew.getText().equalsIgnoreCase("SAVE"))
+	{
+	    //Add new cost center
+	    funSaveDiscount();
+	}
+	else
+	{
+	    //Update existing cost center
+	    funUpdateDiscount();
+	}
     }//GEN-LAST:event_btnNewMouseClicked
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
-        funResetField();
+	// TODO add your handling code here:
+	funResetField();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMouseClicked
-        // TODO add your handling code here:
-        funResetField();
+	// TODO add your handling code here:
+	funResetField();
     }//GEN-LAST:event_btnResetMouseClicked
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
-        dispose();
-        clsGlobalVarClass.hmActiveForms.remove("Discount Master");
+	// TODO add your handling code here:
+	dispose();
+	clsGlobalVarClass.hmActiveForms.remove("Discount Master");
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelMouseClicked
-        // TODO add your handling code here:
-        try
-        {
-            dispose();
-            clsGlobalVarClass.hmActiveForms.remove("Discount Master");
-        }
-        catch (Exception e)
-        {
-        }
+	// TODO add your handling code here:
+	try
+	{
+	    dispose();
+	    clsGlobalVarClass.hmActiveForms.remove("Discount Master");
+	}
+	catch (Exception e)
+	{
+	}
     }//GEN-LAST:event_btnCancelMouseClicked
 
     private void cmbDiscountOnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbDiscountOnKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == 10)
-        {
-            // cmbSecondaryPrinters.requestFocus();
-        }
+	// TODO add your handling code here:
+	if (evt.getKeyCode() == 10)
+	{
+	    // cmbSecondaryPrinters.requestFocus();
+	}
     }//GEN-LAST:event_cmbDiscountOnKeyPressed
 
     private void cmbDiscountOnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDiscountOnActionPerformed
 
-        funDiscOnComboClicked();
+	funDiscOnComboClicked();
     }//GEN-LAST:event_cmbDiscountOnActionPerformed
 
     private void txtDiscountCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountCodeKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyChar() == '?' || evt.getKeyChar() == '/')
-        {
-            funSelectDiscountCode();
-        }
-        if (evt.getKeyCode() == 10)
-        {
+	// TODO add your handling code here:
+	if (evt.getKeyChar() == '?' || evt.getKeyChar() == '/')
+	{
+	    funSelectDiscountCode();
+	}
+	if (evt.getKeyCode() == 10)
+	{
 
-        }
+	}
     }//GEN-LAST:event_txtDiscountCodeKeyPressed
 
     private void txtDiscountCodeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDiscountCodeMouseClicked
-        // TODO add your handling code here:
-        funSelectDiscountCode();
+	// TODO add your handling code here:
+	funSelectDiscountCode();
     }//GEN-LAST:event_txtDiscountCodeMouseClicked
 
     private void cmbPosCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbPosCodeKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_cmbPosCodeKeyPressed
 
     private void txtDiscountValueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDiscountValueMouseClicked
-        try
-        {
+	try
+	{
 
-            if (txtDiscountValue.getText().length() == 0)
-            {
-                new frmNumericKeyboard(this, true, "", "Double", "Enter Discount Value").setVisible(true);
-                txtDiscountValue.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
-            else
-            {
-                new frmNumericKeyboard(this, true, txtDiscountValue.getText(), "Double", "Enter Discount Value").setVisible(true);
-                txtDiscountValue.setText(clsGlobalVarClass.gNumerickeyboardValue);
-            }
+	    if (txtDiscountValue.getText().length() == 0)
+	    {
+		new frmNumericKeyboard(this, true, "", "Double", "Enter Discount Value").setVisible(true);
+		txtDiscountValue.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
+	    else
+	    {
+		new frmNumericKeyboard(this, true, txtDiscountValue.getText(), "Double", "Enter Discount Value").setVisible(true);
+		txtDiscountValue.setText(clsGlobalVarClass.gNumerickeyboardValue);
+	    }
 
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtDiscountValueMouseClicked
 
     private void txtDiscountValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDiscountValueActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtDiscountValueActionPerformed
 
     private void txtDiscountValueKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountValueKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtDiscountValueKeyPressed
 
     private void txtDiscountOnCodeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDiscountOnCodeMouseClicked
-        if (!cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("All"))
-        {
-            funSelectDiscountOn();
-        }
+	if (!cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("All"))
+	{
+	    funSelectDiscountOn();
+	}
 
     }//GEN-LAST:event_txtDiscountOnCodeMouseClicked
 
     private void txtDiscountOnCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDiscountOnCodeKeyPressed
-        if (!cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("All"))
-        {
-            funSelectDiscountOn();
-        }
+	if (!cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("All"))
+	{
+	    funSelectDiscountOn();
+	}
     }//GEN-LAST:event_txtDiscountOnCodeKeyPressed
 
     private void txtDiscountNameMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtDiscountNameMouseClicked
     {//GEN-HEADEREND:event_txtDiscountNameMouseClicked
-        try
-        {
-            if (txtDiscountName.getText().length() == 0)
-            {
-                new frmAlfaNumericKeyBoard(this, true, "1", "Enter Discount Description").setVisible(true);
-                txtDiscountName.setText(clsGlobalVarClass.gKeyboardValue);
-            }
-            else
-            {
-                new frmAlfaNumericKeyBoard(this, true, txtDiscountName.getText(), "1", "Enter Discount Description").setVisible(true);
-                txtDiscountName.setText(clsGlobalVarClass.gKeyboardValue);
-            }
-        }
-        catch (Exception e)
-        {
-            objUtility.funWriteErrorLog(e);
-            e.printStackTrace();
-        }
+	try
+	{
+	    if (txtDiscountName.getText().length() == 0)
+	    {
+		new frmAlfaNumericKeyBoard(this, true, "1", "Enter Discount Description").setVisible(true);
+		txtDiscountName.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
+	    else
+	    {
+		new frmAlfaNumericKeyBoard(this, true, txtDiscountName.getText(), "1", "Enter Discount Description").setVisible(true);
+		txtDiscountName.setText(clsGlobalVarClass.gKeyboardValue);
+	    }
+	}
+	catch (Exception e)
+	{
+	    objUtility.funWriteErrorLog(e);
+	    e.printStackTrace();
+	}
     }//GEN-LAST:event_txtDiscountNameMouseClicked
 
     private void txtDiscountNameActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtDiscountNameActionPerformed
     {//GEN-HEADEREND:event_txtDiscountNameActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtDiscountNameActionPerformed
 
     private void txtDiscountNameKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtDiscountNameKeyPressed
     {//GEN-HEADEREND:event_txtDiscountNameKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtDiscountNameKeyPressed
 
     private void btnAddMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_btnAddMouseClicked
     {//GEN-HEADEREND:event_btnAddMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnAddMouseClicked
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddActionPerformed
     {//GEN-HEADEREND:event_btnAddActionPerformed
-        funAddButtonClicked();
+	funAddButtonClicked();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnAddKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_btnAddKeyPressed
     {//GEN-HEADEREND:event_btnAddKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnAddKeyPressed
 
     private void btnRemoveMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_btnRemoveMouseClicked
     {//GEN-HEADEREND:event_btnRemoveMouseClicked
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnRemoveMouseClicked
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRemoveActionPerformed
     {//GEN-HEADEREND:event_btnRemoveActionPerformed
-        funRemoveButtonClicked();
+	funRemoveButtonClicked();
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnRemoveKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_btnRemoveKeyPressed
     {//GEN-HEADEREND:event_btnRemoveKeyPressed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnRemoveKeyPressed
 
     private void txtDiscountNameMouseEntered(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtDiscountNameMouseEntered
     {//GEN-HEADEREND:event_txtDiscountNameMouseEntered
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_txtDiscountNameMouseEntered
 
 
@@ -1306,6 +1420,9 @@ public class frmDiscountMaster extends javax.swing.JFrame
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnReset;
+    private javax.swing.JCheckBox chkDineIn;
+    private javax.swing.JCheckBox chkHomeDelivery;
+    private javax.swing.JCheckBox chkTakeAway;
     private javax.swing.JComboBox cmbDiscountOn;
     private javax.swing.JComboBox cmbDiscountType;
     private javax.swing.JComboBox cmbPosCode;
@@ -1320,6 +1437,7 @@ public class frmDiscountMaster extends javax.swing.JFrame
     private javax.swing.JLabel lbDiscountPer2;
     private javax.swing.JLabel lblCounterUserCode1;
     private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblDiscOnOperationType;
     private javax.swing.JLabel lblDiscOnValue;
     private javax.swing.JLabel lblDiscountCode;
     private javax.swing.JLabel lblDiscountType;
@@ -1341,151 +1459,150 @@ public class frmDiscountMaster extends javax.swing.JFrame
 
     private void funSaveUpdate()
     {
-        String discName = txtDiscountName.getText().trim();
-        Date dt1 = dteFromDate.getDate();
-        Date dt2 = dteToDate.getDate();
+	String discName = txtDiscountName.getText().trim();
+	Date dt1 = dteFromDate.getDate();
+	Date dt2 = dteToDate.getDate();
 
-        if (discName.isEmpty())
-        {
-            new frmOkPopUp(this, "Please Enter Discount Name", "Error", 1).setVisible(true);
-            return;
-        }
+	if (discName.isEmpty())
+	{
+	    new frmOkPopUp(this, "Please Enter Discount Name", "Error", 1).setVisible(true);
+	    return;
+	}
 
-        if ((dt2.getTime() - dt1.getTime()) < 0)
-        {
-            new frmOkPopUp(this, "Invalid date", "Error", 1).setVisible(true);
-            return;
-        }
+	if ((dt2.getTime() - dt1.getTime()) < 0)
+	{
+	    new frmOkPopUp(this, "Invalid date", "Error", 1).setVisible(true);
+	    return;
+	}
 
-        if (tblDiscDtl.getRowCount() <= 0)
-        {
-            new frmOkPopUp(this, "Please Enter Discount Detail", "Error", 1).setVisible(true);
-            return;
-        }
+	if (tblDiscDtl.getRowCount() <= 0)
+	{
+	    new frmOkPopUp(this, "Please Enter Discount Detail", "Error", 1).setVisible(true);
+	    return;
+	}
 
-        if (btnNew.getText().equalsIgnoreCase("SAVE"))
-        {
-            funSaveDiscount();
-        }
-        else
-        {
-            funUpdateDiscount();
-        }
+	if (btnNew.getText().equalsIgnoreCase("SAVE"))
+	{
+	    funSaveDiscount();
+	}
+	else
+	{
+	    funUpdateDiscount();
+	}
 
-        funResetField();
     }
 
     private void funAddButtonClicked()
     {
 
-        String discountOnCode = txtDiscountOnCode.getText();
-        String discountOnName = lblDiscOnValue.getText();
-        String discTye = cmbDiscountType.getSelectedItem().toString();
-        String discOn = cmbDiscountOn.getSelectedItem().toString();
+	String discountOnCode = txtDiscountOnCode.getText();
+	String discountOnName = lblDiscOnValue.getText();
+	String discTye = cmbDiscountType.getSelectedItem().toString();
+	String discOn = cmbDiscountOn.getSelectedItem().toString();
 
-        if (!objUtility.funCheckLength(txtDiscountValue.getText(), 6))
-        {
-            new frmOkPopUp(this, "Value length must be less than 7", "Error", 0).setVisible(true);
-            txtDiscountValue.requestFocus();
-            return;
-        }
-        if (discountOnCode.isEmpty())
-        {
-            new frmOkPopUp(this, "Please Select " + discOn, "Error", 0).setVisible(true);
-            return;
-        }
-        double dblDiscValue = Double.parseDouble(txtDiscountValue.getText().trim());
-        if (dblDiscValue <= 0 )
-        {
-            new frmOkPopUp(this, "Invalid Discount Value", "Error", 0).setVisible(true);
-            return;
-        }
-        boolean isExists = false;
-        for (int i = 0; i < tblDiscDtl.getRowCount(); i++)
-        {
-            if (discountOnCode.equalsIgnoreCase(tblDiscDtl.getValueAt(i, 0).toString()))
-            {
-                isExists = true;
-                break;
-            }
-        }
-        if (isExists)
-        {
-            new frmOkPopUp(this, "Duplicate Discount.", "Error", 0).setVisible(true);
-            return;
-        }
+	if (!objUtility.funCheckLength(txtDiscountValue.getText(), 6))
+	{
+	    new frmOkPopUp(this, "Value length must be less than 7", "Error", 0).setVisible(true);
+	    txtDiscountValue.requestFocus();
+	    return;
+	}
+	if (discountOnCode.isEmpty())
+	{
+	    new frmOkPopUp(this, "Please Select " + discOn, "Error", 0).setVisible(true);
+	    return;
+	}
+	double dblDiscValue = Double.parseDouble(txtDiscountValue.getText().trim());
+	if (dblDiscValue <= 0)
+	{
+	    new frmOkPopUp(this, "Invalid Discount Value", "Error", 0).setVisible(true);
+	    return;
+	}
+	boolean isExists = false;
+	for (int i = 0; i < tblDiscDtl.getRowCount(); i++)
+	{
+	    if (discountOnCode.equalsIgnoreCase(tblDiscDtl.getValueAt(i, 0).toString()))
+	    {
+		isExists = true;
+		break;
+	    }
+	}
+	if (isExists)
+	{
+	    new frmOkPopUp(this, "Duplicate Discount.", "Error", 0).setVisible(true);
+	    return;
+	}
 
-        boolean isValid = true;
-        for (int i = 0; i < tblDiscDtl.getRowCount(); i++)
-        {
-            if (tblDiscDtl.getValueAt(i, 0).toString().equalsIgnoreCase("All"))
-            {
-                isValid = false;
-                break;
-            }
-        }
-        if (!isValid)
-        {
-            new frmOkPopUp(this, "Invalid Discount Details.", "Error", 0).setVisible(true);
-            return;
-        }
+	boolean isValid = true;
+	for (int i = 0; i < tblDiscDtl.getRowCount(); i++)
+	{
+	    if (tblDiscDtl.getValueAt(i, 0).toString().equalsIgnoreCase("All"))
+	    {
+		isValid = false;
+		break;
+	    }
+	}
+	if (!isValid)
+	{
+	    new frmOkPopUp(this, "Invalid Discount Details.", "Error", 0).setVisible(true);
+	    return;
+	}
 
-        if (tblDiscDtl.getRowCount() > 0 && discOn.equalsIgnoreCase("All"))
-        {
-            new frmOkPopUp(this, "Invalid Discount Details.", "Error", 0).setVisible(true);
-            return;
-        }
+	if (tblDiscDtl.getRowCount() > 0 && discOn.equalsIgnoreCase("All"))
+	{
+	    new frmOkPopUp(this, "Invalid Discount Details.", "Error", 0).setVisible(true);
+	    return;
+	}
 
-        Object row[] =
-        {
-            discountOnCode, discountOnName, discTye, dblDiscValue
-        };
-        DefaultTableModel dtm = (DefaultTableModel) tblDiscDtl.getModel();
-        dtm.addRow(row);
+	Object row[] =
+	{
+	    discountOnCode, discountOnName, discTye, dblDiscValue
+	};
+	DefaultTableModel dtm = (DefaultTableModel) tblDiscDtl.getModel();
+	dtm.addRow(row);
 
-        txtDiscountValue.setText("0.00");
-        cmbDiscountType.setSelectedIndex(0);
-        if (!discOn.equalsIgnoreCase("All"))
-        {
-            txtDiscountOnCode.setText("");
-            lblDiscOnValue.setText("");
-        }
+	txtDiscountValue.setText("0.00");
+	cmbDiscountType.setSelectedIndex(0);
+	if (!discOn.equalsIgnoreCase("All"))
+	{
+	    txtDiscountOnCode.setText("");
+	    lblDiscOnValue.setText("");
+	}
 
-        cmbDiscountOn.setEnabled(false);
+	cmbDiscountOn.setEnabled(false);
 
     }
 
     private void funRemoveButtonClicked()
     {
-        int selectedRow = tblDiscDtl.getSelectedRow();
-        if (selectedRow < 0)
-        {
-            new frmOkPopUp(this, "Please Select Discount Details.", "Error", 0).setVisible(true);
-            return;
-        }
-        DefaultTableModel dtm = (DefaultTableModel) tblDiscDtl.getModel();
-        dtm.removeRow(selectedRow);
+	int selectedRow = tblDiscDtl.getSelectedRow();
+	if (selectedRow < 0)
+	{
+	    new frmOkPopUp(this, "Please Select Discount Details.", "Error", 0).setVisible(true);
+	    return;
+	}
+	DefaultTableModel dtm = (DefaultTableModel) tblDiscDtl.getModel();
+	dtm.removeRow(selectedRow);
 
-        if (dtm.getRowCount() == 0)
-        {
-            cmbDiscountOn.setEnabled(true);
-        }
+	if (dtm.getRowCount() == 0)
+	{
+	    cmbDiscountOn.setEnabled(true);
+	}
     }
 
     private void funDiscOnComboClicked()
     {
-        if (cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("All"))
-        {
-            txtDiscountOnCode.setEnabled(false);
-            txtDiscountOnCode.setText("All");
-            lblDiscOnValue.setText("All");
-        }
-        else
-        {
-            txtDiscountOnCode.setEnabled(true);
-            txtDiscountOnCode.setText("");
-            lblDiscOnValue.setText("");
-        }
+	if (cmbDiscountOn.getSelectedItem().toString().equalsIgnoreCase("All"))
+	{
+	    txtDiscountOnCode.setEnabled(false);
+	    txtDiscountOnCode.setText("All");
+	    lblDiscOnValue.setText("All");
+	}
+	else
+	{
+	    txtDiscountOnCode.setEnabled(true);
+	    txtDiscountOnCode.setText("");
+	    lblDiscOnValue.setText("");
+	}
     }
 
 }

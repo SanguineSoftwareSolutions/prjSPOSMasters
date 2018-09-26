@@ -1570,14 +1570,17 @@ public class frmTaxMaster extends javax.swing.JFrame
 
         chkHomeDelivery.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkHomeDelivery.setText("Home Delivery");
+        chkHomeDelivery.setOpaque(false);
         jPanel7.add(chkHomeDelivery);
         chkHomeDelivery.setBounds(90, 180, 110, 23);
 
         chkTakeAway.setText("Take Away");
+        chkTakeAway.setOpaque(false);
         jPanel7.add(chkTakeAway);
         chkTakeAway.setBounds(330, 180, 80, 23);
 
         chkDineIn.setText("Dinning In");
+        chkDineIn.setOpaque(false);
         jPanel7.add(chkDineIn);
         chkDineIn.setBounds(220, 180, 90, 23);
 
