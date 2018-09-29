@@ -34,6 +34,21 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
+/**
+ * 
+ * @author Admin
+ * 
+ * You can create bill series POS wise or common to all POS.
+ * You can create bill series on only one type ie. 
+ * One of from Group,SubGroup,MenuHead and Revenue Head.
+ * To create bill series,select POS,select Bill series type. Once you select bill series type,first grid will fill for respected bill series type.
+ * To create bill series,select items and add. It will add all selected items in 2nd grid. 
+ * Then you can mention bill series code in 2nd grid. Bill series code will accept only max 2 characters.
+ * 
+ * To update bill series, you will have to select bill series from 2nd grid,after selecting it click on remove button.
+ * It will remove from 2nd grid and will display all items in 1st grid again.
+ * After modifying items of bill series,add it to 2nd grid again and set old bill series code in  2nd grid.
+ */
 public class frmBillSeriesMaster extends javax.swing.JFrame
 {
 
