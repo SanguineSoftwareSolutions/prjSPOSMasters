@@ -127,7 +127,7 @@ public class frmCostCenterMaster extends javax.swing.JFrame
     private void funSetCostCenterData(Object[] data) throws Exception
     {
         sql = "select a.strCostCenterCode,a.strCostCenterName ,ifnull(b.strPrimaryPrinterPort,'')"
-                + ", ifnull(b.strSecondaryPrinterPort,''), ifnull(b.strPrintOnBothPrintersYN,'N'),strLabelOnKOT "
+                + ", ifnull(b.strSecondaryPrinterPort,''), ifnull(b.strPrintOnBothPrintersYN,'N'),strLabelOnKOT,intCostCenterWiseNoOfCopies "
                 + " from tblcostcentermaster  a "
                 + " left outer join tblprintersetup b on a.strCostCenterCode=b.strCostCenterCode "
                 + " where a.strCostCenterCode='" + clsGlobalVarClass.gSearchedItem + "'";
@@ -155,7 +155,8 @@ public class frmCostCenterMaster extends javax.swing.JFrame
             chkBoxPrintOnBothPrinters.setSelected(false);
         }
         txtLabelOnKOT.setText(rsCostCenter.getString(6));
-
+	txtNoOfCopies.setText(rsCostCenter.getString(7));
+	
         rsCostCenter.close();
 
         txtCostCode.requestFocus();
@@ -259,12 +260,12 @@ public class frmCostCenterMaster extends javax.swing.JFrame
                 insertQuery = "insert into tblcostcentermaster "
                         + "(strCostCenterCode,strCostCenterName,strPrinterPort,strSecondaryPrinterPort,"
                         + "strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strDataPostFlag,strPrintOnBothPrinters"
-                        + ",strLabelOnKOT) "
+                        + ",strLabelOnKOT,intCostCenterWiseNoOfCopies) "
                         + "values('" + txtCostCode.getText() + "','" + txtCostName.getText() + "'"
                         + ",'" + primaryPrinterName + "','" + secondaryPrinterName + "','" + clsGlobalVarClass.gUserCode + "'"
                         + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
                         + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "','N'"
-                        + ",'" + printOnBothPrinters + "','" + txtLabelOnKOT.getText().trim() + "')";
+                        + ",'" + printOnBothPrinters + "','" + txtLabelOnKOT.getText().trim() + "','"+txtNoOfCopies.getText().trim()+"')";
                 //System.out.println(insertQuery);
                 int exc = clsGlobalVarClass.dbMysql.execute(insertQuery);
 
@@ -337,7 +338,8 @@ public class frmCostCenterMaster extends javax.swing.JFrame
                         + ",strUserEdited='" + clsGlobalVarClass.gUserCode + "'"
                         + ",dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "'"
                         + ",strDataPostFlag='N',strPrintOnBothPrinters='" + printOnBothPrinters + "' "
-                        + ",strLabelOnKOT='" + txtLabelOnKOT.getText().trim() + "' "
+                        + ",strLabelOnKOT='" + txtLabelOnKOT.getText().trim() + "'"
+			+ " ,intCostCenterWiseNoOfCopies = '"+txtNoOfCopies.getText().trim()+"' "
                         + " WHERE strCostCenterCode ='" + txtCostCode.getText() + "'";
                 //System.out.println(updateQuery);
                 int exc = clsGlobalVarClass.dbMysql.execute(updateQuery);
@@ -410,6 +412,7 @@ public class frmCostCenterMaster extends javax.swing.JFrame
         cmbSecondaryPrinters.setSelectedIndex(0);
         chkBoxPrintOnBothPrinters.setSelected(false);
         txtLabelOnKOT.setText("KOT");
+	txtNoOfCopies.setText("0");
     }
 
     private void funTestPrint(String printerName)
@@ -531,6 +534,8 @@ public class frmCostCenterMaster extends javax.swing.JFrame
         chkBoxPrintOnBothPrinters = new javax.swing.JCheckBox();
         lblLabelOnKOT = new javax.swing.JLabel();
         txtLabelOnKOT = new javax.swing.JTextField();
+        lblNoOfCopies = new javax.swing.JLabel();
+        txtNoOfCopies = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -898,6 +903,32 @@ public class frmCostCenterMaster extends javax.swing.JFrame
             }
         });
 
+        lblNoOfCopies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblNoOfCopies.setText("Number Of Copies      :");
+
+        txtNoOfCopies.setText("0");
+        txtNoOfCopies.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                txtNoOfCopiesMouseClicked(evt);
+            }
+        });
+        txtNoOfCopies.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtNoOfCopiesActionPerformed(evt);
+            }
+        });
+        txtNoOfCopies.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                txtNoOfCopiesKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
@@ -942,7 +973,11 @@ public class frmCostCenterMaster extends javax.swing.JFrame
                             .addGroup(panelBodyLayout.createSequentialGroup()
                                 .addComponent(lblLabelOnKOT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(10, 10, 10)
-                                .addComponent(txtLabelOnKOT, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtLabelOnKOT, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelBodyLayout.createSequentialGroup()
+                                .addComponent(lblNoOfCopies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(10, 10, 10)
+                                .addComponent(txtNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(21, 21, 21)
                         .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtPrimaryPrinterName)
@@ -994,7 +1029,11 @@ public class frmCostCenterMaster extends javax.swing.JFrame
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblLabelOnKOT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtLabelOnKOT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1308,6 +1347,21 @@ public class frmCostCenterMaster extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLabelOnKOTKeyPressed
 
+    private void txtNoOfCopiesMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtNoOfCopiesMouseClicked
+    {//GEN-HEADEREND:event_txtNoOfCopiesMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoOfCopiesMouseClicked
+
+    private void txtNoOfCopiesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtNoOfCopiesActionPerformed
+    {//GEN-HEADEREND:event_txtNoOfCopiesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoOfCopiesActionPerformed
+
+    private void txtNoOfCopiesKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtNoOfCopiesKeyPressed
+    {//GEN-HEADEREND:event_txtNoOfCopiesKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoOfCopiesKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -1328,6 +1382,7 @@ public class frmCostCenterMaster extends javax.swing.JFrame
     private javax.swing.JLabel lblHOSign;
     private javax.swing.JLabel lblLabelOnKOT;
     private javax.swing.JLabel lblModuleName;
+    private javax.swing.JLabel lblNoOfCopies;
     private javax.swing.JLabel lblPosName;
     private javax.swing.JLabel lblPrintOnBothPrinters;
     private javax.swing.JLabel lblPrinterPort;
@@ -1341,6 +1396,7 @@ public class frmCostCenterMaster extends javax.swing.JFrame
     private javax.swing.JTextField txtCostCode;
     private javax.swing.JTextField txtCostName;
     private javax.swing.JTextField txtLabelOnKOT;
+    private javax.swing.JTextField txtNoOfCopies;
     private javax.swing.JTextField txtPrimaryPrinterName;
     private javax.swing.JTextField txtSecondaryPrinterName;
     // End of variables declaration//GEN-END:variables
