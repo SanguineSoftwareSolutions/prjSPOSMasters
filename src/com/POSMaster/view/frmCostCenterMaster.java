@@ -906,7 +906,7 @@ public class frmCostCenterMaster extends javax.swing.JFrame
         lblNoOfCopies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblNoOfCopies.setText("Number Of Copies      :");
 
-        txtNoOfCopies.setText("0");
+        txtNoOfCopies.setText("1");
         txtNoOfCopies.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
