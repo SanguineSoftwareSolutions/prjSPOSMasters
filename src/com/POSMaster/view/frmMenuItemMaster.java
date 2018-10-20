@@ -924,7 +924,7 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 		noDeliverydays = sb.toString();
 		int intDeliveryDays = Integer.parseInt(txtRequiredProductDeliveryDays.getText().toString());
 
-		String query = "insert into tblitemmaster values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String query = "insert into tblitemmaster values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement pre = clsGlobalVarClass.conPrepareStatement.prepareStatement(query);
 		pre.setString(1, txtItemCode.getText());
 		pre.setString(2, txtItemName.getText());
@@ -978,6 +978,7 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 		pre.setString(42, recipeConversion);
 		pre.setString(43, hsnNo);
 		pre.setString(44, operationalYN);
+		pre.setString(45, "");
 		int exc = pre.executeUpdate();
 		pre.close();
 
