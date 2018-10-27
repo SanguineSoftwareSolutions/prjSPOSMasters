@@ -127,7 +127,7 @@ public class frmCostCenterMaster extends javax.swing.JFrame
     private void funSetCostCenterData(Object[] data) throws Exception
     {
         sql = "select a.strCostCenterCode,a.strCostCenterName ,ifnull(b.strPrimaryPrinterPort,'')"
-                + ", ifnull(b.strSecondaryPrinterPort,''), ifnull(b.strPrintOnBothPrintersYN,'N'),strLabelOnKOT,intCostCenterWiseNoOfCopies "
+                + ", ifnull(b.strSecondaryPrinterPort,''), ifnull(b.strPrintOnBothPrintersYN,'N'),strLabelOnKOT,intPrimaryPrinterNoOfCopies,intSecondaryPrinterNoOfCopies "
                 + " from tblcostcentermaster  a "
                 + " left outer join tblprintersetup b on a.strCostCenterCode=b.strCostCenterCode "
                 + " where a.strCostCenterCode='" + clsGlobalVarClass.gSearchedItem + "'";
@@ -155,7 +155,8 @@ public class frmCostCenterMaster extends javax.swing.JFrame
             chkBoxPrintOnBothPrinters.setSelected(false);
         }
         txtLabelOnKOT.setText(rsCostCenter.getString(6));
-	txtNoOfCopies.setText(rsCostCenter.getString(7));
+	txtPrimaryPinterNoOfCopies.setText(rsCostCenter.getString(7));
+	txtSecondaryPrinterNoOfCopies1.setText(rsCostCenter.getString(8));
 	
         rsCostCenter.close();
 
@@ -260,12 +261,12 @@ public class frmCostCenterMaster extends javax.swing.JFrame
                 insertQuery = "insert into tblcostcentermaster "
                         + "(strCostCenterCode,strCostCenterName,strPrinterPort,strSecondaryPrinterPort,"
                         + "strUserCreated,strUserEdited,dteDateCreated,dteDateEdited,strClientCode,strDataPostFlag,strPrintOnBothPrinters"
-                        + ",strLabelOnKOT,intCostCenterWiseNoOfCopies) "
+                        + ",strLabelOnKOT,intPrimaryPrinterNoOfCopies,intSecondaryPrinterNoOfCopies) "
                         + "values('" + txtCostCode.getText() + "','" + txtCostName.getText() + "'"
                         + ",'" + primaryPrinterName + "','" + secondaryPrinterName + "','" + clsGlobalVarClass.gUserCode + "'"
                         + ",'" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
                         + ",'" + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.gClientCode + "','N'"
-                        + ",'" + printOnBothPrinters + "','" + txtLabelOnKOT.getText().trim() + "','"+txtNoOfCopies.getText().trim()+"')";
+                        + ",'" + printOnBothPrinters + "','" + txtLabelOnKOT.getText().trim() + "','"+txtPrimaryPinterNoOfCopies.getText().trim()+"','"+txtSecondaryPrinterNoOfCopies1.getText().trim()+"')";
                 //System.out.println(insertQuery);
                 int exc = clsGlobalVarClass.dbMysql.execute(insertQuery);
 
@@ -339,7 +340,8 @@ public class frmCostCenterMaster extends javax.swing.JFrame
                         + ",dteDateEdited='" + clsGlobalVarClass.getCurrentDateTime() + "'"
                         + ",strDataPostFlag='N',strPrintOnBothPrinters='" + printOnBothPrinters + "' "
                         + ",strLabelOnKOT='" + txtLabelOnKOT.getText().trim() + "'"
-			+ " ,intCostCenterWiseNoOfCopies = '"+txtNoOfCopies.getText().trim()+"' "
+			+ " ,intPrimaryPrinterNoOfCopies = '"+txtPrimaryPinterNoOfCopies.getText().trim()+"'"
+			+ " ,intSecondaryPrinterNoOfCopies='"+txtSecondaryPrinterNoOfCopies1.getText().trim()+"' "
                         + " WHERE strCostCenterCode ='" + txtCostCode.getText() + "'";
                 //System.out.println(updateQuery);
                 int exc = clsGlobalVarClass.dbMysql.execute(updateQuery);
@@ -412,7 +414,8 @@ public class frmCostCenterMaster extends javax.swing.JFrame
         cmbSecondaryPrinters.setSelectedIndex(0);
         chkBoxPrintOnBothPrinters.setSelected(false);
         txtLabelOnKOT.setText("KOT");
-	txtNoOfCopies.setText("0");
+	txtPrimaryPinterNoOfCopies.setText("1");
+	txtSecondaryPrinterNoOfCopies1.setText("0");
     }
 
     private void funTestPrint(String printerName)
@@ -535,7 +538,9 @@ public class frmCostCenterMaster extends javax.swing.JFrame
         lblLabelOnKOT = new javax.swing.JLabel();
         txtLabelOnKOT = new javax.swing.JTextField();
         lblNoOfCopies = new javax.swing.JLabel();
-        txtNoOfCopies = new javax.swing.JTextField();
+        txtPrimaryPinterNoOfCopies = new javax.swing.JTextField();
+        lblNoOfCopies1 = new javax.swing.JLabel();
+        txtSecondaryPrinterNoOfCopies1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -904,28 +909,54 @@ public class frmCostCenterMaster extends javax.swing.JFrame
         });
 
         lblNoOfCopies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblNoOfCopies.setText("Number Of Copies      :");
+        lblNoOfCopies.setText("Primary Printer Copies :");
 
-        txtNoOfCopies.setText("1");
-        txtNoOfCopies.addMouseListener(new java.awt.event.MouseAdapter()
+        txtPrimaryPinterNoOfCopies.setText("1");
+        txtPrimaryPinterNoOfCopies.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                txtNoOfCopiesMouseClicked(evt);
+                txtPrimaryPinterNoOfCopiesMouseClicked(evt);
             }
         });
-        txtNoOfCopies.addActionListener(new java.awt.event.ActionListener()
+        txtPrimaryPinterNoOfCopies.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                txtNoOfCopiesActionPerformed(evt);
+                txtPrimaryPinterNoOfCopiesActionPerformed(evt);
             }
         });
-        txtNoOfCopies.addKeyListener(new java.awt.event.KeyAdapter()
+        txtPrimaryPinterNoOfCopies.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyPressed(java.awt.event.KeyEvent evt)
             {
-                txtNoOfCopiesKeyPressed(evt);
+                txtPrimaryPinterNoOfCopiesKeyPressed(evt);
+            }
+        });
+
+        lblNoOfCopies1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblNoOfCopies1.setText("Secondary Printer Copies :");
+
+        txtSecondaryPrinterNoOfCopies1.setText("0");
+        txtSecondaryPrinterNoOfCopies1.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                txtSecondaryPrinterNoOfCopies1MouseClicked(evt);
+            }
+        });
+        txtSecondaryPrinterNoOfCopies1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtSecondaryPrinterNoOfCopies1ActionPerformed(evt);
+            }
+        });
+        txtSecondaryPrinterNoOfCopies1.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                txtSecondaryPrinterNoOfCopies1KeyPressed(evt);
             }
         });
 
@@ -937,56 +968,71 @@ public class frmCostCenterMaster extends javax.swing.JFrame
                 .addGap(245, 245, 245)
                 .addComponent(lblFormName, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
-                .addContainerGap(126, Short.MAX_VALUE)
+            .addGroup(panelBodyLayout.createSequentialGroup()
+                .addGap(108, 108, 108)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
-                        .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
+                                .addComponent(lblLabelOnKOT, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtLabelOnKOT, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(258, 258, 258))
+                            .addGroup(panelBodyLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(80, 80, 80))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelBodyLayout.createSequentialGroup()
+                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lblGroupName2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblPrinterPort, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(10, 10, 10)
-                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbPrimaryPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCostName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addComponent(lblPrinterPort1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelBodyLayout.createSequentialGroup()
-                                        .addComponent(lblPrintOnBothPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(chkBoxPrintOnBothPrinters))
-                                    .addComponent(cmbSecondaryPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addComponent(lblCostCode, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblCostCode, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtCostCode, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addComponent(lblLabelOnKOT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(10, 10, 10)
-                                .addComponent(txtLabelOnKOT, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(panelBodyLayout.createSequentialGroup()
+                                        .addComponent(lblNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtPrimaryPinterNoOfCopies))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
+                                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(lblGroupName2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(lblPrinterPort, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(10, 10, 10)
+                                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cmbPrimaryPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtCostName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPrimaryPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTestPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelBodyLayout.createSequentialGroup()
+                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
+                                    .addGap(150, 150, 150)
+                                    .addComponent(lblPrintOnBothPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(chkBoxPrintOnBothPrinters)
+                                    .addGap(31, 31, 31))
+                                .addGroup(panelBodyLayout.createSequentialGroup()
+                                    .addComponent(lblNoOfCopies1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtSecondaryPrinterNoOfCopies1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(panelBodyLayout.createSequentialGroup()
-                                .addComponent(lblNoOfCopies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(10, 10, 10)
-                                .addComponent(txtNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(21, 21, 21)
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPrimaryPrinterName)
-                            .addComponent(txtSecondaryPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnTestPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTestPrinter2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(72, 72, 72))))
+                                .addComponent(lblPrinterPort1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cmbSecondaryPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtSecondaryPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTestPrinter2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelBodyLayout.setVerticalGroup(
             panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1001,39 +1047,38 @@ public class frmCostCenterMaster extends javax.swing.JFrame
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblGroupName2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCostName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelBodyLayout.createSequentialGroup()
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblPrinterPort, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbPrimaryPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(25, 25, 25)
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbSecondaryPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPrinterPort1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelBodyLayout.createSequentialGroup()
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnTestPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrimaryPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
-                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnTestPrinter2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSecondaryPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
+                .addGap(22, 22, 22)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBodyLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lblPrintOnBothPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(chkBoxPrintOnBothPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPrinterPort, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbPrimaryPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPrimaryPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnTestPrinter1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrimaryPinterNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbSecondaryPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPrinterPort1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSecondaryPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTestPrinter2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNoOfCopies1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSecondaryPrinterNoOfCopies1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPrintOnBothPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(chkBoxPrintOnBothPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblLabelOnKOT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtLabelOnKOT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNoOfCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addGap(47, 47, 47)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1347,20 +1392,35 @@ public class frmCostCenterMaster extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLabelOnKOTKeyPressed
 
-    private void txtNoOfCopiesMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtNoOfCopiesMouseClicked
-    {//GEN-HEADEREND:event_txtNoOfCopiesMouseClicked
+    private void txtPrimaryPinterNoOfCopiesMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtPrimaryPinterNoOfCopiesMouseClicked
+    {//GEN-HEADEREND:event_txtPrimaryPinterNoOfCopiesMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoOfCopiesMouseClicked
+    }//GEN-LAST:event_txtPrimaryPinterNoOfCopiesMouseClicked
 
-    private void txtNoOfCopiesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtNoOfCopiesActionPerformed
-    {//GEN-HEADEREND:event_txtNoOfCopiesActionPerformed
+    private void txtPrimaryPinterNoOfCopiesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtPrimaryPinterNoOfCopiesActionPerformed
+    {//GEN-HEADEREND:event_txtPrimaryPinterNoOfCopiesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoOfCopiesActionPerformed
+    }//GEN-LAST:event_txtPrimaryPinterNoOfCopiesActionPerformed
 
-    private void txtNoOfCopiesKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtNoOfCopiesKeyPressed
-    {//GEN-HEADEREND:event_txtNoOfCopiesKeyPressed
+    private void txtPrimaryPinterNoOfCopiesKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtPrimaryPinterNoOfCopiesKeyPressed
+    {//GEN-HEADEREND:event_txtPrimaryPinterNoOfCopiesKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoOfCopiesKeyPressed
+    }//GEN-LAST:event_txtPrimaryPinterNoOfCopiesKeyPressed
+
+    private void txtSecondaryPrinterNoOfCopies1MouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_txtSecondaryPrinterNoOfCopies1MouseClicked
+    {//GEN-HEADEREND:event_txtSecondaryPrinterNoOfCopies1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSecondaryPrinterNoOfCopies1MouseClicked
+
+    private void txtSecondaryPrinterNoOfCopies1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtSecondaryPrinterNoOfCopies1ActionPerformed
+    {//GEN-HEADEREND:event_txtSecondaryPrinterNoOfCopies1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSecondaryPrinterNoOfCopies1ActionPerformed
+
+    private void txtSecondaryPrinterNoOfCopies1KeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtSecondaryPrinterNoOfCopies1KeyPressed
+    {//GEN-HEADEREND:event_txtSecondaryPrinterNoOfCopies1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSecondaryPrinterNoOfCopies1KeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1383,6 +1443,7 @@ public class frmCostCenterMaster extends javax.swing.JFrame
     private javax.swing.JLabel lblLabelOnKOT;
     private javax.swing.JLabel lblModuleName;
     private javax.swing.JLabel lblNoOfCopies;
+    private javax.swing.JLabel lblNoOfCopies1;
     private javax.swing.JLabel lblPosName;
     private javax.swing.JLabel lblPrintOnBothPrinters;
     private javax.swing.JLabel lblPrinterPort;
@@ -1396,9 +1457,10 @@ public class frmCostCenterMaster extends javax.swing.JFrame
     private javax.swing.JTextField txtCostCode;
     private javax.swing.JTextField txtCostName;
     private javax.swing.JTextField txtLabelOnKOT;
-    private javax.swing.JTextField txtNoOfCopies;
+    private javax.swing.JTextField txtPrimaryPinterNoOfCopies;
     private javax.swing.JTextField txtPrimaryPrinterName;
     private javax.swing.JTextField txtSecondaryPrinterName;
+    private javax.swing.JTextField txtSecondaryPrinterNoOfCopies1;
     // End of variables declaration//GEN-END:variables
 
     private void funCreateTempFolder()
