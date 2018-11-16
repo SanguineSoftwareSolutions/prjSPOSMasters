@@ -15,6 +15,7 @@ import com.POSGlobal.controller.clsPOSLinkupDtl;
 import com.POSGlobal.controller.clsUtility;
 import com.POSGlobal.view.frmOkPopUp;
 import com.POSGlobal.view.frmSearchFormDialog;
+import com.POSGlobal.controller.clsDebtorDtl;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -51,7 +52,7 @@ public class frmLinkupMaster extends javax.swing.JFrame
     private HashMap<String, String> mapPOSCode, mapPOSName;
     private StringBuilder sb = new StringBuilder();
     private ResultSet rs;
-    DefaultTableModel dmItemLinkup, dmPOSLinkup, dmTaxLinkup, dmSubGroupLinkup, dmSettlementLinkup,dmCostCenterLinkup;
+    DefaultTableModel dmItemLinkup, dmPOSLinkup, dmTaxLinkup, dmSubGroupLinkup, dmSettlementLinkup,dmCostCenterLinkup,dmCustomerLinkup;
     clsUtility objUtility = new clsUtility();
     
     public frmLinkupMaster()
@@ -67,6 +68,7 @@ public class frmLinkupMaster extends javax.swing.JFrame
             dmSubGroupLinkup = (DefaultTableModel) tblSubGroupLinkupDtl.getModel();
             dmSettlementLinkup = (DefaultTableModel) tblSettlementLinkupDtl.getModel();
             dmCostCenterLinkup = (DefaultTableModel) tblCostCenterLinkupDtl.getModel();
+	    dmCustomerLinkup = (DefaultTableModel) tblCustomerLinkupDtl.getModel();
             lblUserCode.setText(clsGlobalVarClass.gUserCode);
             lblPosName.setText(clsGlobalVarClass.gPOSName);
             lblDate.setText(clsGlobalVarClass.gPOSDateToDisplay);
@@ -78,6 +80,7 @@ public class frmLinkupMaster extends javax.swing.JFrame
             funLoadSubGroupAccountLinkupTable();
             funLoadSettlementAccountCodeLinkupTable();
             funLoadCostCenterLocationLinkupTable();
+	    funLoadCustomerLinkupTable();
             funLoadPOSCombo();
         }
         catch (Exception e)
@@ -831,7 +834,9 @@ public class frmLinkupMaster extends javax.swing.JFrame
         {
 
             String sql = " select a.strSubGroupCode as SubGroup_Code,a.strSubGroupName as SubGroup_Name,a.strAccountCode as Account_Code,ifnull(b.strWBAccountName,'') "
+		    + " ,ifnull(c.strWSSubGroupCode,''),ifnull(c.strWSSubGroupName,'')"
                     + " from tblsubgrouphd a left outer join tblaccountmaster b on a.strAccountCode=b.strWBAccountCode "
+		    + " left outer join tblsubgroupmasterlinkupdtl c on a.strSubGroupCode=c.strSubGrooupCode"
                     + " order by strSubGroupName ";
 
             //System.out.println(sql);
@@ -844,7 +849,8 @@ public class frmLinkupMaster extends javax.swing.JFrame
                 column[1] = rs.getString(2);
                 column[2] = rs.getString(3);
                 column[3] = rs.getString(4);
-                column[4] = false;
+                column[4] = rs.getString(5);
+		column[5] = rs.getString(6);
                 dmSubGroupLinkup.addRow(column);
 
             }
@@ -857,11 +863,15 @@ public class frmLinkupMaster extends javax.swing.JFrame
             tblSubGroupLinkupDtl.getColumnModel().getColumn(1).setCellRenderer(leftRenderer);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(2).setCellRenderer(leftRenderer);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(3).setCellRenderer(leftRenderer);
+	    tblSubGroupLinkupDtl.getColumnModel().getColumn(4).setCellRenderer(leftRenderer);
+	    tblSubGroupLinkupDtl.getColumnModel().getColumn(5).setCellRenderer(leftRenderer);
 
             tblSubGroupLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(150);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(1).setPreferredWidth(280);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(2).setPreferredWidth(150);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(3).setPreferredWidth(250);
+	    tblSubGroupLinkupDtl.getColumnModel().getColumn(3).setPreferredWidth(100);
+	    tblSubGroupLinkupDtl.getColumnModel().getColumn(3).setPreferredWidth(200);
 
             tblSubGroupLinkupDtl.setSize(700, 850);
 
@@ -872,7 +882,7 @@ public class frmLinkupMaster extends javax.swing.JFrame
             e.printStackTrace();
         }
     }
-
+    
     //Save linking WB Account Code with subgroup in tblsubgrouphd
     private void funUpdateSubGroupMasterTable() throws Exception
     {
@@ -984,7 +994,7 @@ public class frmLinkupMaster extends javax.swing.JFrame
             {
                 if ((!tblSettlementLinkupDtl.getValueAt(row, 3).toString().isEmpty()) && (!tblSettlementLinkupDtl.getValueAt(row, 3).toString().equals("NA")) && (!tblSettlementLinkupDtl.getValueAt(row, 4).toString().isEmpty()))
                 {
-                    String selectQuery = "select * from tblaccountmaster a where a.strWBAccountCode='" + tblSettlementLinkupDtl.getValueAt(row, 2) + "' and a.strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+                    String selectQuery = "select * from tblaccountmaster a where a.strWBAccountCode='" + tblSettlementLinkupDtl.getValueAt(row, 3) + "' and a.strClientCode='" + clsGlobalVarClass.gClientCode + "'";
                     ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(selectQuery);
                     if (rs.next())
                     {
@@ -1034,6 +1044,61 @@ public class frmLinkupMaster extends javax.swing.JFrame
                 clsGlobalVarClass.dbMysql.execute(sqlUpdate);
             }
 
+        }
+    }
+    
+    //Save linking WB Account Code with subgroup in tblsubgrouphd
+    private void funUpdateCustomerMasterTable() throws Exception
+    {
+        int cnt = 0;
+        String sqlUpdate = "";
+        String insertQuery ="";
+        if (tblCustomerLinkupDtl.getRowCount() > 0)
+        {
+            for (int row = 0; row < tblCustomerLinkupDtl.getRowCount(); row++)
+            {
+                if ((!tblCustomerLinkupDtl.getValueAt(row, 2).toString().isEmpty()) && (!tblCustomerLinkupDtl.getValueAt(row, 2).toString().equals("NA")) && (!tblCustomerLinkupDtl.getValueAt(row, 3).toString().isEmpty()))
+                {
+                    String selectQuery = "select * from tblaccountmaster a where a.strWBAccountCode='" + tblCustomerLinkupDtl.getValueAt(row, 2) + "' and a.strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+                    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(selectQuery);
+                    if (rs.next())
+                    {
+
+                    }
+                    else
+                    {
+			 insertQuery = "insert into tblaccountmaster (strWBAccountCode,strWBAccountName,strClientCode) values ";
+                        insertQuery += "('" + tblCustomerLinkupDtl.getValueAt(row, 2) + "','" + tblCustomerLinkupDtl.getValueAt(row, 3) + "','" + clsGlobalVarClass.gClientCode + "') ";                      
+                        clsGlobalVarClass.dbMysql.execute(insertQuery);
+                    }
+                }
+		else
+		{
+		    
+		}
+		if ((!tblCustomerLinkupDtl.getValueAt(row, 4).toString().isEmpty()) && (!tblCustomerLinkupDtl.getValueAt(row, 4).toString().equals("NA")) && (!tblCustomerLinkupDtl.getValueAt(row, 5).toString().isEmpty()))
+                {
+                    String selectQuery = "select * from tblaccountmaster a where a.strWBAccountCode='" + tblCustomerLinkupDtl.getValueAt(row, 4) + "' and a.strClientCode='" + clsGlobalVarClass.gClientCode + "'";
+                    ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(selectQuery);
+                    if (rs.next())
+                    {
+
+                    }
+                    else
+                    {
+			 insertQuery = "insert into tblaccountmaster (strWBAccountCode,strWBAccountName,strClientCode) values ";
+                        insertQuery += "('" + tblCustomerLinkupDtl.getValueAt(row, 4) + "','" + tblCustomerLinkupDtl.getValueAt(row, 5) + "','" + clsGlobalVarClass.gClientCode + "') ";                      
+                        clsGlobalVarClass.dbMysql.execute(insertQuery);
+                    }
+                }
+		else
+		{
+		    
+		}
+
+                sqlUpdate = "update tblcustomermaster set strAccountCode='" + tblCustomerLinkupDtl.getValueAt(row, 2) + "',strDebtorCode='"+tblCustomerLinkupDtl.getValueAt(row, 4) +"' where strCustomerCode='" + tblCustomerLinkupDtl.getValueAt(row, 0) + "'";
+                clsGlobalVarClass.dbMysql.execute(sqlUpdate);
+            }
         }
     }
     
@@ -1205,7 +1270,9 @@ public class frmLinkupMaster extends javax.swing.JFrame
                 funUpdateSubGroupMasterTable();
                 funUpdateSettlementMasterTable();
                 funUpdateCostCenterMasterTable();
-                new frmOkPopUp(this, "Entry added Successfully", "Successfull", 3).setVisible(true);
+		funUpdateCustomerMasterTable();
+                funSaveDataToSubGroupLinkupTable();
+		new frmOkPopUp(this, "Entry added Successfully", "Successfull", 3).setVisible(true);
                 funResetFields();
             }
 
@@ -1225,7 +1292,8 @@ public class frmLinkupMaster extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jTextField1 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox();
@@ -1275,6 +1343,10 @@ public class frmLinkupMaster extends javax.swing.JFrame
         separator6 = new javax.swing.JSeparator();
         srollPane5 = new javax.swing.JScrollPane();
         tblCostCenterLinkupDtl = new javax.swing.JTable();
+        panelCustomer = new javax.swing.JPanel();
+        separator7 = new javax.swing.JSeparator();
+        srollPane6 = new javax.swing.JScrollPane();
+        tblCustomerLinkupDtl = new javax.swing.JTable();
 
         jTextField1.setText("jTextField1");
 
@@ -1282,11 +1354,14 @@ public class frmLinkupMaster extends javax.swing.JFrame
         setExtendedState(MAXIMIZED_BOTH);
         setMinimumSize(new java.awt.Dimension(800, 600));
         setUndecorated(true);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosed(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosed(evt);
             }
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
@@ -1357,63 +1432,83 @@ public class frmLinkupMaster extends javax.swing.JFrame
         btnExit.setToolTipText("Close Menu Item Pricing");
         btnExit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnExit.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnExit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnExit.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnExitMouseClicked(evt);
             }
         });
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnExit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnExitActionPerformed(evt);
             }
         });
 
         tblItemLinkupDtl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Item Code", "Item Name", "POS Name", "WS Prd Code", "WebStock Product Name", "Excise Brand Code", "Excise Brand Name"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         tblItemLinkupDtl.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tblItemLinkupDtl.setRowHeight(25);
         tblItemLinkupDtl.getTableHeader().setReorderingAllowed(false);
-        tblItemLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        tblItemLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 tblItemLinkupDtlFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 tblItemLinkupDtlFocusLost(evt);
             }
         });
-        tblItemLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tblItemLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 tblItemLinkupDtlMouseClicked(evt);
             }
         });
-        tblItemLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        tblItemLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener()
+        {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt)
+            {
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt)
+            {
                 tblItemLinkupDtlInputMethodTextChanged(evt);
             }
         });
-        tblItemLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        tblItemLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 tblItemLinkupDtlKeyPressed(evt);
             }
         });
         srollPane.setViewportView(tblItemLinkupDtl);
-        if (tblItemLinkupDtl.getColumnModel().getColumnCount() > 0) {
+        if (tblItemLinkupDtl.getColumnModel().getColumnCount() > 0)
+        {
             tblItemLinkupDtl.getColumnModel().getColumn(0).setResizable(false);
             tblItemLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(70);
             tblItemLinkupDtl.getColumnModel().getColumn(1).setResizable(false);
@@ -1439,8 +1534,10 @@ public class frmLinkupMaster extends javax.swing.JFrame
         btnReset.setToolTipText("Reset All Fields");
         btnReset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnReset.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnReset.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnResetActionPerformed(evt);
             }
         });
@@ -1452,18 +1549,24 @@ public class frmLinkupMaster extends javax.swing.JFrame
         btnSave.setToolTipText("Close Menu Item Pricing");
         btnSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSave.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/POSMaster/images/imgCmnBtn2.png"))); // NOI18N
-        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        btnSave.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 btnSaveMouseClicked(evt);
             }
         });
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnSave.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btnSaveActionPerformed(evt);
             }
         });
-        btnSave.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
-            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
+        btnSave.addVetoableChangeListener(new java.beans.VetoableChangeListener()
+        {
+            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException
+            {
                 btnSaveVetoableChange(evt);
             }
         });
@@ -1510,51 +1613,67 @@ public class frmLinkupMaster extends javax.swing.JFrame
         panelPOS.setOpaque(false);
 
         tblPOSLinkupDtl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "POS Code", "POS Name", "WS Loc Code", "WS Location Name", "Dis Acc Code", "Dis Acc Name", "Tip Acc Code", "Tip Acc Name", "Round Off Acc Code", "Round Off Acc Name", "Excise License Code", "Excise License Name"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false, false, false, false, false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         tblPOSLinkupDtl.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tblPOSLinkupDtl.setRowHeight(25);
         tblPOSLinkupDtl.getTableHeader().setReorderingAllowed(false);
-        tblPOSLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        tblPOSLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 tblPOSLinkupDtlFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 tblPOSLinkupDtlFocusLost(evt);
             }
         });
-        tblPOSLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tblPOSLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 tblPOSLinkupDtlMouseClicked(evt);
             }
         });
-        tblPOSLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        tblPOSLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener()
+        {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt)
+            {
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt)
+            {
                 tblPOSLinkupDtlInputMethodTextChanged(evt);
             }
         });
-        tblPOSLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        tblPOSLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 tblPOSLinkupDtlKeyPressed(evt);
             }
         });
         srollPane1.setViewportView(tblPOSLinkupDtl);
-        if (tblPOSLinkupDtl.getColumnModel().getColumnCount() > 0) {
+        if (tblPOSLinkupDtl.getColumnModel().getColumnCount() > 0)
+        {
             tblPOSLinkupDtl.getColumnModel().getColumn(0).setResizable(false);
             tblPOSLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(130);
             tblPOSLinkupDtl.getColumnModel().getColumn(1).setResizable(false);
@@ -1616,51 +1735,67 @@ public class frmLinkupMaster extends javax.swing.JFrame
         panelTax.setOpaque(false);
 
         tblTaxLinkupDtl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Tax Code", "Tax Name", "WebBook Account Code", "WebBook Account Name"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         tblTaxLinkupDtl.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tblTaxLinkupDtl.setRowHeight(25);
         tblTaxLinkupDtl.getTableHeader().setReorderingAllowed(false);
-        tblTaxLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        tblTaxLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 tblTaxLinkupDtlFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 tblTaxLinkupDtlFocusLost(evt);
             }
         });
-        tblTaxLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tblTaxLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 tblTaxLinkupDtlMouseClicked(evt);
             }
         });
-        tblTaxLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        tblTaxLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener()
+        {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt)
+            {
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt)
+            {
                 tblTaxLinkupDtlInputMethodTextChanged(evt);
             }
         });
-        tblTaxLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        tblTaxLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 tblTaxLinkupDtlKeyPressed(evt);
             }
         });
         srollPane2.setViewportView(tblTaxLinkupDtl);
-        if (tblTaxLinkupDtl.getColumnModel().getColumnCount() > 0) {
+        if (tblTaxLinkupDtl.getColumnModel().getColumnCount() > 0)
+        {
             tblTaxLinkupDtl.getColumnModel().getColumn(0).setResizable(false);
             tblTaxLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(150);
             tblTaxLinkupDtl.getColumnModel().getColumn(1).setResizable(false);
@@ -1698,59 +1833,79 @@ public class frmLinkupMaster extends javax.swing.JFrame
         panelSubGroup.setOpaque(false);
 
         tblSubGroupLinkupDtl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
-                "SubGroup Code", "SubGroup Name", "WebBook Account Code", "WebBook Account Name"
+            new String []
+            {
+                "SubGroup Code", "SubGroup Name", "WebBook Account Code", "WebBook Account Name", "WS SubGroup Code", "WS SubGroup Name"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         tblSubGroupLinkupDtl.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tblSubGroupLinkupDtl.setRowHeight(25);
         tblSubGroupLinkupDtl.getTableHeader().setReorderingAllowed(false);
-        tblSubGroupLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        tblSubGroupLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 tblSubGroupLinkupDtlFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 tblSubGroupLinkupDtlFocusLost(evt);
             }
         });
-        tblSubGroupLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tblSubGroupLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 tblSubGroupLinkupDtlMouseClicked(evt);
             }
         });
-        tblSubGroupLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        tblSubGroupLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener()
+        {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt)
+            {
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt)
+            {
                 tblSubGroupLinkupDtlInputMethodTextChanged(evt);
             }
         });
-        tblSubGroupLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        tblSubGroupLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 tblSubGroupLinkupDtlKeyPressed(evt);
             }
         });
         srollPane3.setViewportView(tblSubGroupLinkupDtl);
-        if (tblSubGroupLinkupDtl.getColumnModel().getColumnCount() > 0) {
+        if (tblSubGroupLinkupDtl.getColumnModel().getColumnCount() > 0)
+        {
             tblSubGroupLinkupDtl.getColumnModel().getColumn(0).setResizable(false);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(150);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(1).setResizable(false);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(1).setPreferredWidth(300);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(2).setResizable(false);
-            tblSubGroupLinkupDtl.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tblSubGroupLinkupDtl.getColumnModel().getColumn(2).setPreferredWidth(100);
             tblSubGroupLinkupDtl.getColumnModel().getColumn(3).setResizable(false);
-            tblSubGroupLinkupDtl.getColumnModel().getColumn(3).setPreferredWidth(250);
+            tblSubGroupLinkupDtl.getColumnModel().getColumn(3).setPreferredWidth(200);
+            tblSubGroupLinkupDtl.getColumnModel().getColumn(4).setResizable(false);
+            tblSubGroupLinkupDtl.getColumnModel().getColumn(4).setPreferredWidth(100);
+            tblSubGroupLinkupDtl.getColumnModel().getColumn(5).setResizable(false);
+            tblSubGroupLinkupDtl.getColumnModel().getColumn(5).setPreferredWidth(100);
         }
 
         javax.swing.GroupLayout panelSubGroupLayout = new javax.swing.GroupLayout(panelSubGroup);
@@ -1780,51 +1935,67 @@ public class frmLinkupMaster extends javax.swing.JFrame
         panelSettlement.setOpaque(false);
 
         tblSettlementLinkupDtl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Settlement Code", "Settlement Name", "Settlement", "WebBook Account Code", "WebBook Account Name"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         tblSettlementLinkupDtl.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tblSettlementLinkupDtl.setRowHeight(25);
         tblSettlementLinkupDtl.getTableHeader().setReorderingAllowed(false);
-        tblSettlementLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        tblSettlementLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 tblSettlementLinkupDtlFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 tblSettlementLinkupDtlFocusLost(evt);
             }
         });
-        tblSettlementLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tblSettlementLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 tblSettlementLinkupDtlMouseClicked(evt);
             }
         });
-        tblSettlementLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        tblSettlementLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener()
+        {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt)
+            {
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt)
+            {
                 tblSettlementLinkupDtlInputMethodTextChanged(evt);
             }
         });
-        tblSettlementLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        tblSettlementLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 tblSettlementLinkupDtlKeyPressed(evt);
             }
         });
         srollPane4.setViewportView(tblSettlementLinkupDtl);
-        if (tblSettlementLinkupDtl.getColumnModel().getColumnCount() > 0) {
+        if (tblSettlementLinkupDtl.getColumnModel().getColumnCount() > 0)
+        {
             tblSettlementLinkupDtl.getColumnModel().getColumn(0).setResizable(false);
             tblSettlementLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(150);
             tblSettlementLinkupDtl.getColumnModel().getColumn(1).setResizable(false);
@@ -1863,51 +2034,67 @@ public class frmLinkupMaster extends javax.swing.JFrame
         panelCostCenter.setOpaque(false);
 
         tblCostCenterLinkupDtl.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "CostCenter Code", "CostCenter Name", "WS Loc Code", "WS Location Name"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false
             };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         tblCostCenterLinkupDtl.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tblCostCenterLinkupDtl.setRowHeight(25);
         tblCostCenterLinkupDtl.getTableHeader().setReorderingAllowed(false);
-        tblCostCenterLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        tblCostCenterLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 tblCostCenterLinkupDtlFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 tblCostCenterLinkupDtlFocusLost(evt);
             }
         });
-        tblCostCenterLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tblCostCenterLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 tblCostCenterLinkupDtlMouseClicked(evt);
             }
         });
-        tblCostCenterLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+        tblCostCenterLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener()
+        {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt)
+            {
             }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt)
+            {
                 tblCostCenterLinkupDtlInputMethodTextChanged(evt);
             }
         });
-        tblCostCenterLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        tblCostCenterLinkupDtl.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 tblCostCenterLinkupDtlKeyPressed(evt);
             }
         });
         srollPane5.setViewportView(tblCostCenterLinkupDtl);
-        if (tblCostCenterLinkupDtl.getColumnModel().getColumnCount() > 0) {
+        if (tblCostCenterLinkupDtl.getColumnModel().getColumnCount() > 0)
+        {
             tblCostCenterLinkupDtl.getColumnModel().getColumn(0).setResizable(false);
             tblCostCenterLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(130);
             tblCostCenterLinkupDtl.getColumnModel().getColumn(1).setResizable(false);
@@ -1939,6 +2126,97 @@ public class frmLinkupMaster extends javax.swing.JFrame
         );
 
         tabLinkupMaster.addTab("Cost Center", panelCostCenter);
+
+        tblCustomerLinkupDtl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+                "Customer Code", "Customer Name", "Account Code", "Account Name", "Debtor Code", "Debtor Full Name"
+            }
+        )
+        {
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        tblCustomerLinkupDtl.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblCustomerLinkupDtl.setRowHeight(25);
+        tblCustomerLinkupDtl.getTableHeader().setReorderingAllowed(false);
+        tblCustomerLinkupDtl.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                tblCustomerLinkupDtlFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                tblCustomerLinkupDtlFocusLost(evt);
+            }
+        });
+        tblCustomerLinkupDtl.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                tblCustomerLinkupDtlMouseClicked(evt);
+            }
+        });
+        tblCustomerLinkupDtl.addInputMethodListener(new java.awt.event.InputMethodListener()
+        {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt)
+            {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt)
+            {
+                tblCustomerLinkupDtlInputMethodTextChanged(evt);
+            }
+        });
+        srollPane6.setViewportView(tblCustomerLinkupDtl);
+        if (tblCustomerLinkupDtl.getColumnModel().getColumnCount() > 0)
+        {
+            tblCustomerLinkupDtl.getColumnModel().getColumn(0).setResizable(false);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(1).setResizable(false);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(1).setPreferredWidth(250);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(2).setResizable(false);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(3).setResizable(false);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(3).setPreferredWidth(250);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(4).setResizable(false);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(4).setPreferredWidth(150);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(5).setResizable(false);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(5).setPreferredWidth(250);
+        }
+
+        javax.swing.GroupLayout panelCustomerLayout = new javax.swing.GroupLayout(panelCustomer);
+        panelCustomer.setLayout(panelCustomerLayout);
+        panelCustomerLayout.setHorizontalGroup(
+            panelCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCustomerLayout.createSequentialGroup()
+                .addComponent(srollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(separator7, javax.swing.GroupLayout.DEFAULT_SIZE, 3, Short.MAX_VALUE))
+        );
+        panelCustomerLayout.setVerticalGroup(
+            panelCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCustomerLayout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(separator7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(502, Short.MAX_VALUE))
+            .addGroup(panelCustomerLayout.createSequentialGroup()
+                .addComponent(srollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        tabLinkupMaster.addTab("Customer", panelCustomer);
 
         panelLayout.add(tabLinkupMaster, new java.awt.GridBagConstraints());
 
@@ -1998,7 +2276,7 @@ public class frmLinkupMaster extends javax.swing.JFrame
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
-        // TODO add your handling code here:
+            // TODO add your handling code here:
     }//GEN-LAST:event_btnSaveMouseClicked
 
     private void tblPOSLinkupDtlFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblPOSLinkupDtlFocusGained
@@ -2190,6 +2468,15 @@ public class frmLinkupMaster extends javax.swing.JFrame
              }
              }
              */
+	    int col = tblSubGroupLinkupDtl.columnAtPoint(evt.getPoint());
+            String name = tblSubGroupLinkupDtl.getColumnName(col);
+            if (col == 4 || col == 5)
+            {
+                if (evt.getClickCount() == 2)
+                {
+                    funSubGroupPOSLinkupRowClicked();
+                }
+            }
             if (evt.getClickCount() == 2)
             {
                 funAccountLinkupHelp(tblSubGroupLinkupDtl, 2);
@@ -2270,6 +2557,44 @@ public class frmLinkupMaster extends javax.swing.JFrame
     private void tblCostCenterLinkupDtlKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCostCenterLinkupDtlKeyPressed
     }//GEN-LAST:event_tblCostCenterLinkupDtlKeyPressed
 
+    private void tblCustomerLinkupDtlMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_tblCustomerLinkupDtlMouseClicked
+    {//GEN-HEADEREND:event_tblCustomerLinkupDtlMouseClicked
+	try
+        {
+
+            int col = tblCustomerLinkupDtl.columnAtPoint(evt.getPoint());
+            String name = tblCustomerLinkupDtl.getColumnName(col);
+            if(col == 2 || col == 3)
+	    {
+		funAccountLinkupHelp(tblCustomerLinkupDtl,2);
+	    }
+	    else if (col == 4 || col == 5)
+            {
+		funCustomerLinkupHelp();
+            }
+        }
+        catch (Exception e)
+        {
+            objUtility.funWriteErrorLog(e);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_tblCustomerLinkupDtlMouseClicked
+
+    private void tblCustomerLinkupDtlFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_tblCustomerLinkupDtlFocusGained
+    {//GEN-HEADEREND:event_tblCustomerLinkupDtlFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblCustomerLinkupDtlFocusGained
+
+    private void tblCustomerLinkupDtlFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_tblCustomerLinkupDtlFocusLost
+    {//GEN-HEADEREND:event_tblCustomerLinkupDtlFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblCustomerLinkupDtlFocusLost
+
+    private void tblCustomerLinkupDtlInputMethodTextChanged(java.awt.event.InputMethodEvent evt)//GEN-FIRST:event_tblCustomerLinkupDtlInputMethodTextChanged
+    {//GEN-HEADEREND:event_tblCustomerLinkupDtlInputMethodTextChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblCustomerLinkupDtlInputMethodTextChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
@@ -2288,6 +2613,7 @@ public class frmLinkupMaster extends javax.swing.JFrame
     private javax.swing.JLabel lblUserCode;
     private javax.swing.JLabel lblformName;
     private javax.swing.JPanel panelCostCenter;
+    private javax.swing.JPanel panelCustomer;
     private javax.swing.JPanel panelHeader;
     private javax.swing.JPanel panelItem;
     private javax.swing.JPanel panelLayout;
@@ -2301,14 +2627,17 @@ public class frmLinkupMaster extends javax.swing.JFrame
     private javax.swing.JSeparator separator4;
     private javax.swing.JSeparator separator5;
     private javax.swing.JSeparator separator6;
+    private javax.swing.JSeparator separator7;
     private javax.swing.JScrollPane srollPane;
     private javax.swing.JScrollPane srollPane1;
     private javax.swing.JScrollPane srollPane2;
     private javax.swing.JScrollPane srollPane3;
     private javax.swing.JScrollPane srollPane4;
     private javax.swing.JScrollPane srollPane5;
+    private javax.swing.JScrollPane srollPane6;
     private javax.swing.JTabbedPane tabLinkupMaster;
     private javax.swing.JTable tblCostCenterLinkupDtl;
+    private javax.swing.JTable tblCustomerLinkupDtl;
     private javax.swing.JTable tblItemLinkupDtl;
     private javax.swing.JTable tblPOSLinkupDtl;
     private javax.swing.JTable tblSettlementLinkupDtl;
@@ -2363,7 +2692,9 @@ public class frmLinkupMaster extends javax.swing.JFrame
         dmSubGroup.setRowCount(0);
         DefaultTableModel dmSettlement = (DefaultTableModel) tblSettlementLinkupDtl.getModel();
         dmSettlement.setRowCount(0);
-        sb.setLength(0);
+	DefaultTableModel dmCustomerLinkup = (DefaultTableModel) tblCustomerLinkupDtl.getModel();
+        dmSettlement.setRowCount(0);
+	sb.setLength(0);
     }
 
     /**
@@ -2436,25 +2767,156 @@ public class frmLinkupMaster extends javax.swing.JFrame
             objLinkSangERP = null;
         }
     }
-
-    class MyTableCellEditor extends AbstractCellEditor implements TableCellEditor
+    
+    private void funCustomerLinkupHelp()
     {
-
-        JComponent component = new JTextField();
-
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
-                int rowIndex, int vColIndex)
+       clsInvokeDataFromSanguineERPModules objLinkSangERP = new clsInvokeDataFromSanguineERPModules();
+        try
         {
+            List<clsDebtorDtl> debtorInfo = objLinkSangERP.funGetDebtorDtl(clsGlobalVarClass.gClientCode);
+            new frmSearchFormDialog(debtorInfo, true,this).setVisible(true);
 
-            ((JTextField) component).setText((String) value);
-
-            return component;
+            if(clsGlobalVarClass.gSearchItemClicked)  
+	    {
+		Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+                final int rowNo = tblCustomerLinkupDtl.getSelectedRow();
+                tblCustomerLinkupDtl.setValueAt(data[0], rowNo, 4);
+                tblCustomerLinkupDtl.setValueAt(data[1], rowNo, 5);
+		clsGlobalVarClass.gSearchItemClicked = false;
+	    }   
+        }	
+        catch (Exception e)
+        {
+            objUtility.funWriteErrorLog(e);
+            e.printStackTrace();
         }
-
-        public Object getCellEditorValue()
+        finally
         {
-            return ((JTextField) component).getText();
+            objLinkSangERP = null;
+        }
+	
+    }
+    
+    private void funLoadCustomerLinkupTable()
+    {
+	
+        try
+        {
+
+            String sql = " select a.strCustomerCode as Customer_Code,a.strCustomerName as Customer_Name,a.strAccountCode as Account_Code,"
+		    + "a.strDebtorCode as Debtor_Code from tblcustomermaster a left outer join tblaccountmaster b on "
+		    + "a.strAccountCode=b.strWBAccountCode";
+	   
+            ResultSet rs = clsGlobalVarClass.dbMysql.executeResultSet(sql);
+            dmCustomerLinkup.setRowCount(0);
+            while (rs.next())
+            {
+                final Object[] column = new Object[7];
+                column[0] = rs.getString(1);
+                column[1] = rs.getString(2);
+		column[2] = rs.getString(3);
+		column[4] = rs.getString(4);
+		//String sqlDebt = "select strWBAccountCode , strWBAccountName from tblaccountmaster where strWBAccountCode='"+ rs.getString(4) +"' ";
+                String sqlDebt="select a.strWBAccountName as Debtor_Name,b.strWBAccountName as Account_Name from ( select  a.strWBAccountCode,a.strWBAccountName from tblaccountmaster a where a.strWBAccountCode='"+ rs.getString(4) +"' ) a, "
+			+ " (select  b.strWBAccountCode,b.strWBAccountName from tblaccountmaster b where b.strWBAccountCode='"+ rs.getString(3) +"' ) b";
+		
+		ResultSet rsDebt = clsGlobalVarClass.dbMysql.executeResultSet(sqlDebt);
+		while (rsDebt.next())
+		{
+		    column[5] = rsDebt.getString(1);
+		    column[3] = rsDebt.getString(2);
+		}
+		rsDebt.close();
+		dmCustomerLinkup.addRow(column);
+            }
+            rs.close();
+            tblCustomerLinkupDtl.setModel(dmCustomerLinkup);
+	   
+            DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
+            leftRenderer.setHorizontalAlignment(JLabel.LEFT);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(1).setCellRenderer(leftRenderer);
+            
+            tblCustomerLinkupDtl.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tblCustomerLinkupDtl.getColumnModel().getColumn(1).setPreferredWidth(280);
+            
+            tblCustomerLinkupDtl.setSize(700, 850);
+
+        }
+        catch (Exception e)
+        {
+            objUtility.funWriteErrorLog(e);
+            e.printStackTrace();
         }
     }
+    
+     private void funSubGroupPOSLinkupRowClicked()
+    {
+        clsInvokeDataFromSanguineERPModules objLinkSangERP = new clsInvokeDataFromSanguineERPModules();
+        try
+        {
+            List<clsLinkupDtl> listProducts = objLinkSangERP.funGetSubGroupDtl(clsGlobalVarClass.gWSClientCode);
 
+            List<String> listColumns = new ArrayList<String>();
+            listColumns.add("SubGroup Code");
+            listColumns.add("SubGroup Name");
+            new frmSearchFormDialog(this, true, listProducts, "MMS SubGroup", listColumns).setVisible(true);
+
+            if (clsGlobalVarClass.gSearchItemClicked)
+            {
+                Object[] data = clsGlobalVarClass.gArrListSearchData.toArray();
+                final int rowNo = tblSubGroupLinkupDtl.getSelectedRow();
+                tblSubGroupLinkupDtl.setValueAt(data[0], rowNo, 4);
+                tblSubGroupLinkupDtl.setValueAt(data[1], rowNo, 5);
+                clsGlobalVarClass.gSearchItemClicked = false;
+
+            }
+
+        }
+        catch (Exception e)
+        {
+            objUtility.funWriteErrorLog(e);
+            e.printStackTrace();
+        }
+        finally
+        {
+            objLinkSangERP = null;
+        }
+    }
+     
+      //Save linking WS product Code with itemmaster in tblitemorderingdtl table
+    private void funSaveDataToSubGroupLinkupTable() throws Exception
+    {
+        int cnt = 0;
+
+        String insertQuery = "";
+        if (tblSubGroupLinkupDtl.getRowCount() > 0)
+        {
+            insertQuery = "insert into tblsubgroupmasterlinkupdtl (strSubGrooupCode,strWSSubGroupCode,strWSSubGroupName,strClientCode,strDataPostFlag) values ";
+            for (int row = 0; row < tblSubGroupLinkupDtl.getRowCount(); row++)
+            {
+                    
+                        if (cnt == 0)
+                        {
+                            insertQuery += "('" + tblSubGroupLinkupDtl.getValueAt(row, 0) + "','" + tblSubGroupLinkupDtl.getValueAt(row, 4) + "','" + tblSubGroupLinkupDtl.getValueAt(row, 5) + "', '" + clsGlobalVarClass.gClientCode + "', 'N') ";
+                        }
+                        else
+                        {
+                            insertQuery += ",('" + tblSubGroupLinkupDtl.getValueAt(row, 0) + "','" + tblSubGroupLinkupDtl.getValueAt(row, 4) + "','" + tblSubGroupLinkupDtl.getValueAt(row, 5) + "', '" + clsGlobalVarClass.gClientCode + "', 'N')";
+                        }
+                        cnt++;
+
+            }
+
+        }
+        if (cnt > 0)
+        {
+            System.out.println("cnt=" + cnt);
+            System.out.println("insertQuery=" + insertQuery);
+            String deleteQuery = " truncate table tblsubgroupmasterlinkupdtl  ";
+            clsGlobalVarClass.dbMysql.execute(deleteQuery);
+            clsGlobalVarClass.dbMysql.execute(insertQuery);
+        }
+    }
+    
 }
