@@ -1004,7 +1004,7 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 		    {
 			String sqlPOS = " select strPOSCode from tblposmaster  ";
 			ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet(sqlPOS);
-			String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode);
+			String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode,"");
 			while (rsPOS.next())
 			{
 			    String insertQuery = "insert into tblitemmasterlinkupdtl (strItemCode,strWSProductCode,strWSProductName,strPOSCode,strClientCode,strDataPostFlag) values "
@@ -1574,11 +1574,22 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 			ex.printStackTrace();
 		    }
 
-		    if (flgMMMSCon)
+		     if (flgMMMSCon)
 		    {
+			String wsProductCode="";
+			String sqlItemMaster="select strWSProductCode from tblitemmasterlinkupdtl where strItemCode='" + txtItemCode.getText() + "'  ";
+			ResultSet rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sqlItemMaster);
+			while (rsItemMaster.next())
+			{
+			   wsProductCode=rsItemMaster.getString(1);
+			}
+			rsItemMaster.close();
+			
 			String sqlPOS = " select strPOSCode from tblposmaster  ";
 			ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet(sqlPOS);
-			String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode);
+			
+			
+			String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode,wsProductCode);
 			while (rsPOS.next())
 			{
 			    clsGlobalVarClass.dbMysql.execute("delete from tblitemmasterlinkupdtl where strItemCode='" + txtItemCode.getText() + "' ");

@@ -316,7 +316,7 @@ public class frmUserGroupRights extends javax.swing.JFrame {
                    String userCodeOwner = txtUserCodeOwner.getText().trim().toUpperCase();
                    String password = "";//
                    //String passwordOwner=txtPassOwner.getText().trim().toUpperCase();
-                   String userType="op";
+                   
                    String userNameOwner=txtUserNameOwner.getText().trim();
                    if(alValidDates.size()==4&&alUserCode.size()==4&&alPassword.size()==4&&alUserName.size()==4)
                    {
@@ -336,13 +336,14 @@ public class frmUserGroupRights extends javax.swing.JFrame {
                        }
                     for(int i=0;i<alUserCode.size();i++)
                     {
+			String userType="op";
                         if(alUserCode.get(i).toString().equalsIgnoreCase("Owner"))
                         {
                             userType="Super";
                         }
                         password = clsGlobalSingleObject.getObjPasswordEncryptDecreat().encrypt(encKey, alPassword.get(i).toString());
 
-                        String query = "insert into tbluserhd values( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )";
+                        String query = "insert into tbluserhd values( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )";
                         PreparedStatement pre = clsGlobalVarClass.conPrepareStatement.prepareStatement(query);
                         pre.setString(1, alUserCode.get(i).toString());
                         pre.setString(2, alUserName.get(i).toString());
@@ -361,7 +362,7 @@ public class frmUserGroupRights extends javax.swing.JFrame {
                         pre.setString(15, "");
                         pre.setString(16, " ");
                         pre.setString(17, alUserType.get(i).toString());
-
+			pre.setInt(18, 0);
                         int cnt = pre.executeUpdate();
                         pre.close();
                     }

@@ -70,6 +70,7 @@ public class frmSettlementMaster extends javax.swing.JFrame
             cmbApplicable.addItem("Yes");
             cmbApplicable.addItem("No");
             chlApplicableForBilling.setSelected(true);
+	    chkSelectCustomerOnBillSettlement.setEnabled(false);
         }
         catch (Exception e)
         {
@@ -129,6 +130,7 @@ public class frmSettlementMaster extends javax.swing.JFrame
             cmbComissionType.setSelectedIndex(0);
             txtThirdPartyComission.setText("0.00");
             cmbComissionOn.setSelectedIndex(0);
+	    chkSelectCustomerOnBillSettlement.setSelected(false);
         }
         catch (Exception e)
         {
@@ -210,6 +212,33 @@ public class frmSettlementMaster extends javax.swing.JFrame
             txtThirdPartyComission.setText(rsSettlementInfo.getString(17));
             cmbComissionType.setSelectedItem(rsSettlementInfo.getString(18));
             cmbComissionOn.setSelectedItem(rsSettlementInfo.getString(19));
+	    if(cmbSettelmentType.getSelectedItem().toString().equalsIgnoreCase("Credit"))
+	    {
+		
+		if (rsSettlementInfo.getString(20).equalsIgnoreCase("Y"))
+		{
+		    chkSelectCustomerOnBillSettlement.setSelected(true);
+		}
+		else
+		{
+		    chkSelectCustomerOnBillSettlement.setSelected(false);
+		}
+		chkSelectCustomerOnBillSettlement.setEnabled(true);
+	    }
+	    else
+	    {
+		
+		if (rsSettlementInfo.getString(20).equalsIgnoreCase("Y"))
+		{
+		    chkSelectCustomerOnBillSettlement.setSelected(true);
+		}
+		else
+		{
+		    chkSelectCustomerOnBillSettlement.setSelected(false);
+		}
+		chkSelectCustomerOnBillSettlement.setEnabled(false);
+	    }	
+	    
         }
         catch (Exception e)
         {
@@ -295,7 +324,12 @@ public class frmSettlementMaster extends javax.swing.JFrame
                 {
                     applicableForCreditReceipt = "Y";
                 }
-
+		
+		String customerSelectionOnBillSettlement = "N";
+                if (chkSelectCustomerOnBillSettlement.isSelected())
+                {
+                    customerSelectionOnBillSettlement = "Y";
+                }
                 String comissionType = cmbComissionType.getSelectedItem().toString();
                 double comission = 0.00;
                 try
@@ -314,14 +348,14 @@ public class frmSettlementMaster extends javax.swing.JFrame
                 sql = "insert into tblsettelmenthd(strSettelmentCode,strSettelmentDesc,strSettelmentType,strApplicable,"
                         + "strBilling,strAdvanceReceipt,dblConvertionRatio,strUserCreated,strUserEdited,dteDateCreated"
                         + ",dteDateEdited,strClientCode,strAccountCode,strBillPrintOnSettlement,strCreditReceiptYN"
-                        + ",dblThirdPartyComission,strComissionType,strComissionOn) "
+                        + ",dblThirdPartyComission,strComissionType,strComissionOn,strCustomerSelectionOnBillSettlement )"
                         + "values('" + txtSettelmentCode.getText() + "','" + txtSettelmentName.getText().trim() + "','" + cmbSettelmentType.getSelectedItem().toString()
                         + "','" + cmbApplicable.getSelectedItem().toString() + "','" + strBilling + "','" + strAdvReceipt + "','"
                         + txtCurrencyRate.getText() + "','" + clsGlobalVarClass.gUserCode + "','" + clsGlobalVarClass.gUserCode + "','"
                         + clsGlobalVarClass.getCurrentDateTime() + "','" + clsGlobalVarClass.getCurrentDateTime() + "'"
                         + ",'" + clsGlobalVarClass.gClientCode + "','" + txtAccountCode.getText() + "'"
                         + ",'" + billPrintOnSettlement + "','" + applicableForCreditReceipt + "'"
-                        + ",'" + comission + "','" + comissionType + "','" + comissionOn + "')";
+                        + ",'" + comission + "','" + comissionType + "','" + comissionOn + "','"+customerSelectionOnBillSettlement+"')";
                 int exc = clsGlobalVarClass.dbMysql.execute(sql);
                 if (exc > 0)
                 {
@@ -378,7 +412,12 @@ public class frmSettlementMaster extends javax.swing.JFrame
             {
                 applicableForCreditReceipt = "Y";
             }
-
+	    String customerSelectionOnBillSettlement = "N";
+            if (chkSelectCustomerOnBillSettlement.isSelected())
+            {
+                customerSelectionOnBillSettlement = "Y";
+            }
+	    
             if (clsGlobalVarClass.funCheckItemName("tblsettelmenthd", "strSettelmentDesc", "strSettelmentCode", txtSettelmentName.getText().trim(), txtSettelmentCode.getText().trim(), "update", ""))
             {
                 new frmOkPopUp(this, "Settlement Name is Already Present", "Error", 0).setVisible(true);
@@ -409,6 +448,7 @@ public class frmSettlementMaster extends javax.swing.JFrame
                     + ",strBillPrintOnSettlement='" + billPrintOnSettlement + "'"
                     + ",strCreditReceiptYN='" + applicableForCreditReceipt + "' "
                     + ",dblThirdPartyComission='" + txtThirdPartyComission.getText().trim() + "',strComissionType='" + comissionType + "',strComissionOn='" + comissionOn + "' "
+		    + ",strCustomerSelectionOnBillSettlement='"+customerSelectionOnBillSettlement+"'"
                     + " WHERE strSettelmentCode ='" + txtSettelmentCode.getText() + "'";
 
             int exc = clsGlobalVarClass.dbMysql.execute(sql);
@@ -485,6 +525,7 @@ public class frmSettlementMaster extends javax.swing.JFrame
         cmbComissionType = new javax.swing.JComboBox();
         cmbComissionOn = new javax.swing.JComboBox();
         lblApplicable1 = new javax.swing.JLabel();
+        chkSelectCustomerOnBillSettlement = new javax.swing.JCheckBox();
         panelLinkup = new javax.swing.JPanel();
         lblAccountCode = new javax.swing.JLabel();
         txtAccountCode = new javax.swing.JTextField();
@@ -613,6 +654,13 @@ public class frmSettlementMaster extends javax.swing.JFrame
         cmbSettelmentType.setBackground(new java.awt.Color(51, 102, 255));
         cmbSettelmentType.setMaximumRowCount(15);
         cmbSettelmentType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cash", "Credit", "CreditCard", "Complementary", "DebitCard", "Cupon", "CRM Points", "Room", "JioMoney", "Online Payment", "Cheque", "Benow" }));
+        cmbSettelmentType.addItemListener(new java.awt.event.ItemListener()
+        {
+            public void itemStateChanged(java.awt.event.ItemEvent evt)
+            {
+                cmbSettelmentTypeItemStateChanged(evt);
+            }
+        });
         cmbSettelmentType.addKeyListener(new java.awt.event.KeyAdapter()
         {
             public void keyPressed(java.awt.event.KeyEvent evt)
@@ -828,6 +876,17 @@ public class frmSettlementMaster extends javax.swing.JFrame
         lblApplicable1.setText("On");
         lblApplicable1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        chkSelectCustomerOnBillSettlement.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkSelectCustomerOnBillSettlement.setText("Select Customer On Bill Settlement");
+        chkSelectCustomerOnBillSettlement.setOpaque(false);
+        chkSelectCustomerOnBillSettlement.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                chkSelectCustomerOnBillSettlementKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
@@ -864,22 +923,7 @@ public class frmSettlementMaster extends javax.swing.JFrame
                                 .addComponent(chkApplicableForAdvOrderReceipt, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(chkApplicableForCreditReceipts, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
-                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
-                                        .addComponent(lblApplicable, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(10, 10, 10)
-                                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(chlApplicableForBilling)
-                                            .addComponent(cmbApplicable, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
-                                        .addComponent(lblCurrencyRate, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtCurrencyRate, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
-                                .addComponent(chkBillPrintOnSettlement)
-                                .addGap(105, 105, 105)))
+                                .addGap(18, 18, 18)))
                         .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelBodyLayout.createSequentialGroup()
                         .addComponent(lblThirdPartyComission, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -890,7 +934,23 @@ public class frmSettlementMaster extends javax.swing.JFrame
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblApplicable1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbComissionOn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmbComissionOn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelBodyLayout.createSequentialGroup()
+                        .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
+                                .addComponent(lblApplicable, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(chlApplicableForBilling)
+                                    .addComponent(cmbApplicable, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBodyLayout.createSequentialGroup()
+                                .addComponent(lblCurrencyRate, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtCurrencyRate, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(chkBillPrintOnSettlement)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(chkSelectCustomerOnBillSettlement)))
                 .addGap(26, 26, 26))
         );
         panelBodyLayout.setVerticalGroup(
@@ -920,7 +980,9 @@ public class frmSettlementMaster extends javax.swing.JFrame
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblApplicable, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbApplicable, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chkBillPrintOnSettlement))
+                    .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(chkBillPrintOnSettlement)
+                        .addComponent(chkSelectCustomerOnBillSettlement)))
                 .addGap(30, 30, 30)
                 .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblCurrencyRate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -979,7 +1041,7 @@ public class frmSettlementMaster extends javax.swing.JFrame
         panelLinkupLayout.setHorizontalGroup(
             panelLinkupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLinkupLayout.createSequentialGroup()
-                .addContainerGap(221, Short.MAX_VALUE)
+                .addContainerGap(247, Short.MAX_VALUE)
                 .addComponent(lblAccountCode, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
                 .addComponent(txtAccountCode, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1302,6 +1364,26 @@ public class frmSettlementMaster extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbComissionOnKeyPressed
 
+    private void chkSelectCustomerOnBillSettlementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_chkSelectCustomerOnBillSettlementKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkSelectCustomerOnBillSettlementKeyPressed
+
+    private void cmbSettelmentTypeItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_cmbSettelmentTypeItemStateChanged
+    {//GEN-HEADEREND:event_cmbSettelmentTypeItemStateChanged
+        // TODO add your handling code here:
+	if(cmbSettelmentType.getSelectedItem()!=null)
+	{    
+	if(cmbSettelmentType.getSelectedItem().toString().equalsIgnoreCase("Credit"))
+	{
+	    chkSelectCustomerOnBillSettlement.setEnabled(true);
+	} 
+	else
+	{
+	    chkSelectCustomerOnBillSettlement.setEnabled(false);
+	}    
+	}
+    }//GEN-LAST:event_cmbSettelmentTypeItemStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -1359,6 +1441,7 @@ public class frmSettlementMaster extends javax.swing.JFrame
     private javax.swing.JCheckBox chkApplicableForAdvOrderReceipt;
     private javax.swing.JCheckBox chkApplicableForCreditReceipts;
     private javax.swing.JCheckBox chkBillPrintOnSettlement;
+    private javax.swing.JCheckBox chkSelectCustomerOnBillSettlement;
     private javax.swing.JCheckBox chlApplicableForBilling;
     private javax.swing.JComboBox cmbApplicable;
     private javax.swing.JComboBox cmbComissionOn;
