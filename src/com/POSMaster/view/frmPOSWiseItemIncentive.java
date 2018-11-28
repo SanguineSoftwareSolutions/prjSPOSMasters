@@ -146,8 +146,8 @@ public class frmPOSWiseItemIncentive extends javax.swing.JFrame
 		}
 		rs.close();
 	    }
-
 	    tblPoswiseItemIncentiveDtl.setModel(dmImemTable);
+
 	    sb.setLength(0);
 
 	}

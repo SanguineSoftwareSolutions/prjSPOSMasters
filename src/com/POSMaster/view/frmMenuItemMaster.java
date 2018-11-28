@@ -687,7 +687,9 @@ public class frmMenuItemMaster extends javax.swing.JFrame
     /**
      * This method is used to save item master
      */
-    private void funSaveItemMaster()
+  
+
+ private void funSaveItemMaster()
     {
 	try
 	{
@@ -1002,9 +1004,17 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 
 		    if (flgMMMSCon)
 		    {
+			String wsSGCode="";
+			String sqlSGMaster="select strWSSubGroupCode from tblsubgroupmasterlinkupdtl where strSubGrooupCode='" + subGroupCode + "'  ";
+			ResultSet rsSGMaster = clsGlobalVarClass.dbMysql.executeResultSet(sqlSGMaster);
+			while (rsSGMaster.next())
+			{
+			   wsSGCode=rsSGMaster.getString(1);
+			}
+			rsSGMaster.close();
 			String sqlPOS = " select strPOSCode from tblposmaster  ";
 			ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet(sqlPOS);
-			String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode,"");
+			String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode,"",wsSGCode);
 			while (rsPOS.next())
 			{
 			    String insertQuery = "insert into tblitemmasterlinkupdtl (strItemCode,strWSProductCode,strWSProductName,strPOSCode,strClientCode,strDataPostFlag) values "
@@ -1059,6 +1069,7 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 	    e.printStackTrace();
 	}
     }
+
 
     //Generate ItemCode for new entry 
     private String funGenerateItemCode() throws Exception
@@ -1576,6 +1587,16 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 
 		     if (flgMMMSCon)
 		    {
+			String wsSGCode="";
+			String sqlSGMaster="select strWSSubGroupCode from tblsubgroupmasterlinkupdtl where strSubGrooupCode='" + subGroupCode + "'  ";
+			ResultSet rsSGMaster = clsGlobalVarClass.dbMysql.executeResultSet(sqlSGMaster);
+			while (rsSGMaster.next())
+			{
+			   wsSGCode=rsSGMaster.getString(1);
+			}
+			rsSGMaster.close();
+			
+			
 			String wsProductCode="";
 			String sqlItemMaster="select strWSProductCode from tblitemmasterlinkupdtl where strItemCode='" + txtItemCode.getText() + "'  ";
 			ResultSet rsItemMaster = clsGlobalVarClass.dbMysql.executeResultSet(sqlItemMaster);
@@ -1589,7 +1610,7 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 			ResultSet rsPOS = clsGlobalVarClass.dbMysql.executeResultSet(sqlPOS);
 			
 			
-			String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode,wsProductCode);
+			String mmsProdCode = obj.funCreateProductInMMS(txtItemCode.getText(), txtItemName.getText(), clsGlobalVarClass.gClientCode, clsGlobalVarClass.getCurrentDateTime(), clsGlobalVarClass.gUserCode,wsProductCode,wsSGCode);
 			while (rsPOS.next())
 			{
 			    clsGlobalVarClass.dbMysql.execute("delete from tblitemmasterlinkupdtl where strItemCode='" + txtItemCode.getText() + "' ");
@@ -1636,6 +1657,8 @@ public class frmMenuItemMaster extends javax.swing.JFrame
 	    e.printStackTrace();
 	}
     }
+
+
 
     /**
      * This method is used to save or update master

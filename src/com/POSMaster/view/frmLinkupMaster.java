@@ -2477,10 +2477,13 @@ public class frmLinkupMaster extends javax.swing.JFrame
                     funSubGroupPOSLinkupRowClicked();
                 }
             }
+            if (col == 2 || col == 3)
+            {
             if (evt.getClickCount() == 2)
             {
                 funAccountLinkupHelp(tblSubGroupLinkupDtl, 2);
             }
+	    }
 
         }
         catch (Exception e)
